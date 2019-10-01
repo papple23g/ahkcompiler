@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  ahkcompiler:
+    image: ahkcompiler
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
