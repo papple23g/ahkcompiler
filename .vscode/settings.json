@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/5b9bdf87-af50-4772-9f7f-b99451fe328e/resourceGroups/papple23gtest/providers/Microsoft.Web/sites/papple23gtest",
+    "appService.deploySubpath": ""
+}
