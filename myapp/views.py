@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from django.http import FileResponse
 import os
 import uuid
+import time
 
 def homepage(req):
     html='<p>123</p>'
     return HttpResponse(html)
 
+#定義API:執行AHK編譯為EXE檔
 def cp(req):
     req_body=req.body.decode()
     ahk_code=req_body
@@ -27,12 +29,41 @@ def cp(req):
     os.system(cmd_command)
     return HttpResponse(filename_key)
 
+#定義API:下載.exe檔
 def dl(req):
     filename_key=req.GET.dict()['filename_key']
     filename_key=filename_key[:filename_key.find('?foo=')] if '?foo=' in filename_key else filename_key
-    response = FileResponse(open(f'ahkfile1_30/{filename_key}.exe', 'rb'))
-    response['Content-Type']='application/octet-stream'
-    response['Content-Disposition']='attachment;filename="myahk.exe"'
-    return response
+    #確認檔名key的uuid版本是否符合格式
+    if version_uuid(filename_key)==4:
+        response = FileResponse(open(f'ahkfile1_30/{filename_key}.exe', 'rb'))
+        response['Content-Type']='application/octet-stream'
+        response['Content-Disposition']='attachment;filename="myahk.exe"'
+        return response
+    else:
+        return HttpResponse('unkown uuid vervion')
     
     #return HttpResponse('OKOK!'+filename_key)
+
+
+#定義API:移除.ahk和.exe檔
+def rm(req):
+    filename_key=req.GET.dict()['filename_key']
+    #確認檔名key的uuid版本是否符合格式
+    if version_uuid(filename_key)==4:
+        time.sleep(5)
+        ahk_filepath=f'ahkfile1_30/{filename_key}.ahk'
+        exe_filepath=f'ahkfile1_30/{filename_key}.exe'
+        for filepath in [ahk_filepath,exe_filepath]:
+            if os.path.isfile(filepath):
+                os.remove(filepath)
+                print('REMOVE',filepath,'success.')
+        return HttpResponse('OKOK!'+filename_key)
+    else:
+        return HttpResponse('unkown uuid vervion')
+
+#定義檢查函數:uuid版本是否符合格式
+def version_uuid(uuid_str):
+    try:
+        return uuid.UUID(uuid_str).version
+    except ValueError:
+        return None

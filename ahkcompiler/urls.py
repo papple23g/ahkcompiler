@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^$', homepage),
     url(r'^dl$', dl),
     url(r'^cp$', cp),
+    url(r'^rm$', rm),
 ]
 
