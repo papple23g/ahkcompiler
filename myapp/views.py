@@ -6,8 +6,7 @@ import uuid
 import time
 
 def homepage(req):
-    html='<p>123</p>'
-    return HttpResponse(html)
+    return render(req,"AhkScriptGeneratoPager.html")
 
 #定義API:執行AHK編譯為EXE檔
 def cp(req):
