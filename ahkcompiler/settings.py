@@ -73,9 +73,9 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = (
- os.path.join(BASE_DIR, "static"),
-)
+# STATICFILES_DIRS = (
+#  os.path.join(BASE_DIR, "static"),
+# )
 
 WSGI_APPLICATION = 'ahkcompiler.wsgi.application'
 
@@ -124,10 +124,29 @@ USE_L10N = True
 USE_TZ = True
 
 
+#允許跨站請求CROS  https://yichen0831.wordpress.com/2014/06/20/django%E5%85%81%E8%A8%B1cors/
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 
-#允許跨站請求CROS  https://yichen0831.wordpress.com/2014/06/20/django%E5%85%81%E8%A8%B1cors/
-CORS_ORIGIN_ALLOW_ALL = True
+#setting for enviroment of Django online
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+    # Static asset configuration.
+    STATIC_ROOT= os.path.join(BASE_DIR,'static')
+    # Honor the 'X-Forwarded-Proto' header for request.is_secure().
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # Turn off DEBUG mode.
+    DEBUG = False
+else:
+    STATIC_ROOT= os.path.join(BASE_DIR,'static')
+    DEBUG = False
+    '''
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, "static"),
+    )
+    '''

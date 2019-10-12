@@ -2,12 +2,20 @@
 負責基本函式或共同的函式
 """
 
-from browser import window,doc#,ajax,alert,bind,timer,confirm
+from browser import document as doc
 from browser.html import *
-
-#引渡Javascript印出資料log語法
+from browser import bind,window,alert,ajax
+#過渡JS物件和函式
 log=window.console.log
+FormatHTML=window.FormatHTML
+DownloadTextFile=window.DownloadTextFile
+Blockly=window.Blockly
+workspace=window.workspace
 
+# #將介面改為桌機瀏覽模式 (因此手機上可以編輯文字拼圖)
+Blockly.utils.userAgent.MOBILE=False
+Blockly.utils.userAgent.ANDROID=False
+Blockly.utils.userAgent.IPAD=False
 
 
 #定義動作:複製文字 #不需要建立外部額外元素

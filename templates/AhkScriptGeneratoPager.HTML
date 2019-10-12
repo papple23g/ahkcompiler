@@ -1,16 +1,18 @@
+{% load static %}
+
 {% include 'base.html' %}
 
-
 <body onload="brython(1)">
+
+{% include 'blocklyDiv.html' %}
+
+<script src="{% static "workspace.js" %}"></script>
 <script type="text/python">
 
 {% include 'base_function.py' %}
-
 {% include 'AhkScriptGeneratoPager.py' %}
 
-
 </script>
-
-<p id="loading_webpage_msg">正在載入中...</p>
-
 </body>
+
+</html>

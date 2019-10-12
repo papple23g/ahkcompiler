@@ -30,14 +30,8 @@ Emoji.objects.filter(id="13600").delete()
 
 
 
-#全域函數:版本號
-VERSION="2.2"
-
-#更改網頁標題
-doc.select("head title")[0].text+=f" {VERSION}"
-
 #移除載入頁面訊息
-doc['loading_webpage_msg'].remove()
+#doc['loading_webpage_msg'].remove()
 
 #定義DIV網頁header區塊
 def DIV_header():
@@ -45,7 +39,7 @@ def DIV_header():
     #設置網頁標頭H1元素
     H1_title_elt=H1(
         B(
-            f"噗浪表符庫 {VERSION}"
+            f"AHK 語法產生器"
             ,style={
                 "font-family":"微軟正黑體"
             }
@@ -85,10 +79,11 @@ def DIV_bars():
     AButton_bar_frist.classList.add("AButton_bar_actived")
 
     '其他bars'
-    div_elt<=DIV_ButtonBar("新增表符",id="button_bar_add_emoji")
+    div_elt<=DIV_ButtonBar("積木",id="button_bar_blockly")
     div_elt<=DIV_ButtonBar("更新日誌",id="button_bar_update_diary")
-    div_elt<=DIV_ButtonBar("其他推廣",id="button_bar_other_production")
-    div_elt<=DIV_ButtonBar("關於作者",id="button_bar_about_author")
+    #div_elt<=DIV_ButtonBar("其他推廣",id="button_bar_other_production")
+    #div_elt<=DIV_ButtonBar("關於作者",id="button_bar_about_author")
+
     #設定bar被按下時的樣式
     AddStyle("""
         #button_bar_add_emoji{
@@ -109,6 +104,6 @@ def DIV_bars():
 
 
 #排版:置入DIV網頁header區塊
-doc<=DIV_header()
-doc<=DIV_bars()
-
+doc.body.insertBefore(DIV_header(),doc['blocklyDiv'])
+doc.body.insertBefore(DIV_bars(),doc['blocklyDiv'])
+doc['blocklyDiv'].style.visibility="visible"

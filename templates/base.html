@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +30,67 @@
         gtag('config', 'UA-135785524-1');
     </script>
     -->
-    <style></style>
+    
+    <style>
+        textarea {
+            overflow-x: scroll;
+            white-space: nowrap;
+            height: 200px;
+            width: 100%;
+        }
+        
+        pre#textarea_ahk {
+            background-color: #eee;
+            border-radius: 10px;
+            padding: 10px;
+            overflow-y: scroll;
+            height: 200px;
+            margin: 0;
+            font-size: 15px;
+        }
+        
+        button {
+            height: 30px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: 微軟正黑體;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 8px;
+            margin-right: 8px;
+            text-shadow: #fff 1px 1px 1px;
+            outline: none;
+        }
+        
+        #div_show_ahk_btns {
+            margin-bottom: 8px;
+        }
+        
+        #div_show_ahk_area {
+            margin: 10px 0;
+        }
+        
+        .float_right {
+            float: right;
+        }
+        
+        input#input_var {
+            height: 20px;
+            margin-top: 10px;
+            width: 80px;
+            margin-right: 8px;
+        }
+        
+        button.disabled {
+            color: gray !important;
+        }
+    </style>
+
+    <script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>
+    <script src="{% static "basic_functions.js" %}"></script>
+    <script src="{% static "blockly_compressed.js" %}"></script>
+    <script src="{% static "blocks_compressed.js" %}"></script>
+    <script src="{% static "blocks_definition.js" %}"></script>
+    <script src="{% static "zh_tw.js" %}"></script>
 
 </head>
