@@ -30,7 +30,7 @@
         gtag('config', 'UA-135785524-1');
     </script>
     -->
-    
+
     <style>
         textarea {
             overflow-x: scroll;
@@ -86,11 +86,19 @@
         }
     </style>
 
-    <script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>
-    <script src="{% static "basic_functions.js" %}"></script>
-    <script src="{% static "blockly_compressed.js" %}"></script>
-    <script src="{% static "blocks_compressed.js" %}"></script>
-    <script src="{% static "blocks_definition.js" %}"></script>
-    <script src="{% static "zh_tw.js" %}"></script>
+    
+<script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>
+<script>{% include 'basic_functions.js' %}</script>
+
+{% if subpage == 'ahkblockly' %}
+<script src="{% static "blockly_compressed.js" %}"></script>
+<script src="{% static "blocks_compressed.js" %}"></script>
+<script>{% include 'blocks_definition.js' %}</script>
+<script>{% include 'zh_tw.js' %}</script>
+
+{% endif %}
+
 
 </head>
+
+

@@ -1,16 +1,6 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
-Blockly.Blocks['my_textarea'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldTextArea());
-        this.setColour(230);
-        this.setTooltip("");
-        this.setHelpUrl("");
-    }
-};
-
 Blockly.Blocks['built_in_webpage'] = {
     init: function() {
         this.appendDummyInput()
@@ -26,7 +16,7 @@ Blockly.Blocks['built_in_webpage'] = {
                 ["AHK官網", "ahk"],
                 ["AHK積木網頁", "ahkblockly"],
             ]), "NAME");
-        this.setOutput(true, "String");
+        this.setOutput(true, "link");
         this.setColour(290);
         this.setTooltip("");
         this.setHelpUrl("");
