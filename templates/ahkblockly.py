@@ -234,6 +234,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             field_elt=FindCurrent(block_elt,'field')
             function_key_name=field_elt.text
             com_str+=function_key_name
+
+        elif block_elt.attrs['type']=="return":
+            com_str+='Return'
         
         #endregion 按鍵Blockly
 

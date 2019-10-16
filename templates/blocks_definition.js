@@ -1,6 +1,17 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['return'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("禁用該組合鍵");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#555555");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
 
 Blockly.Blocks['clipboard'] = {
     init: function() {
