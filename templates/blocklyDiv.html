@@ -31,7 +31,21 @@
 <!--block結構必須要是頭尾封閉的html形式才能正常被偵測-->
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <!--工具欄-->
-    <category name="基本">
+    <category name="邏輯" colour="#5b80a5">
+        <block type="controls_if"></block>
+        <block type="logic_compare">
+            <field name="OP">EQ</field>
+        </block>
+        <block type="logic_operation">
+            <field name="OP">AND</field>
+        </block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+        </block>
+        <block type="logic_null"></block>
+    </category>
+    <category name="基本" colour="#818181">
         <block type="hotkey_execute">
             <value name="NAME">
                 <block type="function_key">
@@ -132,7 +146,7 @@
         </block>
     </category>
 
-    <category name="熱鍵">
+    <category name="熱鍵" colour="#5B67A5">
         <block type="hotkey_execute"></block>
         <block type="function_key">
             <field name="function_key">Ctrl</field>
@@ -143,7 +157,7 @@
         <block type="special_key"></block>
     </category>
 
-    <category name="熱字串">
+    <category name="熱字串" colour="#CD5C5C">
         <block type="hotstring">
             <value name="ABB">
                 <block type="text">
@@ -229,16 +243,23 @@
         <block type="hotstringSetting_rawText"></block>
     </category>
 
-    <category name="動作">
+    <category name="動作" colour="#745BA5">
         <block type="open"></block>
         <block type="msgbox"></block>
         <block type="send_text"></block>
         <block type="send_key"></block>
         <block type="file_recycle_empty"></block>
         <block type="close_process"></block>
+        <block type="sleep">
+            <value name="NAME">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
     </category>
 
-    <category name="物件">
+    <category name="物件" colour="#995BA5">
         <block type="filepath">
             <field name="NAME">C:\*.exe</field>
         </block>
@@ -268,7 +289,7 @@
         <block type="built_in_time"></block>
     </category>
 
-    <category name="模擬按鍵">
+    <category name="模擬按鍵" colour="#D75BF0">
         <block type="send_key"></block>
         <block type="send_keys"></block>
         <block type="send_key_times" id="wltY5@wT{M;nzk*|MC4$" x="109" y="236">
@@ -297,7 +318,7 @@
         <block type="special_key"></block>
     </category>
 
-    <category name="文字">
+    <category name="文字" colour="#5BA58C">
         <block type="msgbox"></block>
         <block type="send_text"></block>
         <block type="text">
@@ -308,7 +329,7 @@
         </block>
     </category>
 
-    <category name="時間">
+    <category name="時間" colour="#7B68EE">
         <block type="built_in_time">
             <field name="NAME">year</field>
         </block>
@@ -320,7 +341,7 @@
         </block>
     </category>
 
-    <category name="數學">
+    <category name="數學" colour="#0000CD">
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
@@ -339,7 +360,7 @@
         </block>
     </category>
 
-    <category name="函式">
+    <category name="函式" colour="#995BA5">
         <block type="procedures_defnoreturn">
             <field name="NAME">函式名稱</field>
         </block>
@@ -348,7 +369,7 @@
         </block>
     </category>
 
-    <category name="變數">
+    <category name="變數" colour="#A45A7F">
         <block type="variables_set">
             <field name="VAR">x</field>
         </block>

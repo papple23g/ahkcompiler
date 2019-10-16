@@ -3,7 +3,7 @@ from browser.html import *
 
 VERSION="2.6"
 
-#設置全域變數:AHK自定義函數字典
+#region 設置全域變數:AHK自定義函數字典
 FUNCTION_DICT={
 "AutoInput":
 """
@@ -202,7 +202,7 @@ WebElementAction(selector,action:="Click",value:=0,delay:=300){
 }
 """,
 }
-
+#endregion 設置全域變數:AHK自定義函數字典
 
 #**定義定期刷新顯示AHK語法動作**
 def render_ahk_script():
@@ -523,21 +523,8 @@ def RenderAhkIfInputChange(ev):
 ACTIVE_SCRIPT_TAG_COLOR="#ddd"
 UNACTIVE_SCRIPT_TAG_COLOR="#bbb"
 
-#定義動作函數:複製文字到剪貼簿
-def CopyTextToClipborad(string):
-    textarea_elt_forCopyText=TEXTAREA()
-    textarea_elt_forCopyText.text=string
-    doc<=textarea_elt_forCopyText
-    textarea_elt_forCopyText.select()
-    doc.execCommand("copy")
-    textarea_elt_forCopyText.remove()
-
-#定義功能函數:增加CSS樣式字串
-def AppStyle(style_str):
-    style_elt=doc.select("head style")[0]
-    style_elt.text+=style_str
 #設定全域樣式
-AppStyle("""
+AddStyle("""
     .page_border span,.page_border select,.page_border option,.pointerCursor_onhover span{
         font-size:15px;
         font-family:微軟正黑體;
@@ -573,7 +560,7 @@ def A_INPUTCheckbox(item_name,checked=False,attr_dict={"symbol":""},Class=None,i
             setattr(inputCheckbox_elt,k,v)
     return SPAN(inputCheckbox_elt+SPAN(item_name),Class="pointerCursor_onhover").bind('click',do_ckecking)
 #設定DIV設定組合鍵功能區塊樣式
-AppStyle("""
+AddStyle("""
     .pointerCursor_onhover:hover *{
         cursor:pointer;
     }""")
@@ -827,7 +814,7 @@ def Div_hotkey_setting():
         select_elt.bind("change",RenderAhkIfInputChange)
 
     return div_hotkey_setting
-AppStyle("""
+AddStyle("""
     .expand_or_collapse_span_text{
         font-size: 20px;
         font-weight: normal;
@@ -1389,7 +1376,7 @@ def DIV_function():
         select_elt.bind("change",RenderAhkIfInputChange)
     return div_elt
 #設定DIV設定組合鍵功能區塊樣式
-AppStyle("""
+AddStyle("""
     input[type="text"]{
         margin:10px 3px 3px 3px;
     }
@@ -1399,7 +1386,7 @@ AppStyle("""
     }
 """)
 
-AppStyle("""
+AddStyle("""
     .div_page_tag_none{
         color: #666;
         text-shadow: #eee 1px 2px;
@@ -1431,7 +1418,7 @@ def DIV_ahkScriptBlock():
     return div_elt
 
 #設定DIV顯示對應AHK語法區塊樣式
-AppStyle("""
+AddStyle("""
     #copy_all_function_button{
         float:right;
     }
@@ -1499,7 +1486,7 @@ def DIV_SciptTabs():
     return div_elt
 
 #設定啟用和非啟用標籤顏色
-AppStyle("""
+AddStyle("""
     div#all_function_div_page_tag{
         float: right !important;
     }
@@ -1531,7 +1518,7 @@ div_main=DIV(Class="main")
 doc<=div_main
 
 #主區塊樣式
-AppStyle("""
+AddStyle("""
     div.main{
         width:100%;
         max-width:600px;
@@ -1548,7 +1535,7 @@ div_setting_function<=DIV_function()+BR()
 div_main<=div_setting_function
 
 #深藍區塊樣式
-AppStyle("""
+AddStyle("""
     div.block_header{
         background-color: #344ece;
         color:#fff;
@@ -1560,7 +1547,7 @@ AppStyle("""
 """)
 
 #淺藍區塊樣式
-AppStyle("""
+AddStyle("""
     div.page_border{
         background-color: #9cedf1;
     	padding: 20px 20px 20px 20px;
@@ -1615,7 +1602,7 @@ div_main<=DIV(
 )
 """
 
-AppStyle("""
+AddStyle("""
     #dont_copy_function{
         margin-left:10px;
     }

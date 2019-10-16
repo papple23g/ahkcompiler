@@ -1,9 +1,6 @@
 #{% verbatim %}
 
 
-
-print(456)
-
 #全域變數
 Blockly=window.Blockly
 workspace=window.workspace
@@ -11,16 +8,6 @@ workspace=window.workspace
 #縮排
 TAB_SPACE="    "
 
-
-
-#定義動作:複製文字 #不需要建立外部額外元素
-def CopyTextToClipborad(string):
-    textarea_elt_forCopyText=TEXTAREA()
-    textarea_elt_forCopyText.text=string
-    doc<=textarea_elt_forCopyText
-    textarea_elt_forCopyText.select()
-    doc.execCommand("copy")
-    textarea_elt_forCopyText.remove()
 
 #定義函式:將xml格式化
 def FormatXML(xml_str):
@@ -95,6 +82,11 @@ def XmlToAHK(ev):
         'math_arithmetic',
         'math_number',
         'variables_get',
+        'logic_boolean',
+        'logic_compare',
+        'logic_operation',
+        'logic_null',
+        'logic_negate',
     ]
 
     if ev.type in ["input","click"]:
@@ -347,6 +339,12 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         elif block_elt.attrs['type']=="close_process":
             field_elt=FindCurrent(block_elt,'field')
             com_str+=f'Process, Close, {field_elt.text}\n'
+
+        elif block_elt.attrs['type']=="sleep":
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            com_str+=value_comment
+            com_str+=f'Sleep % {value_str}\n'
 
         #endregion 動作Blockly
 
@@ -666,7 +664,66 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 變數Blockly
 
-        
+        #region 邏輯Blockly
+
+        #邏輯not
+        elif block_elt.attrs['type']=="logic_negate":
+            value_elt=FindCurrent(block_elt,'value[name="BOOL"]')
+            value_str,value_a_comment=AHK_value(value_elt)
+            com_str+=value_a_comment
+            com_str+=f'not {value_str}'
+
+        #邏輯null
+        elif block_elt.attrs['type']=="logic_null":
+            com_str+='""'    
+
+        #邏輯真假
+        elif block_elt.attrs['type']=="logic_boolean":
+            field_op_elt=FindCurrent(block_elt,'field[name="BOOL"]')
+            com_str+=field_op_elt.text
+
+        #邏輯比較
+        elif block_elt.attrs['type']=="logic_compare":
+            #獲取操作類型
+            field_op_elt=FindCurrent(block_elt,'field[name="OP"]')
+            op_str_dict={
+                'EQ':'=',
+                'NEQ':'!=',
+                'LT':'<',
+                'LTE':'<=',
+                'GT':'>',
+                'GTE':'>=',
+            }
+            field_op_str=op_str_dict[field_op_elt.text]
+            #獲取比較值A
+            value_a_elt=FindCurrent(block_elt,'value[name="A"]')
+            value_a_str,value_a_comment=AHK_value(value_a_elt)
+            com_str+=value_a_comment
+            #獲取比較值B
+            value_b_elt=FindCurrent(block_elt,'value[name="B"]')
+            value_b_str,value_b_comment=AHK_value(value_b_elt)
+            com_str+=value_b_comment
+            #輸出程式
+            com_str+=f'({value_a_str} {field_op_str} {value_b_str})'
+
+        #邏輯操作(AND OR)
+        elif block_elt.attrs['type']=="logic_operation":
+            #獲取操作類型
+            field_op_elt=FindCurrent(block_elt,'field[name="OP"]')
+            field_op_str=field_op_elt.text
+            #獲取比較值A
+            value_a_elt=FindCurrent(block_elt,'value[name="A"]')
+            value_a_str,value_a_comment=AHK_value(value_a_elt)
+            com_str+=value_a_comment
+            #獲取比較值B
+            value_b_elt=FindCurrent(block_elt,'value[name="B"]')
+            value_b_str,value_b_comment=AHK_value(value_b_elt)
+            com_str+=value_b_comment
+            #輸出程式
+            com_str+=f'({value_a_str} {field_op_str} {value_b_str})'
+
+
+        #endregion 邏輯Blockly
 
 
         #處理下一個block
@@ -696,7 +753,7 @@ workspace.addChangeListener(ClearAhkCodeArea)
 #綁定事件:停用落單的blockly
 #workspace.addChangeListener(Blockly.Events.disableOrphans);
 
-#範例
+#region 插入範例1
 xml_ex_1='''<xml>
   <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
     <mutation statements="false"></mutation>
@@ -857,6 +914,7 @@ xml_ex_1='''<xml>
     </value>
   </block>
 </xml>'''
+#endregion 插入範例1
 
 #插入範本
 def ViewEx(ev):
@@ -872,12 +930,13 @@ div_showAhkAreaHeader_elt=DIV(id="div_show_ahk_btns")
 div_showAhkAreaHeader_elt<=BUTTON("▼轉換為AHK語法",id="btn_blockToAhk").bind("click",BlocklyToXml)
 div_showAhkAreaHeader_elt<=BUTTON("載入範本1").bind("click",ViewEx)
 
-
+#定義動作:複製AHK語法
 def CopyAhkCode(ev):
     ahk_code=doc['textarea_ahk'].innerHTML
     CopyTextToClipborad(ahk_code)
     alert('複製成功!')
 
+#定義動作:下載AHK檔案
 def DownloadAhkCode(ev):
     ahk_code=doc['textarea_ahk'].innerHTML
     filename="myahk.ahk"

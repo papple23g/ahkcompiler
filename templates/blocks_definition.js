@@ -1,6 +1,24 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+
+Blockly.Blocks['sleep'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck("Number")
+            .appendField("等待");
+        this.appendDummyInput()
+            .appendField("毫秒");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#80ADC4");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 Blockly.Blocks['built_in_webpage'] = {
     init: function() {
         this.appendDummyInput()
