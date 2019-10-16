@@ -31,20 +31,7 @@
 <!--block結構必須要是頭尾封閉的html形式才能正常被偵測-->
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <!--工具欄-->
-    <category name="邏輯" colour="#5b80a5">
-        <block type="controls_if"></block>
-        <block type="logic_compare">
-            <field name="OP">EQ</field>
-        </block>
-        <block type="logic_operation">
-            <field name="OP">AND</field>
-        </block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean">
-            <field name="BOOL">TRUE</field>
-        </block>
-        <block type="logic_null"></block>
-    </category>
+
     <category name="基本" colour="#818181">
         <block type="hotkey_execute">
             <value name="NAME">
@@ -268,6 +255,7 @@
         <block type="built_in_dirpath"></block>
         <block type="webpage"></block>
         <block type="built_in_webpage"></block>
+        <block type="clipboard"></block>
         <block type="math_number">
             <field name="NUM">123</field>
         </block>
@@ -287,6 +275,9 @@
             </value>
         </block>
         <block type="built_in_time"></block>
+        <block type="variables_get">
+            <field name="VAR">變數x</field>
+        </block>
     </category>
 
     <category name="模擬按鍵" colour="#D75BF0">
@@ -360,6 +351,23 @@
         </block>
     </category>
 
+    <sep></sep>
+
+    <category name="邏輯" colour="#5b80a5">
+        <block type="controls_if"></block>
+        <block type="logic_compare">
+            <field name="OP">EQ</field>
+        </block>
+        <block type="logic_operation">
+            <field name="OP">AND</field>
+        </block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+        </block>
+        <block type="logic_null"></block>
+    </category>
+
     <category name="函式" colour="#995BA5">
         <block type="procedures_defnoreturn">
             <field name="NAME">函式名稱</field>
@@ -369,21 +377,7 @@
         </block>
     </category>
 
-    <category name="變數" colour="#A45A7F">
-        <block type="variables_set">
-            <field name="VAR">x</field>
-        </block>
-        <block type="variables_set">
-            <field name="VAR">剪貼簿</field>
-        </block>
-        <block type="variables_get">
-            <field name="VAR">x</field>
-        </block>
-        <block type="variables_get">
-            <field name="VAR">剪貼簿</field>
-        </block>
-
-
+    <category name="變數" colour="#A45A7F" custom="VARIABLE">
     </category>
 
 </xml>

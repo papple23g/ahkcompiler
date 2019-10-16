@@ -2,6 +2,18 @@ var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
 
+Blockly.Blocks['clipboard'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("剪貼簿內容");
+        this.setInputsInline(true);
+        this.setOutput(true, null);
+        this.setColour(290);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['sleep'] = {
     init: function() {
         this.appendValueInput("NAME")

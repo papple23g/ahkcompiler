@@ -351,6 +351,10 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 物件Blockly
 
+        #剪貼簿內容
+        elif block_elt.attrs['type']=="clipboard":
+            com_str+='Clipboard'
+
         #目錄、檔案、網頁
         elif block_elt.attrs['type'] in ["filepath","dirpath","webpage"]:
             filed_elt=FindCurrent(block_elt,'field[name="NAME"]')
@@ -660,6 +664,24 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_comment
             #輸出程式
             com_str+=f'{var_name} := {value_str}\n'
+
+        elif block_elt.attrs['type']=="math_change":
+            field_elt=FindCurrent(block_elt,'field[name="VAR"]')
+            var_name=field_elt.text
+            value_str="0"
+            #獲取賦值內容
+            value_delta_elt=FindCurrent(block_elt,'value[name="DELTA"]')
+            #若有放置數字blockly
+            if FindCurrent(value_delta_elt,'block'):
+                value_str,value_comment=AHK_value(value_delta_elt)
+                com_str+=value_comment
+            #若為預設影子blockly
+            else:
+                shadow_elt=FindCurrent(value_delta_elt,'shadow')
+                value_str=FindCurrent(shadow_elt,'field').text
+            
+            #輸出程式
+            com_str+=f'{var_name} += {value_str}\n'
 
 
         #endregion 變數Blockly
