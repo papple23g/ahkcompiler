@@ -576,6 +576,24 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 模擬鍵盤Blockly
 
+        #region 模擬滑鼠Blockly
+        
+        elif block_elt.attrs['type']=="click_x_y":
+            value_x_elt=FindCurrent(block_elt,f'value[name="X"]')
+            value_x_str,value_x_comment=AHK_value(value_x_elt)
+            com_str+=value_x_comment
+            x_is_var_bool=True if (value_x_elt and FindCurrent(value_x_elt,'block').attrs['type']=="variables_get") else False
+
+            value_y_elt=FindCurrent(block_elt,f'value[name="Y"]')
+            value_y_str,value_y_comment=AHK_value(value_y_elt)
+            com_str+=value_y_comment
+            y_is_var_bool=True if (value_y_elt and FindCurrent(value_y_elt,'block').attrs['type']=="variables_get") else False
+           
+            com_str+=f"Click {'%'*x_is_var_bool}{value_x_str}{'%'*x_is_var_bool},{'%'*y_is_var_bool}{value_y_str}{'%'*y_is_var_bool}\n"
+
+        
+        #endregion 模擬滑鼠Blockly
+
         #region 函式Blockly
 
         elif block_elt.attrs['type']=="procedures_defnoreturn":

@@ -1,6 +1,35 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['click_x_y'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("滑鼠點擊 X:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y:");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+////
+Blockly.Blocks['click'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("點一下滑鼠");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['ahk_code'] = {
     init: function() {
         this.appendDummyInput()
