@@ -312,8 +312,35 @@
     </category>
 
     <category name="模擬滑鼠" colour="#D0D03E">
-        <block type="click"></block>
-        <block type="click_x_y"></block>
+        <block type="send_key">
+            <value name="NAME">
+              <block type="special_key">
+                <field name="special_key">LButton</field>
+              </block>
+            </value>
+          </block>
+        <block type="coord_mode"></block>
+        <block type="click_x_y">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">200</field>
+                </block>
+            </value>
+            <value name="TIMES">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="mouse_get_pos">
+        </block>
+
+        
     </category>
 
     <category name="文字" colour="#5BA58C">

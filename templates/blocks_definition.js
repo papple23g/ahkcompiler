@@ -1,14 +1,16 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
-Blockly.Blocks['click_x_y'] = {
+Blockly.Blocks['mouse_get_pos'] = {
     init: function() {
-        this.appendValueInput("X")
-            .setCheck("Number")
-            .appendField("滑鼠點擊 X:");
-        this.appendValueInput("Y")
-            .setCheck("Number")
-            .appendField("Y:");
+        this.appendValueInput("posX")
+            .setCheck(null)
+            .appendField("將目前滑鼠座標輸出至(");
+        this.appendValueInput("posY")
+            .setCheck(null)
+            .appendField(",");
+        this.appendDummyInput()
+            .appendField(") 兩個變數");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -17,11 +19,19 @@ Blockly.Blocks['click_x_y'] = {
         this.setHelpUrl("");
     }
 };
-////
-Blockly.Blocks['click'] = {
+
+
+Blockly.Blocks['coord_mode'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("點一下滑鼠");
+            .appendField("設定以")
+            .appendField(new Blockly.FieldDropdown([
+                ["螢幕左上角", "screen"],
+                ["視窗左上角", "window "],
+            ]), "NAME");
+        this.appendDummyInput()
+            .appendField("為座標原點");
+        this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(60);
@@ -29,6 +39,29 @@ Blockly.Blocks['click'] = {
         this.setHelpUrl("");
     }
 };
+
+Blockly.Blocks['click_x_y'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("滑鼠至 X:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y:");
+        this.appendValueInput("TIMES")
+            .setCheck("Number")
+            .appendField("點擊");
+        this.appendDummyInput()
+            .appendField("次");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(60);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 
 Blockly.Blocks['ahk_code'] = {
     init: function() {

@@ -577,7 +577,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         #endregion 模擬鍵盤Blockly
 
         #region 模擬滑鼠Blockly
-        
+
+        #coord_mode
+        elif block_elt.attrs['type']=="coord_mode":
+            field_name_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            coord_mode_str=field_name_elt.text
+            coord_mode_str=coord_mode_str[0].upper()+coord_mode_str[1:]
+            com_str+=f'CoordMode, Mouse , {coord_mode_str}\n'
+
+        #點擊(x,y)
         elif block_elt.attrs['type']=="click_x_y":
             value_x_elt=FindCurrent(block_elt,f'value[name="X"]')
             value_x_str,value_x_comment=AHK_value(value_x_elt)
@@ -588,9 +596,25 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             value_y_str,value_y_comment=AHK_value(value_y_elt)
             com_str+=value_y_comment
             y_is_var_bool=True if (value_y_elt and FindCurrent(value_y_elt,'block').attrs['type']=="variables_get") else False
-           
-            com_str+=f"Click {'%'*x_is_var_bool}{value_x_str}{'%'*x_is_var_bool},{'%'*y_is_var_bool}{value_y_str}{'%'*y_is_var_bool}\n"
 
+            value_times_elt=FindCurrent(block_elt,f'value[name="TIMES"]')
+            value_times_str,value_times_comment=AHK_value(value_times_elt)
+            com_str+=value_times_comment
+            times_is_var_bool=True if (value_times_elt and FindCurrent(value_times_elt,'block').attrs['type']=="variables_get") else False
+           
+            com_str+=f"Click {'%'*x_is_var_bool}{value_x_str}{'%'*x_is_var_bool}, {'%'*y_is_var_bool}{value_y_str}{'%'*y_is_var_bool}, {'%'*times_is_var_bool}{value_times_str}{'%'*times_is_var_bool}\n"
+        
+        elif block_elt.attrs['type']=="mouse_get_pos":
+            value_posX_elt=FindCurrent(block_elt,f'value[name="posX"]')
+            value_posX_str,value_posX_comment=AHK_value(value_posX_elt)
+            com_str+=value_posX_comment
+
+            value_posY_elt=FindCurrent(block_elt,f'value[name="posY"]')
+            value_posY_str,value_posY_comment=AHK_value(value_posY_elt)
+            com_str+=value_posY_comment
+
+            com_str+=f'MouseGetPos, {value_posX_str}, {value_posY_str}\n'
+        
         
         #endregion 模擬滑鼠Blockly
 
