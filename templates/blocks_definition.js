@@ -1,6 +1,17 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['built_in_wday_zh'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("現週(一 ~ 日)");
+        this.setOutput(true, null);
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['return'] = {
     init: function() {
         this.appendDummyInput()

@@ -49,7 +49,6 @@ def XmlToBlockly(ev):
 
         #輸出格式化xml到
         textarea_elt.value=FormatXML(textarea_elt.value)
-    
 #定義動作:顯示blocks的xml (必須等待Block載入完成)
 def BlocklyToXml(ev):
     #啟用複製和下載AHK檔案按鈕
@@ -482,12 +481,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 "year":"A_YYYY",
                 "month":"A_MM",
                 "day":"A_DD",
-                "wday":"A_WDay",
+                "wday":"(A_WDay=1 ? 7 : A_WDay-1)",
                 "hour":"A_Hour",
                 "min":"A_Min",
                 "sec":"A_Sec",
             }
             com_str+=built_in_time_dict[field_elt.text]
+
+        elif block_elt.attrs['type']=="built_in_wday_zh":
+            com_str+='Array("日","一","二","三","四","五","六")[A_WDay]'
 
 
         #endregion 物件Blockly
@@ -690,12 +692,45 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         #endregion 變數Blockly
 
         #region 邏輯Blockly
+        ###
+        elif block_elt.attrs['type']=="controls_if":
+            #獲取判斷布林值
+            value_if0_elt=FindCurrent(block_elt,'value[name="IF0"]')
+            value_if0_str,value_ifn_comment=AHK_value(value_if0_elt,get_all_comment=True)
+            com_str+=value_ifn_comment
+            #獲取執行式
+            statement_do0_elt=FindCurrent(block_elt,'statement[name="DO0"]')
+            statement_do0_str=AHK_statement(statement_do0_elt)
+            com_str+=f"if {value_if0_str} {{\n{statement_do0_str}}}"
+
+            mutation_elt=FindCurrent(block_elt,'mutation')
+            #若是多層if層次block
+            if mutation_elt:
+                if mutation_elt.attrs.get('elseif'):
+                    nb_elseif_int=int(mutation_elt.attrs.get('elseif'))
+                    for i in range(1,nb_elseif_int+1):
+                        #獲取判斷布林值
+                        value_ifn_elt=FindCurrent(block_elt,f'value[name="IF{i}"]')
+                        value_ifn_str,value_ifn_comment=AHK_value(value_ifn_elt,get_all_comment=True)
+                        #取消註解的斷行，讓其出現在 }else if () { 同一行的後段
+                        value_ifn_comment=value_ifn_comment.replace('\n','')
+                        #獲取執行式
+                        statement_don_elt=FindCurrent(block_elt,f'statement[name="DO{i}"]')
+                        statement_don_str=AHK_statement(statement_don_elt)
+                        
+                        com_str+=f"else if {value_ifn_str} {{ {value_ifn_comment}\n{statement_don_str}}}"
+                if mutation_elt.attrs.get('else'):
+                    #獲取執行式
+                    statement_doElse_elt=FindCurrent(block_elt,'statement[name="ELSE"]')
+                    statement_doElse_str=AHK_statement(statement_doElse_elt)
+                    com_str+=f"else {{\n{statement_doElse_str}}}"
+            com_str+='\n'           
 
         #邏輯not
         elif block_elt.attrs['type']=="logic_negate":
             value_elt=FindCurrent(block_elt,'value[name="BOOL"]')
-            value_str,value_a_comment=AHK_value(value_elt)
-            com_str+=value_a_comment
+            value_str,value_comment=AHK_value(value_elt)
+            com_str+=value_comment
             com_str+=f'not {value_str}'
 
         #邏輯null
