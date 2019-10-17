@@ -337,6 +337,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
             com_str+=value_comment
             com_str+=f'SendInput % "{{TEXT}}" . {value_str}\n'
+
+        elif block_elt.attrs['type']=="set_clipboard":
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+
+            com_str+=value_comment
+            com_str+=f'Clipboard := {value_str}\n'
+
+
             
         elif block_elt.attrs['type']=="close_process":
             field_elt=FindCurrent(block_elt,'field')
@@ -785,6 +794,21 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 邏輯Blockly
 
+        
+        #region 系統資訊Blockly
+        elif block_elt.attrs['type']=="computer_name":
+            com_str+="A_ComputerName"
+
+        elif block_elt.attrs['type']=="user_name":
+            com_str+="A_UserName"
+
+        #endregion 系統資訊Blockly
+
+
+        #AHK原生程式碼Blockly
+        elif block_elt.attrs['type']=="ahk_code":
+            field_elt=FindCurrent(block_elt,'field')
+            com_str+=field_elt.text+'\n'
 
         #處理下一個block
         next_elt=FindCurrent(block_elt,'next',get_one=True)

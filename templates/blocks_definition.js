@@ -1,11 +1,59 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['ahk_code'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("AHK碼")
+            .appendField(new Blockly.FieldTextInput("Msgbox % \"Hellow World !\""), "NAME");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C4C4C4");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['computer_name'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("本電腦名稱");
+        this.setOutput(true, "String");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['user_name'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("本用戶名稱");
+        this.setOutput(true, "String");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['set_clipboard'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(null)
+            .appendField("剪接簿內容 設為");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['built_in_wday_zh'] = {
     init: function() {
         this.appendDummyInput()
             .appendField("現週(一 ~ 日)");
-        this.setOutput(true, null);
+        this.setOutput(true, "String");
         this.setColour(160);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -15,7 +63,7 @@ Blockly.Blocks['built_in_wday_zh'] = {
 Blockly.Blocks['return'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("禁用該組合鍵");
+            .appendField("禁用該熱鍵");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour("#555555");

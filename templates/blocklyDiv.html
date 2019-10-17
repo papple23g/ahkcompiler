@@ -236,6 +236,7 @@
         <block type="msgbox"></block>
         <block type="send_text"></block>
         <block type="send_key"></block>
+        <block type="set_clipboard"></block>
         <block type="file_recycle_empty"></block>
         <block type="close_process"></block>
         <block type="sleep">
@@ -319,6 +320,17 @@
         <block type="text_join">
             <mutation items="2" />
         </block>
+        <block type="text_join" id="MlcSa_-%[~;}wLX.I(R]" x="89" y="150">
+            <mutation items="2"></mutation>
+            <value name="ADD0">
+                <block type="text" id="xbZSOE`SL!rpf_Mu2:M9">
+                    <field name="TEXT">今天星期</field>
+                </block>
+            </value>
+            <value name="ADD1">
+                <block type="built_in_wday_zh" id="ht]u_Z_++4!s63:JvV9#"></block>
+            </value>
+        </block>
     </category>
 
     <category name="時間" colour="#7B68EE">
@@ -344,7 +356,6 @@
         <block type="built_in_time">
             <field name="NAME">sec</field>
         </block>
-
     </category>
 
     <category name="數學" colour="#0000CD">
@@ -367,6 +378,25 @@
     </category>
 
     <sep></sep>
+
+    <category name="系統資訊" colour="#956D49">
+        <block type="user_name"></block>
+        <block type="computer_name"></block>
+        <block type="procedures_defreturn" id="^y(x_n|j+Ax!P=OvF?FQ" x="92" y="84">
+            <field name="NAME">視窗名稱</field>
+            <statement name="STACK">
+            <block type="ahk_code" id="?V=A.7t1!WUz|sQQJxT|">
+                <field name="NAME">WinGetActiveTitle, Title</field>
+            </block>
+            </statement>
+            <value name="RETURN">
+            <block type="variables_get" id="zz9Np1ADn)RBo-2dp[qm">
+                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">Title</field>
+            </block>
+            </value>
+        </block>
+    </category>
+
 
     <category name="邏輯" colour="#5b80a5">
         <block type="controls_if"></block>
@@ -393,6 +423,10 @@
     </category>
 
     <category name="變數" colour="#A45A7F" custom="VARIABLE">
+    </category>
+
+    <category name="自訂AHK" colour="#C4C4C4">
+        <block type="ahk_code"></block>
     </category>
 
 </xml>
