@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '*',
-    "papple23gwebtest.azurewebsites.net",
+    "papple23g-ahkcompiler.herokuapp.com",
     ]
 
 
