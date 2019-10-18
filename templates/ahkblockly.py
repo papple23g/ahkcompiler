@@ -46,9 +46,10 @@ def XmlToBlockly(ev):
         #若xml元素產生成功，就將xml元素嵌入至blockly區塊顯示
         if xml_elt:
             Blockly.Xml.clearWorkspaceAndLoadFromXml(xml_elt,workspace)
-
         #輸出格式化xml到
-        textarea_elt.value=FormatXML(textarea_elt.value)
+        xml_format_str=FormatXML(textarea_elt.value)
+        textarea_elt.value=xml_format_str
+        
 #定義動作:顯示blocks的xml (必須等待Block載入完成)
 def BlocklyToXml(ev):
     #啟用複製和下載AHK檔案按鈕
@@ -1092,7 +1093,7 @@ div_showAhkArea_elt<=div_showAhkAreaBtns_elt
 
 
 #設置XML轉換結果畫面元素
-div_textareaXml_elt=DIV(id='input_xml_area',style={"display":"none"}) ##
+div_textareaXml_elt=DIV(id='input_xml_area')#,style={"display":"none"}) ##
 div_textareaXml_elt
 div_textareaXml_elt<=P("xml:")
 textarea_showXml_elt=TEXTAREA(
@@ -1145,12 +1146,27 @@ AddStyle('''
         }
     }
 ''')
+#調整workspace為符合當前頁面的尺寸
 Blockly.svgResize(workspace)
 
+def f(ev):
+    #獲取workspace blockly的xml
+    xml_str=Blockly.Xml.workspaceToDom(workspace).outerHTML
+    #紀錄xml到暫存空間
+    storage['xml']=xml_str
+
+workspace.addChangeListener(f)
 
 
-#首次載入網頁時，解析workspace
-BlocklyToXml(window.Event.new("change"))
+#首次載入網頁時，若暫存空間裡有xml的資料，就印出該資資料
+if 'xml' in storage.keys():
+    #獲取之前儲存的xml資料
+    doc['textarea_xml'].value=storage['xml']
+    #觸發xml轉Blockly
+    doc['textarea_xml'].dispatchEvent(window.Event.new("input"))
+#否則，解析workspace
+else:
+    BlocklyToXml(window.Event.new("change"))
 
 
 
