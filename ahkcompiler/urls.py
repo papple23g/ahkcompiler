@@ -8,7 +8,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', homepage),
-    url(r'(?P<subpage>^ahk.+)',ahk_webpage),
+    url(r'(?P<subpage>ahktool)',ahk_webpage),
+    url(r'(?P<subpage>ahkblockly)',ahk_webpage),
+    url(r'(?P<subpage>updateDiary)',ahk_webpage),
+    url(r'(?P<subpage>about)',ahk_webpage),
 
 
     url(r'^dl$', dl),

@@ -1515,7 +1515,7 @@ AddStyle("""
 
 #進行排版
 div_main=DIV(Class="main")
-doc<=div_main
+doc['div_subMainPage']<=div_main
 
 #主區塊樣式
 AddStyle("""
@@ -1570,38 +1570,29 @@ def doCopy(ev):
 def doCopyAllFunction(ev):
     CopyTextToClipborad(doc['all_function_srcipt_output'].select('pre')[0].text)
 
-#排版
-div_main<=H1(f"AutoHotKey 自動化工具語法產生器 v{VERSION}",style={"color":"#3939dc","font-size":"18px"})
 
+#排版
+
+#設置版本標題
+h1_title_elt=H1(f"AutoHotKey 自動化工具語法產生器 v{VERSION}",style={"color":"#3939dc","font-size":"18px","font-weight":"600"})
+div_main<=h1_title_elt
+#置入設定組合鍵區塊
 div_main<=DIV("設定組合鍵",Class="block_header")
 div_main<=div_setting_hotkey
-
 #隱藏前綴設定DIV區塊
 doc['div_elt_prefixSymbol_setting'].style.display="none"
-
+#置入設定功能區塊
 div_main<=DIV("設定功能",Class="block_header")
 div_main<=div_setting_function
-
+#置入AHK程式碼區塊
 div_main<=DIV_SciptTabs()
 div_main<=DIV(style={"clear":"both"})
 div_main<=DIV(DIV_ahkScriptBlock())
-
 div_main<=DIV(
     BUTTON("複製語法",id="copy_button").bind("click",doCopy)
     + A_INPUTCheckbox("同時複製關聯函式",checked=True,id="dont_copy_function"),
     style={"float":"left"},
 )
-
-"""
-div_main<=DIV(
-    BUTTON("複製所有函式",id="copy_all_function_button").bind("click",doCopyAllFunction),
-    style={
-        "float":"right",
-        "margin-top":"10px",
-    },
-)
-"""
-
 AddStyle("""
     #dont_copy_function{
         margin-left:10px;
@@ -1624,6 +1615,35 @@ AddStyle("""
         display:none;
     }
 """)
+
+#設置使用說明iframe
+iframe_elt=IFRAME(src="https://hackmd.io/j9mJkJGfTFiMpz4Wyt-q0Q?view")
+div_iframe_elt=DIV(iframe_elt)
+doc['div_subMainPage']<=div_iframe_elt
+AddStyle('''
+    div.main {
+        width: 69% !important;
+        float: left;
+        margin-right: 150px;
+        margin-bottom: 150px;
+    }
+
+    iframe{
+        float: left;
+        border: none;
+        width: 460px;
+        height: 1000px;
+    }
+
+    @media only screen and (max-width: 911px) {
+        div.main {
+            width: 90% !important;
+        }
+        iframe{
+            width: 90%;
+        }
+    }
+''')
 
 #遮蔽文字輸入欄:僅在標題含有該文字的視窗下執行
 doc['ifWinTitle_InputElt'].disabled=True

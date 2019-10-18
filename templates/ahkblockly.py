@@ -1121,13 +1121,11 @@ doc['div_ahkblockly_gui']<=div_textareaXml_elt
 doc['div_subMainPage']<=div_iframe_elt
 AddStyle('''
 
-    #div_subMainPage>*{
-        padding:20px;
-    }
-
     #div_ahkblockly_gui {
         width: 69% !important;
         float: left;
+        margin-bottom: 150px;
+
     }
 
     iframe{

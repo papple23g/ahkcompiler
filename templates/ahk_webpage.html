@@ -27,12 +27,20 @@ doc['div_headerAndBars']<=DIV_header()
 
 #根據subpage置入bar DIV元素
 {% if subpage == "ahktool" %}
-doc<=DIV_bars(0)
+doc['div_headerAndBars']<=DIV_bars(0)
 {% include 'ahktool.py' %}
 
 {% elif subpage == "ahkblockly" %}
 doc['div_headerAndBars']<=DIV_bars(1)
 {% include 'ahkblockly.py' %}
+
+{% elif subpage == "updateDiary" %}
+doc['div_headerAndBars']<=DIV_bars(2)
+{% include 'updateDiary.py' %}
+
+{% elif subpage == "about" %}
+doc['div_headerAndBars']<=DIV_bars(3)
+{% include 'about.py' %}
 
 {% endif %}
 

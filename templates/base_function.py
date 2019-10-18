@@ -48,7 +48,7 @@ def ParentElt(elt,parent_tagName):
 
 #定義DIV網頁header區塊
 def DIV_header():
-    div_elt=DIV(id="div_header",Class="w3-row-padding w3-green")
+    div_elt=DIV(id="div_header",Class="w3-row-padding w3-indigo")
     #設置網頁標頭H1元素
     H1_title_elt=H1(
         B(
@@ -90,7 +90,8 @@ def DIV_bars(nbo_subpage_int):
     div_btnBar_elt_list=[
         DIV_ButtonBar("首頁",id="首頁",link='/ahktool'),
         DIV_ButtonBar("AHK積木",id="AHK積木",link='/ahkblockly'),
-        DIV_ButtonBar("更新日誌",id="更新日誌",link='/ahktool'),
+        DIV_ButtonBar("更新日誌",id="更新日誌",link='/updateDiary'),
+        DIV_ButtonBar("關於作者",id="關於作者",link='/about'),
     ]
 
     #將當前子頁面的按鈕亮起
@@ -117,3 +118,12 @@ def DIV_bars(nbo_subpage_int):
     """)
 
     return div_elt
+
+#子頁面之前的元素空出間隔
+AddStyle('''
+#div_subMainPage>*{
+        padding:20px;
+    }
+'''
+)
+
