@@ -1104,7 +1104,7 @@ div_textareaXml_elt<=textarea_showXml_elt
 
 
 #設置使用說明iframe
-iframe_elt=IFRAME(src="https://hackmd.io/xAv1hm_DSb-eMe0kdSYayg?view")
+iframe_elt=IFRAME(src="https://hackmd.io/@papple23g/r1RuM08tB")
 div_iframe_elt=DIV(iframe_elt)
 
 #排版

@@ -1,6 +1,6 @@
 
 #設置更新日誌iframe
-iframe_elt=IFRAME(id="iframe_ahktool_iframe",src="https://hackmd.io/SRDwVzy4QDa_O_P8tK4P_g?view")
+iframe_elt=IFRAME(id="iframe_ahktool_iframe",src="https://hackmd.io/@papple23g/SkRWltCVB")
 div_iframe_elt=DIV(iframe_elt)
 
 #排版

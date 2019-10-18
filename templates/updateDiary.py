@@ -1,9 +1,9 @@
 
 #設置更新日誌iframe
-ahktool_iframe_elt=IFRAME(id="iframe_ahktool_iframe",src="https://hackmd.io/WZdfdBwRTRaUWUTmVj4BDA?view")
+ahktool_iframe_elt=IFRAME(id="iframe_ahktool_iframe",src="https://hackmd.io/@papple23g/H1qdYeDtr")
 div_ahktoolIframe_elt=DIV(ahktool_iframe_elt)
 
-ahkblockly_iframe_elt=IFRAME(id="iframe_ahkblockly_iframe",src="https://hackmd.io/XZuRN06GT92THHqNypNIAw?view")
+ahkblockly_iframe_elt=IFRAME(id="iframe_ahkblockly_iframe",src="https://hackmd.io/@papple23g/Bk9WKlDtr")
 div_ahkblocklyIframe_elt=DIV(ahkblockly_iframe_elt)
 
 #排版

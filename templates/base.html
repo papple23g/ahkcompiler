@@ -17,21 +17,23 @@
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <link async rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-    <!-- Google Analytics 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135785524-1"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135785524-3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-135785524-1');
+    gtag('config', 'UA-135785524-3');
     </script>
-    -->
 
     <style>
+        body {
+            overflow: hidden;
+        }
+        body > .ui-infobar, body > .ui-toc, body > .ui-affix-toc {
+            display: none !important;
+        }
         textarea {
             overflow-x: scroll;
             white-space: nowrap;

@@ -1617,7 +1617,7 @@ AddStyle("""
 """)
 
 #設置使用說明iframe
-iframe_elt=IFRAME(src="https://hackmd.io/j9mJkJGfTFiMpz4Wyt-q0Q?view")
+iframe_elt=IFRAME(src="https://hackmd.io/@papple23g/r1geUgPKH")
 div_iframe_elt=DIV(iframe_elt)
 doc['div_subMainPage']<=div_iframe_elt
 AddStyle('''
