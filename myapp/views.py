@@ -9,7 +9,6 @@ def homepage(req):
     return HttpResponse("home page.")
 
 def ahk_webpage(req,subpage):
-    print(subpage)
     return render(req,"ahk_webpage.html",{'subpage':subpage})
 
 #定義API:執行AHK編譯為EXE檔

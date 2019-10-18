@@ -338,9 +338,63 @@
             </value>
         </block>
         <block type="mouse_get_pos">
+            <value name="posX">
+            <block type="variables_get">
+                <field name="VAR">滑鼠X</field>
+            </block>
+            </value>
+            <value name="posY">
+            <block type="variables_get">
+                <field name="VAR">滑鼠Y</field>
+            </block>
+            </value>
         </block>
-
-        
+        <block type="coord_mode"x="71" y="185">
+            <field name="NAME">screen</field>
+            <next>
+            <block type="mouse_get_pos">
+                <value name="posX">
+                <block type="variables_get">
+                    <field name="VAR">滑鼠X</field>
+                </block>
+                </value>
+                <value name="posY">
+                <block type="variables_get">
+                    <field name="VAR">滑鼠Y</field>
+                </block>
+                </value>
+                <next>
+                <block type="msgbox">
+                    <value name="NAME">
+                    <block type="text_join">
+                        <mutation items="4"></mutation>
+                        <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">現在滑鼠座標為: </field>
+                        </block>
+                        </value>
+                        <value name="ADD1">
+                        <block type="variables_get">
+                            <field name="VAR">滑鼠X</field>
+                        </block>
+                        </value>
+                        <value name="ADD2">
+                        <block type="text">
+                            <field name="TEXT">, </field>
+                        </block>
+                        </value>
+                        <value name="ADD3">
+                        <block type="variables_get">
+                            <field name="VAR">滑鼠Y</field>
+                        </block>
+                        </value>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </next>
+        </block>
     </category>
 
     <category name="文字" colour="#5BA58C">
@@ -387,6 +441,72 @@
         </block>
         <block type="built_in_time">
             <field name="NAME">sec</field>
+        </block>
+        <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
+            <mutation statements="false"></mutation>
+            <field name="NAME">現在時間</field>
+            <comment pinned="false" h="80" w="160">請按右鍵&gt;創造函式積木
+來使用此函式積木</comment>
+            <value name="RETURN">
+            <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
+                <mutation items="11"></mutation>
+                <value name="ADD0">
+                <block type="built_in_time" id="3*b_Ao:WS1JMA~pdCo@1">
+                    <field name="NAME">year</field>
+                </block>
+                </value>
+                <value name="ADD1">
+                <block type="text" id="s)pS:L;BF`;kflQBLVNR">
+                    <field name="TEXT">/</field>
+                </block>
+                </value>
+                <value name="ADD2">
+                <block type="built_in_time" id="N)U2e8AB{xaJHW!c;h#/">
+                    <field name="NAME">month</field>
+                </block>
+                </value>
+                <value name="ADD3">
+                <block type="text" id="Hin^|y$w@)Bz-3fxYJo_">
+                    <field name="TEXT">/</field>
+                </block>
+                </value>
+                <value name="ADD4">
+                <block type="built_in_time" id="Tfi4BII%@Ap31W]Fg9%l">
+                    <field name="NAME">day</field>
+                </block>
+                </value>
+                <value name="ADD5">
+                <block type="text" id="r_0%Xpw_71L_L[Ao-8oo">
+                    <field name="TEXT">-</field>
+                </block>
+                </value>
+                <value name="ADD6">
+                <block type="built_in_time" id="G|$^aoRw?.-nvdlw)h!-">
+                    <field name="NAME">hour</field>
+                </block>
+                </value>
+                <value name="ADD7">
+                <block type="text" id="Z!nnU}TwQHz|QeNz_J=|">
+                    <field name="TEXT">:</field>
+                </block>
+                </value>
+                <value name="ADD8">
+                <block type="built_in_time" id="14gg/Elks,(H;_T}(=lO">
+                    <field name="NAME">min</field>
+                </block>
+                </value>
+                <value name="ADD9">
+                <block type="text" id="]h^=X9AaM^g5^w/CakfK">
+                    <field name="TEXT">:</field>
+                </block>
+                </value>
+                <value name="ADD10">
+                <block type="built_in_time" id="mpTd{yebnp:R/%H30rj3">
+                    <field name="NAME">sec</field>
+                </block>
+                </value>
+            </block>
+            </value>
         </block>
     </category>
 

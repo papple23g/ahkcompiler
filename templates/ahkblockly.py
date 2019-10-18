@@ -884,7 +884,7 @@ xml_ex_1='''<xml>
   <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
     <mutation statements="false"></mutation>
     <field name="NAME">現在時間</field>
-    <comment pinned="false" h="80" w="160">請按右鍵&gt;創造函式積木
+    <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木
 來使用此函式積木</comment>
     <value name="RETURN">
       <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
@@ -947,14 +947,14 @@ xml_ex_1='''<xml>
       </block>
     </value>
   </block>
-  <block type="procedures_defreturn" id="[ZFzaKc.WVOfgb*~E4X4" x="438" y="116">
+  <block type="procedures_defreturn" id="[ZFzaKc.WVOfgb*~E4X4" x="418" y="59">
     <mutation statements="false"></mutation>
     <field name="NAME">現在日期</field>
-    <comment pinned="false" h="80" w="160">請按右鍵&gt;創造函式積木
+    <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木
 來使用此函式積木</comment>
     <value name="RETURN">
       <block type="text_join" id=".wPxQ{%A/.TkGGUS:/l@">
-        <mutation items="7"></mutation>
+        <mutation items="9"></mutation>
         <value name="ADD0">
           <block type="text" id="8edf;tX{wP:I5]xI5#J6">
             <field name="TEXT">中華民國</field>
@@ -1012,6 +1012,14 @@ xml_ex_1='''<xml>
             <field name="TEXT">日</field>
           </block>
         </value>
+        <value name="ADD7">
+          <block type="text" id="H78r)U*L}t~7e.@L5dM2">
+            <field name="TEXT">  星期</field>
+          </block>
+        </value>
+        <value name="ADD8">
+          <block type="built_in_wday_zh" id="EkC@I@+HGH5^cu~3G=S="></block>
+        </value>
       </block>
     </value>
   </block>
@@ -1040,7 +1048,9 @@ xml_ex_1='''<xml>
     </value>
   </block>
 </xml>'''
+
 #endregion 插入範例1
+
 
 #插入範本
 def ViewEx(ev):
@@ -1092,13 +1102,53 @@ textarea_showXml_elt.bind('input',XmlToAHK)
 textarea_showXml_elt.bind('input',XmlToBlockly)
 div_textareaXml_elt<=textarea_showXml_elt
 
+
+#設置使用說明iframe
+iframe_elt=IFRAME(src="https://hackmd.io/xAv1hm_DSb-eMe0kdSYayg?view")
+div_iframe_elt=DIV(iframe_elt)
+
 #排版
-VERSION="1.3 beta"
-h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px"})
-doc.body.insertBefore(h1_title_elt,doc['blocklyDiv'])
-doc['blocklyDiv'].style.visibility="visible" #載入完Brython後才顯示workspace區塊 (才能一併顯示頁面)
-doc<=div_showAhkArea_elt
-doc<=div_textareaXml_elt
+VERSION="1.4"
+#設置版本標題
+h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600"})
+doc['div_ahkblockly_gui'].insertBefore(h1_title_elt,doc['div_ahkblockly_gui'].select_one('div'))
+#載入完Brython後才顯示workspace區塊 (才能一併顯示頁面)
+doc['blocklyDiv'].style.visibility="visible"
+#在ahkblockly_gui置入程式碼區塊
+doc['div_ahkblockly_gui']<=div_showAhkArea_elt
+doc['div_ahkblockly_gui']<=div_textareaXml_elt
+#置入說明區塊
+doc['div_subMainPage']<=div_iframe_elt
+AddStyle('''
+
+    #div_subMainPage>*{
+        padding:20px;
+    }
+
+    #div_ahkblockly_gui {
+        width: 69% !important;
+        float: left;
+    }
+
+    iframe{
+        float: left;
+        border: none;
+        width: 30%;
+        min-width: 200px;
+        height: 1000px;
+    }
+
+    @media only screen and (max-width: 911px) {
+        #div_ahkblockly_gui {
+            width: 90% !important;
+        }
+        iframe{
+            width: 90%;
+        }
+    }
+''')
+Blockly.svgResize(workspace)
+
 
 
 #首次載入網頁時，解析workspace

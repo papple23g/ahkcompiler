@@ -4,32 +4,34 @@
 
 <body onload="brython(1)">
 
+<div id="div_headerAndBars"></div>
+
+<div id="div_subMainPage">
 
 {% if subpage == 'ahkblockly' %}
+<div id="div_ahkblockly_gui">
 {% include 'blocklyDiv.html' %}
+</div>
 <script src="{% static "workspace.js" %}"></script>
 {% endif %}
+
+</div>
 
 <script type="text/python">
 
 {% include 'base_function.py' %}
 
-#置入標頭
-# div_elt=doc.select_one('div')
-# print(div_elt)
+#置入header DIV元素
+doc['div_headerAndBars']<=DIV_header()
 
 
-
+#根據subpage置入bar DIV元素
 {% if subpage == "ahktool" %}
-
-doc<=DIV_header()
 doc<=DIV_bars(0)
 {% include 'ahktool.py' %}
 
 {% elif subpage == "ahkblockly" %}
-
-doc.body.insertBefore(DIV_header(),doc['blocklyDiv'])
-doc.body.insertBefore(DIV_bars(1),doc['blocklyDiv'])
+doc['div_headerAndBars']<=DIV_bars(1)
 {% include 'ahkblockly.py' %}
 
 {% endif %}
