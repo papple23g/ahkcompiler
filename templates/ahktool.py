@@ -1,4 +1,4 @@
-from browser import doc,alert,bind,timer,window
+from browser import doc,alert,bind,window
 from browser.html import *
 
 VERSION="2.6"
