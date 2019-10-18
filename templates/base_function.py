@@ -4,7 +4,7 @@
 
 from browser import document as doc
 from browser.html import *
-from browser import bind,window,alert,ajax
+from browser import bind,window,alert
 #過渡JS物件和函式
 log=window.console.log
 FormatHTML=window.FormatHTML
