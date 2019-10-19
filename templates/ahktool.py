@@ -1571,11 +1571,20 @@ def doCopyAllFunction(ev):
     CopyTextToClipborad(doc['all_function_srcipt_output'].select('pre')[0].text)
 
 
-#排版
-
+#設置子頁面標頭DIV元素
+div_title_elt=DIV()
 #設置版本標題
-h1_title_elt=H1(f"AutoHotKey 自動化工具語法產生器 v{VERSION}",style={"color":"#3939dc","font-size":"18px","font-weight":"600"})
-div_main<=h1_title_elt
+h1_title_elt=H1(f"AutoHotKey 自動化工具語法產生器 v{VERSION}",style={"color":"#3939dc","font-size":"18px","font-weight":"600",'float':'left'})
+#設置FB DIV元素
+div_fb_elt=DIV(id='div_fb',style={'float':'right'})
+div_fb_elt.innerHTML=r'<div id="fb-root" style="float:right"></div><div class="fb-like" data-href"https://papple23g-ahkcompiler.herokuapp.com/ahktool" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>' # style="float:right"
+#
+div_title_elt<=h1_title_elt
+div_title_elt<=div_fb_elt+DIV(style={'clear':'both'})
+
+
+#排版
+div_main<=div_title_elt
 #置入設定組合鍵區塊
 div_main<=DIV("設定組合鍵",Class="block_header")
 div_main<=div_setting_hotkey

@@ -1094,6 +1094,9 @@ div_showAhkArea_elt<=div_showAhkAreaBtns_elt
 
 #設置XML轉換結果畫面元素
 div_textareaXml_elt=DIV(id='input_xml_area')#,style={"display":"none"}) ##
+#實際部屬時，要把XML區塊隱藏起來
+if 'window.location.hostname' in window.location.hostname:
+    div_textareaXml_elt.style.display="none"
 div_textareaXml_elt
 div_textareaXml_elt<=P("xml:")
 textarea_showXml_elt=TEXTAREA(
@@ -1108,11 +1111,22 @@ div_textareaXml_elt<=textarea_showXml_elt
 iframe_elt=IFRAME(src="https://hackmd.io/@papple23g/r1RuM08tB")
 div_iframe_elt=DIV(iframe_elt)
 
-#排版
+#設置子頁面標頭DIV元素
+div_title_elt=DIV()
+#設置標頭H1元素
 VERSION="1.4"
+h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
+#設置FB DIV元素
+div_fb_elt=DIV(id='div_fb',style={'float':'right'})
+div_fb_elt.innerHTML=r'<div id="fb-root" style="float:right"></div><div class="fb-like" data-href"https://papple23g-ahkcompiler.herokuapp.com/ahkblockly" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>' # style="float:right"
+#
+div_title_elt<=h1_title_elt
+div_title_elt<=div_fb_elt+DIV(style={'clear':'both'})
+
+#排版
+
 #設置版本標題
-h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600"})
-doc['div_ahkblockly_gui'].insertBefore(h1_title_elt,doc['div_ahkblockly_gui'].select_one('div'))
+doc['div_ahkblockly_gui'].insertBefore(div_title_elt,doc['div_ahkblockly_gui'].select_one('div'))
 #載入完Brython後才顯示workspace區塊 (才能一併顯示頁面)
 doc['blocklyDiv'].style.visibility="visible"
 #在ahkblockly_gui置入程式碼區塊
@@ -1149,13 +1163,13 @@ AddStyle('''
 #調整workspace為符合當前頁面的尺寸
 Blockly.svgResize(workspace)
 
-def f(ev):
+#定義動作:儲存
+def StoringXml(ev):
     #獲取workspace blockly的xml
     xml_str=Blockly.Xml.workspaceToDom(workspace).outerHTML
     #紀錄xml到暫存空間
     storage['xml']=xml_str
-
-workspace.addChangeListener(f)
+workspace.addChangeListener(StoringXml)
 
 
 #首次載入網頁時，若暫存空間裡有xml的資料，就印出該資資料
