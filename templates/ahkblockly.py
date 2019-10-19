@@ -744,12 +744,12 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         #endregion 變數Blockly
 
         #region 邏輯Blockly
-        ###
+        
         elif block_elt.attrs['type']=="controls_if":
             #獲取判斷布林值
             value_if0_elt=FindCurrent(block_elt,'value[name="IF0"]')
-            value_if0_str,value_ifn_comment=AHK_value(value_if0_elt,get_all_comment=True)
-            com_str+=value_ifn_comment
+            value_if0_str,value_if0_comment=AHK_value(value_if0_elt,get_all_comment=True)
+            com_str+=value_if0_comment
             #獲取執行式
             statement_do0_elt=FindCurrent(block_elt,'statement[name="DO0"]')
             statement_do0_str=AHK_statement(statement_do0_elt)
@@ -846,6 +846,42 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+="A_UserName"
 
         #endregion 系統資訊Blockly
+
+
+        #region 循環Blockly
+
+        #Loop循環
+        elif block_elt.attrs['type']=="controls_repeat_ext":
+            #獲取重複次數
+            value_elt=FindCurrent(block_elt,'value[name="TIMES"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            com_str+=value_comment
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            com_str+=f"Loop {value_str} {{\n{statement_do_str}}}"
+
+        #while循環
+        elif block_elt.attrs['type']=="controls_whileUntil":
+            #獲取布林值
+            value_elt=FindCurrent(block_elt,'value[name="BOOL"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else "False"
+            com_str+=value_comment
+            #獲取迴圈方式
+            field_elt=FindCurrent(block_elt,'field[name="MODE"]')
+            while_str="while"+" not"*(field_elt.text!="WHILE")
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            com_str+=f"{while_str} {value_str} {{\n{statement_do_str}}}"
+
+        #break或continue
+        elif block_elt.attrs['type']=="controls_flow_statements":
+            field_elt=FindCurrent(block_elt,'field')
+            com_str+=field_elt.text.lower()+'\n'
+
+        #endregion 循環Blockly
 
 
         #AHK原生程式碼Blockly

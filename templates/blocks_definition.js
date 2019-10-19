@@ -1,6 +1,21 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['win_get_active_title'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(null)
+            .appendField("將目前視窗名稱輸出至");
+        this.appendDummyInput()
+            .appendField("變數");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#956D49");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['mouse_get_pos'] = {
     init: function() {
         this.appendValueInput("posX")
@@ -19,7 +34,6 @@ Blockly.Blocks['mouse_get_pos'] = {
         this.setHelpUrl("");
     }
 };
-
 
 Blockly.Blocks['coord_mode'] = {
     init: function() {

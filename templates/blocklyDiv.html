@@ -587,6 +587,25 @@
         <block type="logic_null"></block>
     </category>
 
+    <category name="循環" colour="#006400">
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+            <block type="math_number">
+                <field name="NUM">10</field>
+            </block>
+            </value>
+        </block>
+        <block type="controls_whileUntil">
+            <field name="MODE">WHILE</field>
+        </block>
+        <block type="controls_flow_statements">
+            <field name="FLOW">BREAK</field>
+        </block>
+
+    </category>
+
+
+
     <category name="函式" colour="#995BA5">
         <block type="procedures_defnoreturn">
             <field name="NAME">函式名稱</field>
