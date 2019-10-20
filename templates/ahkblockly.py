@@ -87,6 +87,8 @@ def XmlToAHK(ev):
         'logic_operation',
         'logic_null',
         'logic_negate',
+        'in_str',
+        'right_click_menu', #不讓右鍵清單獨立執行，否則會無限循環跳出清單
     ]
 
     if ev.type in ["input","click"]:
@@ -310,7 +312,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=f':{hotstring_setting_str}:{value_abb_str}::{statement_do_str}\n'
 
         #endregion 熱字串Blockly
-
         
         #region 動作Blockly
         
@@ -503,7 +504,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
 
         #endregion 物件Blockly
-
         
         #region 模擬鍵盤Blockly
         elif block_elt.attrs['type']=="send_key":
@@ -709,12 +709,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 變數Blockly
         elif block_elt.attrs['type']=="variables_get":
-            com_str+=block_elt.select_one('field').text
+            #獲取變數名稱(取代空白為底線)
+            var_name=block_elt.select_one('field').text
+            var_name=var_name.replace(" ","_").replace("　","_")
+            com_str+=var_name
 
         elif block_elt.attrs['type']=="variables_set":
-            #獲取變數名稱
+            #獲取變數名稱(取代空白為底線)
             field_elt=FindCurrent(block_elt,'field[name="VAR"]')
-            var_name=field_elt.text
+            var_name=field_elt.text.replace(" ","_").replace("　","_")
             #獲取賦值內容
             value_elt=FindCurrent(block_elt,'value[name="VALUE"]')
             value_str,value_comment=AHK_value(value_elt)
@@ -724,7 +727,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         elif block_elt.attrs['type']=="math_change":
             field_elt=FindCurrent(block_elt,'field[name="VAR"]')
-            var_name=field_elt.text
+            var_name=field_elt.text.replace(" ","_").replace("　","_")
             value_str="0"
             #獲取賦值內容
             value_delta_elt=FindCurrent(block_elt,'value[name="DELTA"]')
@@ -834,10 +837,85 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #輸出程式
             com_str+=f'({value_a_str} {field_op_str} {value_b_str})'
 
+        #包含文字
+        elif block_elt.attrs['type']=="in_str":
+            #獲取主要文字
+            value_text_elt=FindCurrent(block_elt,'value[name="text"]')
+            value_text_str,value_text_comment=AHK_value(value_text_elt)
+            com_str+=value_text_comment
+            #獲取次要對比文字
+            value_subtext_elt=FindCurrent(block_elt,'value[name="sub_text"]')
+            value_subtext_str,value_subtext_comment=AHK_value(value_subtext_elt)
+            com_str+=value_subtext_comment
+            #獲取要使用的函式名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            func_str="not "*(field_elt.text=="not_contain")+"InStr"
+            #輸出程式
+            com_str+=f'{func_str}({value_text_str},{value_subtext_str})'
+
+            
+
+
+
 
         #endregion 邏輯Blockly
 
-        
+        #region 右鍵清單
+
+        elif block_elt.attrs['type']=="right_click_menu":
+            menu_myMenu_add_str=""
+            label_str=""
+            #遍歷所有項目
+            statement_elt=FindCurrent(block_elt,'statement')
+            #設置項目計數器(防止重複Lable名稱)
+            i_item=1
+            block_item_elt_list=[]
+            block_item_elt=FindCurrent(statement_elt,'block')
+            if block_item_elt:
+                block_item_elt_list.append(block_item_elt)
+                while FindCurrent(block_item_elt,'next'):
+                    next_elt=FindCurrent(block_item_elt,'next')
+                    block_item_elt=FindCurrent(next_elt,'block')
+                    block_item_elt_list.append(block_item_elt)
+            
+            for block_item_elt in block_item_elt_list:
+
+                if block_item_elt.attrs['type']=="right_click_menu_item":
+                    #獲取項目名稱
+                    field_itemName_elt=FindCurrent(block_item_elt,'field[name="item_name"]')
+                    item_name_raw_str=field_itemName_elt.text
+                    item_name_str=item_name_raw_str.replace(" ","_").replace("　","_")
+                    menu_myMenu_add_str+=f"Menu,MyMenu,Add,{item_name_raw_str},{item_name_str}_{i_item}\n"
+                    #獲取執行式
+                    statement_do_elt=FindCurrent(block_item_elt,'statement[name="DO"]')
+                    statement_do_str=AHK_statement(statement_do_elt)
+                    label_str+=f"{item_name_str}_{i_item}:\n{statement_do_str}return\n"
+                    #增加項目計數
+                    i_item+=1
+                elif block_item_elt.attrs['type']=="right_click_menu_item_hr":
+                    menu_myMenu_add_str+=f"Menu,MyMenu,Add,\n"
+
+
+
+            #輸出程式碼
+            com_str+='''Loop,1{
+CoordMode, Menu, Screen
+CoordMode, Mouse, Screen
+
+'''+ menu_myMenu_add_str +'''
+MouseGetPos,MX,MY
+Menu,MyMenu,Show,% MX,% MY
+Reload
+WinKill,menu launcher -quits right after .ahk,WinText,ET
+return
+
+'''+ label_str +'''}\n'''
+
+
+
+        #endregion 右鍵清單
+
+
         #region 系統資訊Blockly
         elif block_elt.attrs['type']=="computer_name":
             com_str+="A_ComputerName"
@@ -845,8 +923,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         elif block_elt.attrs['type']=="user_name":
             com_str+="A_UserName"
 
-        #endregion 系統資訊Blockly
+        elif block_elt.attrs['type']=="win_get_active_title":
+            #獲取變數名稱
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            com_str+=value_comment
 
+            com_str+=f'WinGetActiveTitle, {value_str}\n'
+
+        #endregion 系統資訊Blockly
 
         #region 循環Blockly
 
@@ -1129,7 +1214,7 @@ div_showAhkArea_elt<=div_showAhkAreaBtns_elt
 
 
 #設置XML轉換結果畫面元素
-div_textareaXml_elt=DIV(id='input_xml_area')#,style={"display":"none"}) ##
+div_textareaXml_elt=DIV(id='input_xml_area')
 #實際部屬時，要把XML區塊隱藏起來
 if 'herokuapp' in window.location.hostname:
     div_textareaXml_elt.style.display="none"

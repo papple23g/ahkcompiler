@@ -428,20 +428,33 @@
         <block type="text_join">
             <mutation items="2" />
         </block>
-        <block type="text_join" id="MlcSa_-%[~;}wLX.I(R]" x="89" y="150">
+        <block type="text_join">
             <mutation items="2"></mutation>
             <value name="ADD0">
-                <block type="text" id="xbZSOE`SL!rpf_Mu2:M9">
+                <block type="text">
                     <field name="TEXT">今天星期</field>
                 </block>
             </value>
             <value name="ADD1">
-                <block type="built_in_wday_zh" id="ht]u_Z_++4!s63:JvV9#"></block>
+                <block type="built_in_wday_zh"></block>
             </value>
         </block>
+        <block type="in_str">
+            <field name="NAME">contain</field>
+            <value name="text">
+            <block type="text">
+                <field name="TEXT">Apple</field>
+            </block>
+            </value>
+            <value name="sub_text">
+            <block type="text">
+                <field name="TEXT">App</field>
+            </block>
+            </value>
+        </block>       
     </category>
 
-    <category name="時間" colour="#7B68EE">
+    <category name="時間" colour="#AFEEEE">
         <block type="built_in_time">
             <field name="NAME">year</field>
         </block>
@@ -531,8 +544,9 @@
             </value>
         </block>
     </category>
+    
 
-    <category name="數學" colour="#AFEEEE">
+    <category name="數學" colour="#7B68EE">
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
@@ -551,23 +565,174 @@
         </block>
     </category>
 
+    <category name="右鍵清單" colour="#00CED1">
+        <block type="hotkey_execute" id="W[bq`zQ(;Ln!!2VoANHZ" x="67" y="126">
+            <value name="NAME">
+            <block type="function_key" id="-{XjF0@#mpJ*O8f]flTe">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key" id="U:+l@VS~ey)!$AKkn4H6">
+                    <field name="normal_key">Z</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="right_click_menu" id="Z,VFz*rj8(rhwMNLjR1w">
+                <statement name="NAME">
+                <block type="right_click_menu_item" id="TSjJYV8,eC{dFw?jLNMY">
+                    <field name="item_name">開啟 Google</field>
+                    <statement name="DO">
+                    <block type="open" id=";VnDBJS=Bru*.zmN`k/@">
+                        <value name="NAME">
+                        <block type="built_in_webpage" id="k~tjUZYFUqgcRRzJ/xA`">
+                            <field name="NAME">google</field>
+                        </block>
+                        </value>
+                    </block>
+                    </statement>
+                    <next>
+                    <block type="right_click_menu_item" id="yp!vUG^4}4M.,7gD9px/">
+                        <field name="item_name">開啟 Youtube</field>
+                        <statement name="DO">
+                        <block type="open" id="z^Tfs+![h;8M?3?xUjdI">
+                            <value name="NAME">
+                            <block type="built_in_webpage" id="5w~#|4=tInjem5)@HH17">
+                                <field name="NAME">youtube</field>
+                            </block>
+                            </value>
+                        </block>
+                        </statement>
+                    </block>
+                    </next>
+                </block>
+                </statement>
+            </block>
+            </statement>
+        </block>
+        <block type="hotkey_execute" id="+dm/z.]/po+;s5I`NW,5" x="65" y="105">
+            <value name="NAME">
+            <block type="function_key" id="sa46!MfGf)7b6Sl8PfXB">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key" id="#9FCV/h6NC~p%/U`a)Pi">
+                    <field name="normal_key">A</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="right_click_menu" id="W;~b1TyLB3I0)[].G~sf">
+                <statement name="NAME">
+                <block type="right_click_menu_item" id="Xpsdc+H?14[pXrLb37HX">
+                    <field name="item_name">開啟AHK官網</field>
+                    <statement name="DO">
+                    <block type="open" id="1Ntc44`BQHI!;$M!i+Dt">
+                        <value name="NAME">
+                        <block type="built_in_webpage" id="P:JXM]q;;{LTRoBfOJ;A">
+                            <field name="NAME">ahk</field>
+                        </block>
+                        </value>
+                    </block>
+                    </statement>
+                    <next>
+                    <block type="right_click_menu_item_hr" id=",?GSS9y54Y~@Frm=9k{M">
+                        <next>
+                        <block type="right_click_menu_item" id="ww-fXW=HiFA{IM_)YzD.">
+                            <field name="item_name">開啟記事本</field>
+                            <statement name="DO">
+                            <block type="open" id="0mu2o8dZ!ue~bm=|dWPp">
+                                <value name="NAME">
+                                <block type="built_in_program" id="29EiNv)sE_}9^*^2eL2#">
+                                    <field name="NAME">notepad</field>
+                                </block>
+                                </value>
+                            </block>
+                            </statement>
+                            <next>
+                            <block type="right_click_menu_item" id="%|gSHyK??7?An$O/TmME">
+                                <field name="item_name">開啟小畫家</field>
+                                <statement name="DO">
+                                <block type="open" id="cccD3=`#LN%Ha|~6y1K(">
+                                    <value name="NAME">
+                                    <block type="built_in_program" id="vW.~(?#c|l2j`D2z9D1V">
+                                        <field name="NAME">mspaint</field>
+                                    </block>
+                                    </value>
+                                </block>
+                                </statement>
+                            </block>
+                            </next>
+                        </block>
+                        </next>
+                    </block>
+                    </next>
+                </block>
+                </statement>
+            </block>
+            </statement>
+        </block>
+        <block type="right_click_menu"></block>
+        <block type="right_click_menu_item"></block>
+        <block type="right_click_menu_item_hr"></block>
+    </category>
+
     <sep></sep>
 
     <category name="系統資訊" colour="#956D49">
         <block type="user_name"></block>
         <block type="computer_name"></block>
-        <block type="procedures_defreturn" id="^y(x_n|j+Ax!P=OvF?FQ" x="92" y="84">
-            <field name="NAME">視窗名稱</field>
-            <statement name="STACK">
-            <block type="ahk_code" id="?V=A.7t1!WUz|sQQJxT|">
-                <field name="NAME">WinGetActiveTitle, Title</field>
-            </block>
-            </statement>
-            <value name="RETURN">
-            <block type="variables_get" id="zz9Np1ADn)RBo-2dp[qm">
-                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">Title</field>
+        <block type="win_get_active_title" id="R.^alvnwVH62{ocVJB*2" x="50" y="119">
+            <value name="NAME">
+            <block type="variables_get" id="Ntu}npMscT9(NC%1vI^]">
+                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
             </block>
             </value>
+        </block>
+        <block type="win_get_active_title" id="L.}LiI^$/@uv#dN:-en;" x="63" y="158">
+            <value name="NAME">
+            <block type="variables_get" id="Yhln+Uagm;I=qq!d(M?#">
+                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
+            </block>
+            </value>
+            <next>
+            <block type="controls_if" id="KV8}fV1mC-TCy{5,wReK">
+                <mutation else="1"></mutation>
+                <value name="IF0">
+                <block type="in_str" id="]V{p[##dRw7nZ.rOquKe">
+                    <field name="NAME">contain</field>
+                    <value name="text">
+                    <block type="variables_get" id="Qf_[:Q{iI*esiE~Nl^K*">
+                        <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
+                    </block>
+                    </value>
+                    <value name="sub_text">
+                    <block type="text" id="X?`-CG8@Sk}x=pRa1*]@">
+                        <field name="TEXT">記事本</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+                <statement name="DO0">
+                <block type="msgbox" id="MB0CkCX}e/AdfaI{]U6h">
+                    <value name="NAME">
+                    <block type="text" id="b3+3pX4o2i`EDcE)UdE!">
+                        <field name="TEXT">目前的視窗是記事本</field>
+                    </block>
+                    </value>
+                </block>
+                </statement>
+                <statement name="ELSE">
+                <block type="msgbox" id="@?{_T!1yA{6Qh:Z#RH=$">
+                    <value name="NAME">
+                    <block type="text" id="r7Ng*P{Zj0M{hzQv=vS?">
+                        <field name="TEXT">目前的視窗不是記事本</field>
+                    </block>
+                    </value>
+                </block>
+                </statement>
+            </block>
+            </next>
         </block>
     </category>
 
@@ -585,6 +750,19 @@
             <field name="BOOL">TRUE</field>
         </block>
         <block type="logic_null"></block>
+        <block type="in_str">
+            <field name="NAME">contain</field>
+            <value name="text">
+            <block type="text">
+                <field name="TEXT">Apple</field>
+            </block>
+            </value>
+            <value name="sub_text">
+            <block type="text">
+                <field name="TEXT">App</field>
+            </block>
+            </value>
+        </block> 
     </category>
 
     <category name="循環" colour="#006400">

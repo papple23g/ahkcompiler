@@ -1,6 +1,74 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['right_click_menu_item_hr'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("──── 項目水平線 ────");
+        this.setPreviousStatement(true, ["right_click_menu_item", "right_click_menu_item_hr"]);
+        this.setNextStatement(true, ["right_click_menu_item", "right_click_menu_item_hr"]);
+        this.setColour("#00CED1");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['right_click_menu_item'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("項目")
+            .appendField(new Blockly.FieldTextInput("名稱"), "item_name");
+        this.appendStatementInput("DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("執行");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, ["right_click_menu_item", "right_click_menu_item_hr"]);
+        this.setNextStatement(true, ["right_click_menu_item", "right_click_menu_item_hr"]);
+        this.setColour("#00CED1");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+
+Blockly.Blocks['right_click_menu'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("顯示右鍵清單");
+        this.appendStatementInput("NAME")
+            .setCheck("right_click_menu_item");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#00CED1");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+}
+
+
+Blockly.Blocks['in_str'] = {
+    init: function() {
+        this.appendValueInput("text")
+            .setCheck("String");
+        this.appendValueInput("sub_text")
+            .setCheck("String")
+            .appendField(new Blockly.FieldDropdown([
+                ["包含", "contain"],
+                ["不包含", "not_contain"]
+            ]), "NAME")
+            .appendField("文字");
+        this.setInputsInline(true);
+        this.setOutput(true, null);
+        this.setColour(210);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 Blockly.Blocks['win_get_active_title'] = {
     init: function() {
         this.appendValueInput("NAME")
