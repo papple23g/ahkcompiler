@@ -359,6 +359,29 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_comment
             com_str+=f'Sleep % {value_str}\n'
 
+
+        elif block_elt.attrs['type']=="shutdown":
+            #獲取動作
+            field_action_elt=FindCurrent(block_elt,'field[name="action"]')
+            field_action_str=field_action_elt.text
+            #獲取是否強制執行
+            field_force_elt=FindCurrent(block_elt,'field[name="force"]')
+            field_force_str=field_force_elt.text            
+            #若為Shutdown語法 (登出/關機/重新啟動)
+            if field_action_str in ["logout","shutdown","restart"]:
+                action_int=0 if field_action_str=="logout" else 1 if field_action_str=="shutdown" else 2
+                force_int=4 if field_force_str=="TRUE" else 0
+                com_str+=f"Shutdown, {action_int+force_int}\n"
+            #若為DllCall語法 (睡眠/休眠)
+            elif field_action_str in ["sleep","deepsleep"]:
+                var_int=0 if field_action_str=="sleep" else 1
+                com_str+=f'DllCall("PowerProf\\SetSuspendState", "int", {var_int}, "int", 0, "int", 0,)\n'
+            else:
+                com_str+='Run rundll32.exe user32.dll`,LockWorkStation\n'
+
+
+
+
         #endregion 動作Blockly
 
 

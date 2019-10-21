@@ -1,6 +1,30 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['shutdown'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("電腦")
+            .appendField(new Blockly.FieldDropdown([
+                ["關機", "shutdown"],
+                ["登出", "logout"],
+                ["睡眠", "sleep"],
+                ["休眠", "deepsleep"],
+                ["鎖定", "lock"],
+                ["重新啟動", "restart"]
+            ]), "action")
+            .appendField("　")
+            .appendField(new Blockly.FieldCheckbox("TRUE"), "force")
+            .appendField("強制執行");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 Blockly.Blocks['right_click_menu_item_hr'] = {
     init: function() {
         this.appendDummyInput()
