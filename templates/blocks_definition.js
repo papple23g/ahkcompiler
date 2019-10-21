@@ -1,6 +1,42 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['volume_mute'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("靜音 / 取消靜音");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C95E00");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['volume_adjust'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("音量")
+            .appendField(new Blockly.FieldDropdown([
+                ["增加", "add"],
+                ["降低", "sub"],
+                ["變更為", "set"],
+            ]), "action");
+        this.appendValueInput("NAME")
+            .setCheck("Number");
+        this.appendDummyInput()
+            .appendField("%");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C95E00");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 Blockly.Blocks['shutdown'] = {
     init: function() {
         this.appendDummyInput()

@@ -347,8 +347,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_comment
             com_str+=f'Clipboard := {value_str}\n'
 
-
-            
         elif block_elt.attrs['type']=="close_process":
             field_elt=FindCurrent(block_elt,'field')
             com_str+=f'Process, Close, {field_elt.text}\n'
@@ -938,6 +936,32 @@ return
 
         #endregion 右鍵清單
 
+
+        #region 音量控制
+
+        elif block_elt.attrs['type']=="volume_adjust":
+            #獲取同整動作
+            field_action_elt=FindCurrent(block_elt,'field[name="action"]')
+            field_action_str=field_action_elt.text
+            add_or_sub_symbol_str='+' if field_action_str=="add" else '-' if field_action_str=="sub" else ""
+            #獲取調整數值
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else 0
+            com_str+=value_comment
+            #輸出程式碼
+            com_str+=f"SoundSet {add_or_sub_symbol_str}{value_str}\n"
+
+        elif block_elt.attrs['type']=="volume_mute":
+            #輸出程式碼
+            com_str+="SoundSet,+1, , mute\n"
+
+            
+
+        
+
+
+        #endregion 音量控制
 
         #region 系統資訊Blockly
         elif block_elt.attrs['type']=="computer_name":
