@@ -1,6 +1,59 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['key_pressing'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("按著");
+        this.appendDummyInput()
+            .appendField("不放");
+        this.appendStatementInput("DO")
+            .setCheck(null)
+            .appendField("執行");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['key_wait'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("等待按鍵");
+        this.appendDummyInput()
+            .appendField("釋放");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#80ADC4");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['cmd'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("CMD碼")
+            .appendField(new Blockly.FieldTextInput("Notepad.exe"), "code")
+            .appendField("執行完後")
+            .appendField(new Blockly.FieldDropdown([
+                ["關閉視窗", "close"],
+                ["不關閉視窗", "dont_close"]
+            ]), "do_close");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C4C4C4");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['volume_mute'] = {
     init: function() {
         this.appendDummyInput()
@@ -212,7 +265,7 @@ Blockly.Blocks['ahk_code'] = {
             .appendField(new Blockly.FieldTextInput("Msgbox % \"Hellow World !\""), "NAME");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour("#C4C4C4");
+        this.setColour("#818181");
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -735,6 +788,18 @@ Blockly.Blocks['special_key'] = {
     init: function() {
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown([
+                ["Ctrl", "Ctrl"],
+                ["Shift", "Shift"],
+                ["Alt", "Alt"],
+                ["Win", "Win"],
+                ["LCtrl", "LCtrl"],
+                ["LShift", "LShift"],
+                ["LAlt", "LAlt"],
+                ["LWin", "LWin"],
+                ["RCtrl", "RCtrl"],
+                ["RShift", "RShift"],
+                ["RAlt", "RAlt"],
+                ["RWin", "RWin"],
                 ["Enter", "Enter"],
                 ["Space", "Space"],
                 ["Tab", "Tab"],

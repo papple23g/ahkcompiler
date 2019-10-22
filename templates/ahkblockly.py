@@ -149,7 +149,7 @@ def AHK_value(value_elt,get_all_comment=False):
         return ("","")
 
 #定義函式:解析statement元素為AHK語法
-def AHK_statement(statement_elt,for_hotkey=False):
+def AHK_statement(statement_elt,for_hotkey=False,Indentation=True):
     com_str=""
     if statement_elt:
         block_underStatement_elt=FindCurrent(statement_elt,'block')
@@ -162,7 +162,7 @@ def AHK_statement(statement_elt,for_hotkey=False):
                     com_str+=f"{statement_str}"
             else:
                 #處理執行式縮排
-                statement_str=TAB_SPACE+statement_str.replace("\n","\n"+TAB_SPACE)
+                statement_str=TAB_SPACE*Indentation+statement_str.replace("\n","\n"+TAB_SPACE*Indentation)
                 #去除執行式中空白的文字行
                 statement_str='\n'.join([statement_str for statement_str in statement_str.split('\n') if statement_str.replace(';','').strip()!=""])+'\n'
                 com_str+=statement_str
@@ -382,7 +382,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 動作Blockly
 
-
         #region 物件Blockly
 
         #剪貼簿內容
@@ -595,6 +594,33 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_times_comment
             
             com_str+=f'Send, {functionKey_all_str}{{{normalKey_str} {value_times_str}}}\n'
+
+        #等待功能鍵釋放
+        elif block_elt.attrs['type']=="key_wait":
+            #獲取功能鍵
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt)
+            com_str+=value_comment
+            #對於等待Win按鍵釋放，需要兩行程式碼寫完
+            if value_str=="Win":
+                com_str+=f'KeyWait, LWin\nKeyWait, RWin\n'
+            else:
+                com_str+=f'KeyWait, {value_str}\n'
+
+        #按著功能鍵
+        elif block_elt.attrs['type']=="key_pressing":
+            #獲取功能鍵
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt)
+            com_str+=value_comment
+            #獲取執行元素
+            statement_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_str=AHK_statement(statement_elt,Indentation=False) #不要將執行式縮排
+            #輸出程式碼
+            com_str=f'Send {{{value_str} Down}}\n{statement_str}Send {{{value_str} Up}}\n'
+
+
+
 
         #endregion 模擬鍵盤Blockly
 
@@ -936,7 +962,6 @@ return
 
         #endregion 右鍵清單
 
-
         #region 音量控制
 
         elif block_elt.attrs['type']=="volume_adjust":
@@ -1015,11 +1040,23 @@ return
 
         #endregion 循環Blockly
 
+        #region 自訂程式碼Blockly
 
-        #AHK原生程式碼Blockly
         elif block_elt.attrs['type']=="ahk_code":
             field_elt=FindCurrent(block_elt,'field')
             com_str+=field_elt.text+'\n'
+
+        elif block_elt.attrs['type']=="cmd":
+            #獲取CMD程式碼
+            field_code_elt=FindCurrent(block_elt,'field[name="code"]')
+            cmd_code_str=field_code_elt.text
+            #獲取使否執行後關閉
+            field_doClose_elt=FindCurrent(block_elt,'field[name="do_close"]')
+            arg_str='/c' if field_doClose_elt.text=="TRUE" else '/k'
+
+            com_str+=f'Run %comspec% {arg_str} {cmd_code_str}\n'
+
+        #endregion 自訂程式碼Blockly
 
         #處理下一個block
         next_elt=FindCurrent(block_elt,'next',get_one=True)
@@ -1053,8 +1090,7 @@ xml_ex_1='''<xml>
   <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
     <mutation statements="false"></mutation>
     <field name="NAME">現在時間</field>
-    <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木
-來使用此函式積木</comment>
+    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
     <value name="RETURN">
       <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
         <mutation items="11"></mutation>
@@ -1119,8 +1155,7 @@ xml_ex_1='''<xml>
   <block type="procedures_defreturn" id="[ZFzaKc.WVOfgb*~E4X4" x="418" y="59">
     <mutation statements="false"></mutation>
     <field name="NAME">現在日期</field>
-    <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木
-來使用此函式積木</comment>
+    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
     <value name="RETURN">
       <block type="text_join" id=".wPxQ{%A/.TkGGUS:/l@">
         <mutation items="9"></mutation>

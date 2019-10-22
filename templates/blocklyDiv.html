@@ -284,7 +284,18 @@
     </category>
 
     <category name="模擬按鍵" colour="#D75BF0">
-        <block type="send_key"></block>
+        <block type="send_key">
+            <value name="NAME">
+            <block type="function_key">
+                <field name="function_key">Ctrl</field>
+                <value name="function_key">
+                <block type="normal_key">
+                    <field name="normal_key">V</field>
+                </block>
+                </value>
+            </block>
+            </value>
+        </block>
         <block type="send_keys"></block>
         <block type="send_key_times" id="wltY5@wT{M;nzk*|MC4$" x="109" y="236">
             <value name="KEY">
@@ -309,7 +320,47 @@
         <block type="normal_key">
             <field name="normal_key">A</field>
         </block>
-        <block type="special_key"></block>
+        <block type="special_key">
+            <field name="special_key">Enter</field>
+        </block>
+        <block type="hotkey_execute" id="7I+5fy;B^P8hVJWcz{ww" x="63" y="211">
+            <value name="NAME">
+            <block type="function_key" id="LU_QR7+j}QyFMGHD@iR(">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key" id="v|!Dz:)#5@X]zTxR,1+9">
+                    <field name="normal_key">Z</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="key_wait" id="eW`k|W|L!3,[./!_Nkd?">
+                <comment pinned="true" h="43" w="337">等待按鍵釋放，可以避免後面的按鍵操作被干擾</comment>
+                <value name="NAME">
+                <block type="special_key" id="Hl8D7$[+#d_$!#H!)nqW">
+                    <field name="special_key">Win</field>
+                </block>
+                </value>
+                <next>
+                <block type="key_pressing" id="%/R;}sd^/Y|Ndqo/4,,?">
+                    <value name="NAME">
+                    <block type="special_key" id="L){/tTV..9dT05]]66PR">
+                        <field name="special_key">Shift</field>
+                    </block>
+                    </value>
+                    <statement name="DO">
+                    <block type="send_keys" id="0x+|6uKys^axuK()hK!a">
+                        <field name="NAME">abc</field>
+                    </block>
+                    </statement>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
+        <block type="key_wait"></block>
+        <block type="key_pressing"></block>
     </category>
 
     <category name="模擬滑鼠" colour="#D0D03E">
@@ -481,8 +532,7 @@
         <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
             <mutation statements="false"></mutation>
             <field name="NAME">現在時間</field>
-            <comment pinned="false" h="80" w="160">請按右鍵&gt;創造函式積木
-來使用此函式積木</comment>
+            <comment pinned="true" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
             <value name="RETURN">
             <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
                 <mutation items="11"></mutation>
@@ -809,8 +859,9 @@
     <category name="變數" colour="#A45A7F" custom="VARIABLE">
     </category>
 
-    <category name="自訂AHK" colour="#C4C4C4">
+    <category name="自訂編碼" colour="#C4C4C4">
         <block type="ahk_code"></block>
+        <block type="cmd"></block>
     </category>
 
 </xml>

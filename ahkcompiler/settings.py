@@ -30,7 +30,6 @@ ALLOWED_HOSTS = [
     "papple23g-ahkcompiler.herokuapp.com",
     ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
