@@ -1,6 +1,27 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['search_selected_keyword_custom'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("將選取的關鍵字進行")
+            .appendField(new Blockly.FieldTextInput("(自訂範例) Google學術網"), "website_name")
+            .appendField("搜尋");
+        this.appendDummyInput()
+            .appendField("    關鍵字之前的網址:")
+            .appendField(new Blockly.FieldTextInput("https://scholar.google.com.tw/scholar?hl=zh-TW&as_sdt=0%2C5&q="), "url_a");
+        this.appendDummyInput()
+            .appendField("    關鍵字之後的網址:")
+            .appendField(new Blockly.FieldTextInput("&btnG="), "url_b");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 Blockly.Blocks['search_selected_keyword'] = {
     init: function() {
         this.appendDummyInput()

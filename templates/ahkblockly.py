@@ -1007,7 +1007,7 @@ return
                 'clipboard:=clipboard_save\n'
             ])
        
-       ####選取文字進行關鍵字搜尋
+        #選取文字進行關鍵字搜尋
         elif block_elt.attrs['type']=="search_selected_keyword":
             #獲取網站名稱元素
             field_elt=FindCurrent(block_elt,'field[name="NAME"]')
@@ -1045,7 +1045,6 @@ return
                 '    }',
                 '    InputBox, __keyWord,搜尋關鍵字,%__WebsiteName%,,,150',
                 '}',
-                ';將關鍵字做解碼處理，並嵌入搜尋網址中',
                 'if (ErrorLevel=0 and __keyWord!=""){',
                 '    VarSetCapacity(__Var, StrPut(__keyWord, "UTF-8"), 0)',
                 '    StrPut(__keyWord, &__Var, "UTF-8")',
@@ -1065,6 +1064,54 @@ return
                 '}',
                 '_keyWord:=""\n',
             ])
+
+        #選取文字進行關鍵字搜尋
+        elif block_elt.attrs['type']=="search_selected_keyword_custom":
+            #獲取網站名稱元素
+            field_websiteName_elt=FindCurrent(block_elt,'field[name="website_name"]')
+            website_name=field_websiteName_elt.text
+            field_urlA_elt=FindCurrent(block_elt,'field[name="url_a"]')
+            urlA_str=field_urlA_elt.text
+            field_urlB_elt=FindCurrent(block_elt,'field[name="url_b"]')
+            urlB_str=field_urlB_elt.text
+            com_str+='\n'.join([
+                f'__UrlA:="{urlA_str}"',
+                f'__UrlB:="{urlB_str}"',
+                f'__WebsiteName:="{website_name}"',
+                'clipboard_save:= clipboard',
+                'clipboard:=""',
+                'Send ^{c}',
+                'Sleep 100',
+                '__keyWord:= clipboard',
+                'Clipboard = %clipboard_save%',
+                'if not __keyWord {',
+                '    if not __WebsiteName{',
+                '        __WebsiteName:=__UrlA',
+                '    }',
+                '    InputBox, __keyWord,搜尋關鍵字,%__WebsiteName%,,,150',
+                '}',
+                'if (ErrorLevel=0 and __keyWord!=""){',
+                '    VarSetCapacity(__Var, StrPut(__keyWord, "UTF-8"), 0)',
+                '    StrPut(__keyWord, &__Var, "UTF-8")',
+                '    f := A_FormatInteger',
+                '    SetFormat, IntegerFast, H',
+                '    While __Code := NumGet(__Var, A_Index - 1, "UChar")',
+                '        If (__Code >= 0x30 && __Code <= 0x39 ; 0-9',
+                '            || __Code >= 0x41 && __Code <= 0x5A ; A-Z',
+                '            || __Code >= 0x61 && __Code <= 0x7A) ; a-z',
+                '            __Res .= Chr(__Code)',
+                '        Else',
+                '            __Res .= "%" . SubStr(__Code + 0x100, -1)',
+                '    SetFormat, IntegerFast, %f%',
+                '    Run %__UrlA%%__Res%%__UrlB%',
+                '    __Res:=""',
+                '    __Var:=""',
+                '}',
+                '_keyWord:=""\n',
+            ])
+
+
+        
 
         #endregion 選取文字後
 
