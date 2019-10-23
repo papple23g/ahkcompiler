@@ -377,7 +377,19 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             else:
                 com_str+='Run rundll32.exe user32.dll`,LockWorkStation\n'
 
-
+        elif block_elt.attrs['type']=="paste_text":
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            com_str+=value_comment
+            com_str+='\n'.join([
+                'clipboard_save := clipboard',
+                'clipboard:=',
+                f'clipboard:={value_str}',
+                'ClipWait',
+                'Sleep 100',
+                'Send ^v',
+                'clipboard = %clipboard_save%\n',
+            ])
 
 
         #endregion 動作Blockly
@@ -981,12 +993,80 @@ return
             #輸出程式碼
             com_str+="SoundSet,+1, , mute\n"
 
-            
-
-        
-
-
         #endregion 音量控制
+
+        #region 選取文字後
+        elif block_elt.attrs['type']=="open_select_url":
+            com_str+='\n'.join([
+                'clipboard_save:=clipboard',
+                'clipboard:=""',
+                'Send ^{c}',
+                'ClipWait',
+                'Sleep 100',
+                'Run %clipboard%',
+                'clipboard:=clipboard_save\n'
+            ])
+       
+       ####選取文字進行關鍵字搜尋
+        elif block_elt.attrs['type']=="search_selected_keyword":
+            #獲取網站名稱元素
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #網站名稱和對應的網址tuple字典
+            search_selected_keyword_url_tuple_dict={
+                'google':("https://www.google.com.tw/search?q=","","Google搜尋"),
+                'youtube':("https://www.youtube.com/results?search_query=","","Youtube搜尋"),
+                'wiki':("http://zh.wikipedia.org/w/index.php?title=Special:Search&search=","","WIKI搜尋"),
+                'google_map':("https://www.google.com.tw/maps/search/","","Google地圖搜尋"),
+                'google_trend':("https://www.google.com/trends/explore?q=","","Google搜尋趨勢"),
+                'google_translate':("https://translate.google.com.tw/?tab=wT#view=home&op=translate&sl=auto&tl=zh-TW&text=","","Gooogle翻譯"),
+                'evernote':("https://www.evernote.com/client/web#?query=","","Evernote搜尋"),
+                'facebook':("https://www.facebook.com/search/top/?q=","","Facebook搜尋"),
+                'cdict':("https://cdict.net/?q=","","cdict(英翻中/中翻英)"),
+                'plurk':("https://www.plurk.com/w/#","?time=365","噗浪搜尋"),
+                'twitter':("https://twitter.com/search?q=","","推特搜尋"),
+                'moedict':("https://www.moedict.tw/","","萌典(中文字典)"),
+            }
+            #獲取對應的網址
+            search_selected_keyword_url_tuple=search_selected_keyword_url_tuple_dict[field_elt.text]
+            urlA_str, urlB_str, website_name=search_selected_keyword_url_tuple
+            com_str+='\n'.join([
+                f'__UrlA:="{urlA_str}"',
+                f'__UrlB:="{urlB_str}"',
+                f'__WebsiteName:="{website_name}"',
+                'clipboard_save:= clipboard',
+                'clipboard:=""',
+                'Send ^{c}',
+                'Sleep 100',
+                '__keyWord:= clipboard',
+                'Clipboard = %clipboard_save%',
+                'if not __keyWord {',
+                '    if not __WebsiteName{',
+                '        __WebsiteName:=__UrlA',
+                '    }',
+                '    InputBox, __keyWord,搜尋關鍵字,%__WebsiteName%,,,150',
+                '}',
+                ';將關鍵字做解碼處理，並嵌入搜尋網址中',
+                'if (ErrorLevel=0 and __keyWord!=""){',
+                '    VarSetCapacity(__Var, StrPut(__keyWord, "UTF-8"), 0)',
+                '    StrPut(__keyWord, &__Var, "UTF-8")',
+                '    f := A_FormatInteger',
+                '    SetFormat, IntegerFast, H',
+                '    While __Code := NumGet(__Var, A_Index - 1, "UChar")',
+                '        If (__Code >= 0x30 && __Code <= 0x39 ; 0-9',
+                '            || __Code >= 0x41 && __Code <= 0x5A ; A-Z',
+                '            || __Code >= 0x61 && __Code <= 0x7A) ; a-z',
+                '            __Res .= Chr(__Code)',
+                '        Else',
+                '            __Res .= "%" . SubStr(__Code + 0x100, -1)',
+                '    SetFormat, IntegerFast, %f%',
+                '    Run %__UrlA%%__Res%%__UrlB%',
+                '    __Res:=""',
+                '    __Var:=""',
+                '}',
+                '_keyWord:=""\n',
+            ])
+
+        #endregion 選取文字後
 
         #region 系統資訊Blockly
         elif block_elt.attrs['type']=="computer_name":

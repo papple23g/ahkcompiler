@@ -1,6 +1,57 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['search_selected_keyword'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("將選取的關鍵字進行")
+            .appendField(new Blockly.FieldDropdown([
+                ["Google搜尋", "google"],
+                ["Youtube搜尋", "youtube"],
+                ["WIKI搜尋", "wiki"],
+                ["Google地圖搜尋", "google_map"],
+                ["Google搜尋趨勢", "google_trend"],
+                ["Gooogle翻譯", "google_translate"],
+                ["Evernote搜尋", "evernote"],
+                ["Facebook搜尋", "facebook"],
+                ["cdict(英翻中/中翻英)", "cdict"],
+                ["噗浪搜尋", "plurk"],
+                ["推特搜尋", "twitter"],
+                ["萌典(中文字典)", "moedict"]
+            ]), "NAME");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['open_select_url'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("進入被選取的網址文字");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['paste_text'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(null)
+            .appendField("貼上文字");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['key_pressing'] = {
     init: function() {
         this.appendValueInput("NAME")
@@ -13,7 +64,7 @@ Blockly.Blocks['key_pressing'] = {
             .appendField("執行");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(230);
+        this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -297,10 +348,10 @@ Blockly.Blocks['set_clipboard'] = {
     init: function() {
         this.appendValueInput("NAME")
             .setCheck(null)
-            .appendField("剪接簿內容 設為");
+            .appendField("剪貼簿內容 設為");
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(260);
+        this.setColour(160);
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -335,7 +386,7 @@ Blockly.Blocks['clipboard'] = {
             .appendField("剪貼簿內容");
         this.setInputsInline(true);
         this.setOutput(true, null);
-        this.setColour(290);
+        this.setColour(160);
         this.setTooltip("");
         this.setHelpUrl("");
     }

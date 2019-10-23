@@ -237,6 +237,7 @@
         <block type="send_text"></block>
         <block type="send_key"></block>
         <block type="set_clipboard"></block>
+        <block type="paste_text"></block>
         <block type="file_recycle_empty"></block>
         <block type="close_process"></block>
         <block type="shutdown"></block>
@@ -474,6 +475,7 @@
     <category name="文字" colour="#5BA58C">
         <block type="msgbox"></block>
         <block type="send_text"></block>
+        <block type="paste_text"></block>
         <block type="text">
             <field name="TEXT">文字</field>
         </block>
@@ -738,6 +740,11 @@
             </value>
         </block>
         <block type="volume_mute"></block>
+    </category>
+
+    <category name="選取文字後" colour="#8FBC8F">
+        <block type="open_select_url"></block>
+        <block type="search_selected_keyword"></block>
     </category>
 
     <sep></sep>
