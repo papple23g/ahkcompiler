@@ -656,19 +656,21 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             value_x_elt=FindCurrent(block_elt,f'value[name="X"]')
             value_x_str,value_x_comment=AHK_value(value_x_elt)
             com_str+=value_x_comment
-            x_is_var_bool=True if (value_x_elt and FindCurrent(value_x_elt,'block').attrs['type']=="variables_get") else False
 
             value_y_elt=FindCurrent(block_elt,f'value[name="Y"]')
             value_y_str,value_y_comment=AHK_value(value_y_elt)
             com_str+=value_y_comment
-            y_is_var_bool=True if (value_y_elt and FindCurrent(value_y_elt,'block').attrs['type']=="variables_get") else False
 
             value_times_elt=FindCurrent(block_elt,f'value[name="TIMES"]')
             value_times_str,value_times_comment=AHK_value(value_times_elt)
             com_str+=value_times_comment
-            times_is_var_bool=True if (value_times_elt and FindCurrent(value_times_elt,'block').attrs['type']=="variables_get") else False
            
-            com_str+=f"Click {'%'*x_is_var_bool}{value_x_str}{'%'*x_is_var_bool}, {'%'*y_is_var_bool}{value_y_str}{'%'*y_is_var_bool}, {'%'*times_is_var_bool}{value_times_str}{'%'*times_is_var_bool}\n"
+            com_str+="\n".join([
+                f"__ClickX:={value_x_str}",
+                f"__ClickY:={value_y_str}",
+                f"__ClickTimes:={value_times_str}",
+                f"Click %__ClickX%, %__ClickY%, %__ClickTimes%\n",
+            ])
         
         elif block_elt.attrs['type']=="mouse_get_pos":
             field_posX_elt=FindCurrent(block_elt,f'field[name="posX"]')
