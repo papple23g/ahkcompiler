@@ -1,6 +1,61 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['my_loop'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("無限循環");
+        this.appendStatementInput("NAME")
+            .setCheck(null);
+        this.setColour(120);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['get_picture_pos'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("在當前畫面搜尋圖片")
+            .appendField(new Blockly.FieldTextInput("C:\\*.png"), "img_filepath");
+        this.appendDummyInput()
+            .appendField("並將位置座標輸出至(")
+            .appendField(new Blockly.FieldVariable("圖片座標X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片座標Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到圖片後");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['block_input'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("防止外部按鍵干擾的情況下，執行:");
+        this.appendStatementInput("DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#708090");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['search_selected_keyword_custom'] = {
     init: function() {
         this.appendDummyInput()
@@ -271,13 +326,11 @@ Blockly.Blocks['win_get_active_title'] = {
 
 Blockly.Blocks['mouse_get_pos'] = {
     init: function() {
-        this.appendValueInput("posX")
-            .setCheck(null)
-            .appendField("將目前滑鼠座標輸出至(");
-        this.appendValueInput("posY")
-            .setCheck(null)
-            .appendField(",");
         this.appendDummyInput()
+            .appendField("將目前滑鼠座標輸出至(")
+            .appendField(new Blockly.FieldVariable("滑鼠座標X"), "posX")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("滑鼠座標Y"), "posY")
             .appendField(") 兩個變數");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);

@@ -239,6 +239,12 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         elif block_elt.attrs['type']=="return":
             com_str+='Return'
+
+        elif block_elt.attrs['type']=="block_input":
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt,Indentation=False)
+            com_str+=f"BlockInput, On\n{statement_do_str}BlockInput, Off\n"
         
         #endregion 按鍵Blockly
 
@@ -665,18 +671,59 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=f"Click {'%'*x_is_var_bool}{value_x_str}{'%'*x_is_var_bool}, {'%'*y_is_var_bool}{value_y_str}{'%'*y_is_var_bool}, {'%'*times_is_var_bool}{value_times_str}{'%'*times_is_var_bool}\n"
         
         elif block_elt.attrs['type']=="mouse_get_pos":
-            value_posX_elt=FindCurrent(block_elt,f'value[name="posX"]')
-            value_posX_str,value_posX_comment=AHK_value(value_posX_elt)
-            com_str+=value_posX_comment
+            field_posX_elt=FindCurrent(block_elt,f'field[name="posX"]')
+            value_posX_str=field_posX_elt.text
 
-            value_posY_elt=FindCurrent(block_elt,f'value[name="posY"]')
-            value_posY_str,value_posY_comment=AHK_value(value_posY_elt)
-            com_str+=value_posY_comment
+            field_posY_elt=FindCurrent(block_elt,f'field[name="posY"]')
+            value_posY_str=field_posY_elt.text
 
             com_str+=f'MouseGetPos, {value_posX_str}, {value_posY_str}\n'
         
         
         #endregion 模擬滑鼠Blockly
+
+        #region 偵測圖片Blockly
+
+        elif block_elt.attrs['type']=="get_picture_pos":
+            #獲取圖片路徑
+            field_imgFilepath_elt=FindCurrent(block_elt,'field[name="img_filepath"]')
+            img_filepath_str=field_imgFilepath_elt.text
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            com_str+='\n'.join([
+                f'__ImageFilePath:="{img_filepath_str}"',
+                'if FileExist(__ImageFilePath){',
+                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
+                TAB_SPACE+';獲取顯示器總數',
+                TAB_SPACE+'SysGet, __nb_monitor, MonitorCount',
+                TAB_SPACE+'CoordMode Pixel',
+                TAB_SPACE+';搜尋圖片',
+                TAB_SPACE+'ImageSearch, __FoundX, __FoundY, 0, 0, A_ScreenWidth*__nb_monitor, A_ScreenHeight,%__ImageFilePath%',
+                TAB_SPACE+'CoordMode Mouse',
+                TAB_SPACE+';獲取圖片中心座標',
+                TAB_SPACE+f'{posXVar_str}:=__FoundX + __img_w/2',
+                TAB_SPACE+f'{posYVar_str}:=__FoundY + __img_h/2',
+                TAB_SPACE+'if (ErrorLevel=0) {',
+                TAB_SPACE+f'{statement_do_str}'+TAB_SPACE+'} else {',
+                TAB_SPACE+f'{statement_elseDo_str}'+TAB_SPACE+'}',
+                '} else {',
+                TAB_SPACE+'Msgbox % "圖片路徑不存在"',
+                '}\n',
+            ])
+
+
+        #endregion 偵測圖片Blockly
 
         #region 函式Blockly
 
@@ -1109,9 +1156,7 @@ return
                 '}',
                 '_keyWord:=""\n',
             ])
-
-
-        
+       
 
         #endregion 選取文字後
 
@@ -1444,7 +1489,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.6" ##
+VERSION="1.7" ##
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})

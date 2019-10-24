@@ -134,14 +134,27 @@
     </category>
 
     <category name="熱鍵" colour="#0000CD">
-        <block type="hotkey_execute"></block>
+        <block type="hotkey_execute" id="ijf~}`xQflr[cT,i!IuZ" x="73" y="34">
+            <value name="NAME">
+            <block type="function_key" id="]{!*{~gp;ZCY?1fojJE/">
+                <field name="function_key">Ctrl</field>
+                <value name="function_key">
+                <block type="normal_key" id="D3K/AB#m?2%h.,4;_f:b">
+                    <field name="normal_key">Q</field>
+                </block>
+                </value>
+            </block>
+            </value>
+        </block>
         <block type="function_key">
             <field name="function_key">Ctrl</field>
         </block>
         <block type="normal_key">
+            <field name="special_key">Enter</field>
+        </block>
+        <block type="special_key">
             <field name="normal_key">A</field>
         </block>
-        <block type="special_key"></block>
         <block type="return"></block>
     </category>
 
@@ -324,35 +337,40 @@
         <block type="special_key">
             <field name="special_key">Enter</field>
         </block>
-        <block type="hotkey_execute" id="7I+5fy;B^P8hVJWcz{ww" x="63" y="211">
+        <block type="hotkey_execute" id="?=RLJGLLo*3==U2{,/I=" x="16" y="189">
             <value name="NAME">
-            <block type="function_key" id="LU_QR7+j}QyFMGHD@iR(">
+            <block type="function_key" id="ljy`21lCO(t(,FX?^_B)">
                 <field name="function_key">Win</field>
                 <value name="function_key">
-                <block type="normal_key" id="v|!Dz:)#5@X]zTxR,1+9">
+                <block type="normal_key" id="eXg9UF9(_KE]A,^w19PA">
                     <field name="normal_key">Z</field>
                 </block>
                 </value>
             </block>
             </value>
             <statement name="DO">
-            <block type="key_wait" id="eW`k|W|L!3,[./!_Nkd?">
-                <comment pinned="true" h="43" w="337">等待按鍵釋放，可以避免後面的按鍵操作被干擾</comment>
+            <block type="key_wait" id="P6z%LXNyAtAY4If$z#F}">
+                <comment pinned="false" h="43" w="337">等待按鍵釋放，可以避免後面的按鍵操作被干擾</comment>
                 <value name="NAME">
-                <block type="special_key" id="Hl8D7$[+#d_$!#H!)nqW">
+                <block type="special_key" id="!*b+B|sj1]?hVBY4s*Iv">
                     <field name="special_key">Win</field>
                 </block>
                 </value>
                 <next>
-                <block type="key_pressing" id="%/R;}sd^/Y|Ndqo/4,,?">
-                    <value name="NAME">
-                    <block type="special_key" id="L){/tTV..9dT05]]66PR">
-                        <field name="special_key">Shift</field>
-                    </block>
-                    </value>
+                <block type="block_input" id="H=laPU368t7CawQkX4|S">
+                    <comment pinned="false" h="44" w="316">需要使用系統管理員執行AHK腳本才會生效</comment>
                     <statement name="DO">
-                    <block type="send_keys" id="0x+|6uKys^axuK()hK!a">
-                        <field name="NAME">abc</field>
+                    <block type="key_pressing" id="_8N,QjnM#b0#(yJX@Ddd">
+                        <value name="NAME">
+                        <block type="special_key" id="`=TDh^,_e~$Y%`}]G)w1">
+                            <field name="special_key">Shift</field>
+                        </block>
+                        </value>
+                        <statement name="DO">
+                        <block type="send_keys" id="/t9sK8_:V7z}_t_DlPM0">
+                            <field name="NAME">abcabcabcabcabcabcabcabcabcabc</field>
+                        </block>
+                        </statement>
                     </block>
                     </statement>
                 </block>
@@ -362,6 +380,7 @@
         </block>
         <block type="key_wait"></block>
         <block type="key_pressing"></block>
+        <block type="block_input"></block>
     </category>
 
     <category name="模擬滑鼠" colour="#D0D03E">
@@ -400,12 +419,12 @@
             <block type="mouse_get_pos">
                 <value name="posX">
                 <block type="variables_get">
-                    <field name="VAR">滑鼠X</field>
+                    <field name="VAR">滑鼠座標X</field>
                 </block>
                 </value>
                 <value name="posY">
                 <block type="variables_get">
-                    <field name="VAR">滑鼠Y</field>
+                    <field name="VAR">滑鼠座標Y</field>
                 </block>
                 </value>
                 <next>
@@ -470,6 +489,113 @@
             </block>
             </value>
         </block>
+    </category>
+
+    <category name="偵測圖片" colour="#DB7093">
+        <block type="hotkey_execute" id="HkwcUnN5parh[{Y/CYLZ" x="5" y="155">
+            <comment pinned="false" h="46" w="327">這個積木放這裡，方便大家擷取畫面圖片:)</comment>
+            <value name="NAME">
+            <block type="function_key" id=":AbP,Snml,n?7?%O5sB3">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key" id="u{E/kO2Cg((hz6wPJaiZ">
+                    <field name="normal_key">Q</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="open" id="B2+cH1~uhj}6H?PK7SDq">
+                <value name="NAME">
+                <block type="built_in_program" id="Aqh/(_Tz4r(/J[4.9JJZ">
+                    <field name="NAME">SnippingTool</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="get_picture_pos" id="]WzcYqQA{#g,=`}Lz4{a" x="22" y="279">
+            <field name="img_filepath">C:\*.png</field>
+            <field name="pos_x" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+            <field name="pos_y" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+            <statement name="DO">
+            <block type="msgbox" id="x}cfui-{(eob(?l.ww8l">
+                <value name="NAME">
+                <block type="text_join" id="K9wAX5M[a+T+iA[I{mLa">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                    <block type="text" id="qj*+OM`K+$t+PxvE@TNa">
+                        <field name="TEXT">圖片座標為: </field>
+                    </block>
+                    </value>
+                    <value name="ADD1">
+                    <block type="variables_get" id="zZ9JNzS4r:5%Ytyy{mT:">
+                        <field name="VAR" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+                    </block>
+                    </value>
+                    <value name="ADD2">
+                    <block type="text" id="$cR{2.ut6Al8.gk=ANah">
+                        <field name="TEXT">, </field>
+                    </block>
+                    </value>
+                    <value name="ADD3">
+                    <block type="variables_get" id="EaxJKy|H;_^+S/in$o}!">
+                        <field name="VAR" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+            </block>
+            </statement>
+            <statement name="ELSE_DO">
+            <block type="msgbox" id=",`lafHqh|:A(=4O^#pO|">
+                <value name="NAME">
+                <block type="text" id=")@F2O$M_@nzhSI2eN^m@">
+                    <field name="TEXT">圖片未找到</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="get_picture_pos" id="$=;G2eTm(yK*ji[%9qJ#" x="32" y="229">
+            <field name="img_filepath">C:\*.png</field>
+            <field name="pos_x" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+            <field name="pos_y" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+            <statement name="DO">
+            <block type="coord_mode" id="CU.lnqXZ`il8LE)PL{1g">
+                <field name="NAME">screen</field>
+                <next>
+                <block type="click_x_y" id="XRd3hyw!bDuYJ49^}:S2">
+                    <value name="X">
+                    <block type="variables_get" id="}dLAPui?tG29hq{-ioM2">
+                        <field name="VAR" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="variables_get" id="gnb_IJ+-L=oTNlSY*K@N">
+                        <field name="VAR" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+                    </block>
+                    </value>
+                    <value name="TIMES">
+                    <block type="math_number" id="d8sZL/6)iLy!X;!nO}*B">
+                        <field name="NUM">1</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+            <statement name="ELSE_DO">
+            <block type="msgbox" id="afGoGzo-${r%{;/Ihayp">
+                <value name="NAME">
+                <block type="text" id="M@vrDrp:UD#!4MygN=/,">
+                    <field name="TEXT">圖片未找到</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="get_picture_pos"></block>
     </category>
 
     <category name="文字" colour="#5BA58C">
@@ -839,9 +965,9 @@
     <category name="循環" colour="#006400">
         <block type="controls_repeat_ext">
             <value name="TIMES">
-            <block type="math_number">
-                <field name="NUM">10</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
             </value>
         </block>
         <block type="controls_whileUntil">
@@ -850,6 +976,8 @@
         <block type="controls_flow_statements">
             <field name="FLOW">BREAK</field>
         </block>
+        <block type="my_loop"></block>
+        
 
     </category>
 
