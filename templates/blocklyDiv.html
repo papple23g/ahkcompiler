@@ -976,7 +976,72 @@
         <block type="controls_flow_statements">
             <field name="FLOW">BREAK</field>
         </block>
-        <block type="my_loop"></block>
+        <block type="while_true"></block>
+        <block type="variables_set" id="C4EKGy^N]=!/m=,7Fy)q" x="38" y="72">
+            <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+            <value name="VALUE">
+            <block type="math_number" id="u4]mMZOW%3k//_RlmP9I">
+                <field name="NUM">0</field>
+            </block>
+            </value>
+            <next>
+            <block type="while_true" id="%=h%*6b]R%GI#v~[.Xg@">
+                <statement name="DO">
+                <block type="math_change" id="0]YzcL/filPo)9(tq`+@">
+                    <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                    <value name="DELTA">
+                    <shadow type="math_number" id="^ymSFd/+)rK:2{]Dg#us">
+                        <field name="NUM">1</field>
+                    </shadow>
+                    </value>
+                    <next>
+                    <block type="msgbox" id="0L;^(xJ{2xi0f,W_A?IJ">
+                        <value name="NAME">
+                        <block type="text_join" id="H@p4=rtBIr5s2d$%fc_N">
+                            <mutation items="2"></mutation>
+                            <value name="ADD0">
+                            <block type="text" id="r;q9f=1M#gUA^~G%+%;.">
+                                <field name="TEXT">現在 x =</field>
+                            </block>
+                            </value>
+                            <value name="ADD1">
+                            <block type="variables_get" id="e.gj}Z+:H}ZqmSl30h+z">
+                                <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                            </block>
+                            </value>
+                        </block>
+                        </value>
+                        <next>
+                        <block type="controls_if" id="9+=q/p*BCOu}4L{$R;2L">
+                            <value name="IF0">
+                            <block type="logic_compare" id="A1z!Qe:Kdvg$sBKlmXf`">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                <block type="variables_get" id="fnew8Wgo:bLD,6[*;c)q">
+                                    <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                                </block>
+                                </value>
+                                <value name="B">
+                                <block type="math_number" id="PDOdg0QH-~IUQW*h/*e/">
+                                    <field name="NUM">5</field>
+                                </block>
+                                </value>
+                            </block>
+                            </value>
+                            <statement name="DO0">
+                            <block type="controls_flow_statements" id="52!WAO*X)E![VO8W2ysy">
+                                <field name="FLOW">BREAK</field>
+                            </block>
+                            </statement>
+                        </block>
+                        </next>
+                    </block>
+                    </next>
+                </block>
+                </statement>
+            </block>
+            </next>
+        </block>
         
 
     </category>

@@ -96,8 +96,8 @@
 <script>{% include 'basic_functions.js' %}</script>
 
 {% if subpage == 'ahkblockly' %}
-<script src="{% static "blockly_compressed.js" %}"></script>
-<script src="{% static "blocks_compressed.js" %}"></script>
+<script>{% include 'blockly_compressed.js' %}</script>
+<script>{% include 'blocks_compressed.js' %}</script>
 <script>{% include 'blocks_definition.js' %}</script>
 <script>{% include 'zh_tw.js' %}</script>
 {% endif %}

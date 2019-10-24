@@ -1210,6 +1210,13 @@ return
             field_elt=FindCurrent(block_elt,'field')
             com_str+=field_elt.text.lower()+'\n'
 
+        #while true
+        elif block_elt.attrs['type']=="while_true":
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            com_str+=f"while TRUE {{\n{statement_do_str}}}"
+
         #endregion 循環Blockly
 
         #region 自訂程式碼Blockly

@@ -1,12 +1,14 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
-Blockly.Blocks['my_loop'] = {
+Blockly.Blocks['while_true'] = {
     init: function() {
         this.appendDummyInput()
             .appendField("無限循環");
-        this.appendStatementInput("NAME")
+        this.appendStatementInput("DO")
             .setCheck(null);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
         this.setColour(120);
         this.setTooltip("");
         this.setHelpUrl("");

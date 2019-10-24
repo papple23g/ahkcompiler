@@ -827,7 +827,7 @@ Blockly.Extensions.registerMixin("contextMenu_newGetVariableBlock", Blockly.Cons
 Blockly.Extensions.register("controls_for_tooltip", Blockly.Extensions.buildTooltipWithFieldText("%{BKY_CONTROLS_FOR_TOOLTIP}", "VAR"));
 Blockly.Extensions.register("controls_forEach_tooltip", Blockly.Extensions.buildTooltipWithFieldText("%{BKY_CONTROLS_FOREACH_TOOLTIP}", "VAR"));
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
-    LOOP_TYPES: ["my_loop", "controls_repeat", "controls_repeat_ext", "controls_forEach", "controls_for", "controls_whileUntil"],
+    LOOP_TYPES: ["while_true", "controls_repeat", "controls_repeat_ext", "controls_forEach", "controls_for", "controls_whileUntil"],
     suppressPrefixSuffix: !0,
     getSurroundLoop: function(a) {
         do {
