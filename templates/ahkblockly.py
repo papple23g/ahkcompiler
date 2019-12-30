@@ -699,6 +699,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取找到圖片後執行動作
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
+            print(statement_do_str)
             #獲取找不到圖片後執行動作
             statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
@@ -970,7 +971,10 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 右鍵清單
 
+        ###
+
         elif block_elt.attrs['type']=="right_click_menu":
+            MyMenu_str=f'MyMenu_{id(block_elt)}'
             menu_myMenu_add_str=""
             label_str=""
             #遍歷所有項目
@@ -993,15 +997,15 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     field_itemName_elt=FindCurrent(block_item_elt,'field[name="item_name"]')
                     item_name_raw_str=field_itemName_elt.text
                     item_name_str=item_name_raw_str.replace(" ","_").replace("　","_")
-                    menu_myMenu_add_str+=f"Menu,MyMenu,Add,{item_name_raw_str},{item_name_str}_{i_item}\n"
+                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_raw_str},{item_name_str}_{i_item}_{id(block_elt)}\n"
                     #獲取執行式
                     statement_do_elt=FindCurrent(block_item_elt,'statement[name="DO"]')
                     statement_do_str=AHK_statement(statement_do_elt)
-                    label_str+=f"{item_name_str}_{i_item}:\n{statement_do_str}return\n"
+                    label_str+=f"{item_name_str}_{i_item}_{id(block_elt)}:\n{statement_do_str}return\n"
                     #增加項目計數
                     i_item+=1
                 elif block_item_elt.attrs['type']=="right_click_menu_item_hr":
-                    menu_myMenu_add_str+=f"Menu,MyMenu,Add,\n"
+                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,\n"
 
 
 
@@ -1012,9 +1016,7 @@ CoordMode, Mouse, Screen
 
 '''+ menu_myMenu_add_str +'''
 MouseGetPos,MX,MY
-Menu,MyMenu,Show,% MX,% MY
-Reload
-WinKill,menu launcher -quits right after .ahk,WinText,ET
+Menu,'''+MyMenu_str+''',Show,% MX,% MY
 return
 
 '''+ label_str +'''}\n'''
