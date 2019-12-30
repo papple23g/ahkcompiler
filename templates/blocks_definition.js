@@ -1,6 +1,38 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['win_activate'] = {
+    init: function() {
+        this.appendValueInput("title")
+            .setCheck("String")
+            .appendField("置頂視窗, 標題含:");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['run_or_active'] = {
+    init: function() {
+        this.appendValueInput("run")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("開啟");
+        this.appendValueInput("title")
+            .setCheck("String")
+            .appendField("或置頂視窗, 標題含:");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['while_true'] = {
     init: function() {
         this.appendDummyInput()

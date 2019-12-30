@@ -328,6 +328,43 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_comment
             com_str+=f'Run % {value_str}\n'
 
+        elif block_elt.attrs['type']=="win_activate":
+            #獲取要顯示的標題
+            value_title_elt=FindCurrent(block_elt,'value[name="title"]')
+            value_title_str,value_title_comment=AHK_value(value_title_elt,get_all_comment=True)
+            com_str+=value_title_comment
+
+            com_str+='\n'.join([
+                f'SetTitleMatchMode, 2',
+                f'WinActivate % {value_title_str}\n',
+            ])
+
+
+        elif block_elt.attrs['type']=="run_or_active":
+            #獲取要執行的程式
+            value_elt=FindCurrent(block_elt,'value[name="run"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            com_str+=value_comment
+            #獲取要顯示的標題
+            value_title_elt=FindCurrent(block_elt,'value[name="title"]')
+            value_title_str,value_title_comment=AHK_value(value_title_elt,get_all_comment=True)
+            com_str+=value_title_comment
+
+            com_str+='\n'.join([
+                f'SetTitleMatchMode, 2',
+                f'IfWinExist % {value_title_str}',
+                f'{{',
+                f'{TAB_SPACE}IfWinNotActive % {value_title_str}',
+                f'{TAB_SPACE}{TAB_SPACE}WinActivate',
+                f'}}',
+                f'else',
+                f'{{',
+                f'{TAB_SPACE}Run % {value_str}',
+                f'{TAB_SPACE}WinWait % {value_title_str}',
+                f'{TAB_SPACE}WinActivate',
+                f'}}\n',
+            ])
+
         elif block_elt.attrs['type']=="file_recycle_empty":
             com_str+='FileRecycleEmpty\n'
 
