@@ -23,10 +23,10 @@ def cp(req):
     with open(f"ahkfile1_30/{filename_key}.ahk",'w',encoding="utf-8-sig") as f:
         f.write(ahk_code)
     #執行編譯
-    if '64-bit' in os_type:
-        cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
-    else:
-        cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 32-bit.bin\" /mpress 1"
+    # if '64-bit' in os_type:
+    cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
+    # else:
+    #     cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 32-bit.bin\" /mpress 1"
     print('CMD',cmd_command)
     os.system(cmd_command)
     return HttpResponse(filename_key)

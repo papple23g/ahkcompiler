@@ -1,5 +1,6 @@
 #{% verbatim %}
 
+from browser import ajax, timer
 
 #全域變數
 Blockly=window.Blockly
@@ -55,6 +56,7 @@ def BlocklyToXml(ev):
     #啟用複製和下載AHK檔案按鈕
     for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
         btn_elt.disabled=False
+        btn_elt.classList.remove('disabled_button')
     #print('block>xml')
     #自blockly獲取xml_str
     xml_blockly_elt=Blockly.Xml.workspaceToDom(workspace)
@@ -1298,6 +1300,7 @@ def ClearAhkCodeArea(ev):
     #禁用複製和下載AHK檔案按鈕
     for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
         btn_elt.disabled=True
+        btn_elt.classList.add('disabled_button')
 
 
 workspace.addChangeListener(ClearAhkCodeArea)
@@ -1502,10 +1505,77 @@ def DownloadAhkCode(ev):
     filename="myahk.ahk"
     DownloadTextFile(filename,ahk_code)
 
+countdown_timer=None
+sec_int=None
+#定義動作:轉譯成AHK.exe檔並下載
+def DownloadAhkExe(ev):
+    global countdown_timer,sec_int
+    #host="http://127.0.0.1:8001"
+    host="https://ahkpeterserver.localtunnel.me"
+    btn_elt=ev.currentTarget
+
+    #停用按鍵
+    btn_elt.disabled=True
+    btn_elt.classList.add('disabled_button')
+    
+    sec_int=10
+    #定義動作:在按鈕文字上顯示等待時間
+    def waitting_compile_countdown():
+        global sec_int
+        btn_elt.text=f"轉譯中...(約{sec_int}秒等待)"
+        sec_int=sec_int-1 if sec_int!=0 else 0
+
+    btn_text=btn_elt.text
+    countdown_timer=timer.set_interval(waitting_compile_countdown,1000)
+    
+    #定義完成送出AHK程式碼後的動作
+    def on_complete(res):
+        #停止倒數
+        global countdown_timer
+        timer.clear_interval(countdown_timer)
+        countdown_timer=None
+        #獲取檔名key
+        filename_key=res.text
+        window.open(f"{host}/dl?filename_key={filename_key}","_parent")
+        #恢復按鍵文字訊息
+        btn_elt.text="下載中..."
+
+        #定義刪除檔案動作
+        def rm_ahk_exe():
+            req = ajax.ajax()
+            url=f"{host}/rm?filename_key={filename_key}"
+            req.open('GET',url,True)
+            req.set_header('content-type','application/x-www-form-urlencoded')
+            req.send()
+            btn_elt.text=btn_text
+            #啟用按鍵
+            btn_elt.disabled=False
+            btn_elt.classList.remove('disabled_button')
+
+
+        #三秒後送出刪除檔案請求
+        timer.set_timeout(rm_ahk_exe,3000)
+        return #res.text
+
+    #獲取AHK程式碼
+    ahk_code=doc['textarea_ahk'].innerHTML
+    #獲取作業系統類型(64/32位元)
+    btn_elt=ev.currentTarget
+    os_type_str=';__32-bit__;\n' if btn_elt.id=="btn_dl32exe" else ';__64-bit__;\n'
+    #送出post請求
+    req = ajax.ajax()
+    req.bind('complete',on_complete)
+    url=f"{host}/cp"
+    req.open('POST',url,True)
+    req.set_header('content-type','application/x-www-form-urlencoded')
+    req.send(os_type_str+ahk_code)
+    #print(os_type_str+ahk_code)
+
 #設置複製和下載按鈕
 div_showAhkAreaBtns_elt=DIV(id="div_copy_ahkfile_btns_area")
 div_showAhkAreaBtns_elt<=BUTTON("複製語法").bind("click",CopyAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.ahk檔案").bind("click",DownloadAhkCode)
+div_showAhkAreaBtns_elt<=BUTTON("下載.exe檔(64-bit)",style={'color':'#000094'},id="btn_dl64exe").bind("click",DownloadAhkExe)
 
 #排版
 div_showAhkArea_elt<=div_showAhkAreaHeader_elt
