@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.http import FileResponse
 import os
 import uuid
@@ -42,7 +42,7 @@ def dl(req):
         response['Content-Disposition']='attachment;filename="myahk.exe"'
         return response
     else:
-        return HttpResponse('unkown uuid vervion')
+        return HttpResponseRedirect("/ahkblockly/")
     
     #return HttpResponse('OKOK!'+filename_key)
 
@@ -61,7 +61,7 @@ def rm(req):
                 print('REMOVE',filepath,'success.')
         return HttpResponse('OKOK!'+filename_key)
     else:
-        return HttpResponse('unkown uuid vervion')
+        return HttpResponseRedirect("/ahkblockly/")
 
 #定義檢查函數:uuid版本是否符合格式
 def version_uuid(uuid_str):
