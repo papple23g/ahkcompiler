@@ -1577,7 +1577,7 @@ div_showAhkAreaBtns_elt<=BUTTON("複製語法").bind("click",CopyAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.ahk檔案").bind("click",DownloadAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.exe檔(64-bit)",style={'color':'#000094'},id="btn_dl64exe").bind("click",DownloadAhkExe)
 
-div_showAhkAreaBtns_elt<=SPAN("←測試功能 (")+A("檢測到病毒?有何風險?",href="www.google.com")+SPAN(")")
+div_showAhkAreaBtns_elt<=SPAN("←測試功能 (")+A("檢測到病毒?有何風險?",href="https://hackmd.io/hcAlG6oeQNO1jpILguR5hw?view")+SPAN(")")
 
 #排版
 div_showAhkArea_elt<=div_showAhkAreaHeader_elt
@@ -1655,11 +1655,11 @@ AddStyle('''
         }
     }
 
-    a {
+    #div_copy_ahkfile_btns_area a {
         color:#0505b3 !important;
     }
 
-    a:hover {
+    #div_copy_ahkfile_btns_area a:hover {
         color:#4a7aff !important;
     }
 ''')
