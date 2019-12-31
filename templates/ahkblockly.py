@@ -1511,7 +1511,7 @@ sec_int=None
 def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
-    host="https://ahkpeterserver.localtunnel.me"
+    host="https://ahkhomeserver.localtunnel.me"
     btn_elt=ev.currentTarget
 
     #停用按鍵
@@ -1553,9 +1553,8 @@ def DownloadAhkExe(ev):
             btn_elt.classList.remove('disabled_button')
 
 
-        #三秒後送出刪除檔案請求
-        timer.set_timeout(rm_ahk_exe,3000)
-        return #res.text
+        #數秒後送出刪除檔案請求
+        timer.set_timeout(rm_ahk_exe,10000)
 
     #獲取AHK程式碼
     ahk_code=doc['textarea_ahk'].innerHTML
@@ -1576,6 +1575,8 @@ div_showAhkAreaBtns_elt=DIV(id="div_copy_ahkfile_btns_area")
 div_showAhkAreaBtns_elt<=BUTTON("複製語法").bind("click",CopyAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.ahk檔案").bind("click",DownloadAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.exe檔(64-bit)",style={'color':'#000094'},id="btn_dl64exe").bind("click",DownloadAhkExe)
+
+div_showAhkAreaBtns_elt<=SPAN("←測試功能 (")+A("檢測到病毒?有何風險?",href="www.google.com")+SPAN(")")
 
 #排版
 div_showAhkArea_elt<=div_showAhkAreaHeader_elt
@@ -1651,6 +1652,14 @@ AddStyle('''
         iframe{
             width: 90%;
         }
+    }
+
+    a {
+        color:#0505b3 !important;
+    }
+
+    a:hover {
+        color:#4a7aff !important;
     }
 ''')
 #調整workspace為符合當前頁面的尺寸
