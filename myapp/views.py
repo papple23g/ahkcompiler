@@ -42,7 +42,7 @@ def dl(req):
         response['Content-Disposition']='attachment;filename="myahk.exe"'
         return response
     else:
-        return HttpResponseRedirect("/ahkblockly/")
+        return HttpResponseRedirect("https://papple23g-ahkcompiler.herokuapp.com/ahkblockly")
     
     #return HttpResponse('OKOK!'+filename_key)
 
@@ -61,7 +61,7 @@ def rm(req):
                 print('REMOVE',filepath,'success.')
         return HttpResponse('OKOK!'+filename_key)
     else:
-        return HttpResponseRedirect("/ahkblockly/")
+        return HttpResponseRedirect("https://papple23g-ahkcompiler.herokuapp.com/ahkblockly")
 
 #定義檢查函數:uuid版本是否符合格式
 def version_uuid(uuid_str):
