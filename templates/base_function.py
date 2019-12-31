@@ -21,14 +21,15 @@ DownloadTextFile=window.DownloadTextFile
 # Blockly.utils.userAgent.IPAD=False
 
 
+#定義函式:JS特殊符號解碼器
+def JavascriptSymbolDecoder(encodedStr):
+    parser =window.DOMParser.new()
+    dom=parser.parseFromString('<!doctype html><body>'+ encodedStr,'text/html')
+    decodedString =dom.body.textContent
+    return decodedString
+
 #定義動作:複製文字 #不需要建立外部額外元素
 def CopyTextToClipborad(string):
-    #定義函式:JS特殊符號解碼器
-    def JavascriptSymbolDecoder(encodedStr):
-        parser =window.DOMParser.new()
-        dom=parser.parseFromString('<!doctype html><body>'+ encodedStr,'text/html')
-        decodedString =dom.body.textContent
-        return decodedString
     #將文字先禁行解碼
     string=JavascriptSymbolDecoder(string)
     #製作暫時元素複製文字

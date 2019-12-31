@@ -1558,6 +1558,8 @@ def DownloadAhkExe(ev):
 
     #獲取AHK程式碼
     ahk_code=doc['textarea_ahk'].innerHTML
+    #轉換JS字元，如 &amp; -> &
+    ahk_code=JavascriptSymbolDecoder(ahk_code)
     #獲取作業系統類型(64/32位元)
     btn_elt=ev.currentTarget
     os_type_str=';__32-bit__;\n' if btn_elt.id=="btn_dl32exe" else ';__64-bit__;\n'
@@ -1568,7 +1570,6 @@ def DownloadAhkExe(ev):
     req.open('POST',url,True)
     req.set_header('content-type','application/x-www-form-urlencoded')
     req.send(os_type_str+ahk_code)
-    #print(os_type_str+ahk_code)
 
 #設置複製和下載按鈕
 div_showAhkAreaBtns_elt=DIV(id="div_copy_ahkfile_btns_area")
