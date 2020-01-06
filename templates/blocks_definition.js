@@ -1,6 +1,25 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['str_replace'] = {
+    init: function() {
+        this.appendValueInput("text")
+            .setCheck(["String", "link", "dirpath", "filepath"])
+            .appendField("文字");
+        this.appendValueInput("subs")
+            .setCheck("String")
+            .appendField("的");
+        this.appendValueInput("to")
+            .setCheck("String")
+            .appendField("替換為");
+        this.setInputsInline(true);
+        this.setOutput(true, null);
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['win_activate'] = {
     init: function() {
         this.appendValueInput("title")
@@ -1041,8 +1060,6 @@ Blockly.Blocks['special_key'] = {
         this.setHelpUrl("");
     }
 };
-
-
 
 Blockly.Blocks['msgbox'] = {
     init: function() {

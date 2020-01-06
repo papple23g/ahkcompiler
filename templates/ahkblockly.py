@@ -474,6 +474,22 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             value_str_list_str=" . ".join(value_str_list)
             com_str+=value_str_list_str
 
+        #替換文字
+        elif block_elt.attrs['type']=="str_replace":
+            #獲取輸入的文字
+            value_text_elt=FindCurrent(block_elt,'value[name="text"]')
+            value_text_str,value_text_comment=AHK_value(value_text_elt,get_all_comment=True)
+            com_str+=value_text_comment
+            #獲取搜尋的文字
+            value_subs_elt=FindCurrent(block_elt,'value[name="subs"]')
+            value_subs_str,value_subs_comment=AHK_value(value_subs_elt,get_all_comment=True)
+            com_str+=value_subs_comment
+            #獲取替換成的文字
+            value_to_elt=FindCurrent(block_elt,'value[name="to"]')
+            value_to_str,value_to_comment=AHK_value(value_to_elt,get_all_comment=True)
+            com_str+=value_to_comment
+
+            com_str+=f'StrReplace({value_text_str},{value_subs_str},{value_to_str})'
 
         #內建程式變量
         elif block_elt.attrs['type']=="built_in_program":
