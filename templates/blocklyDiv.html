@@ -149,11 +149,11 @@
         <block type="function_key">
             <field name="function_key">Ctrl</field>
         </block>
-        <block type="normal_key">
-            <field name="special_key">Enter</field>
-        </block>
-        <block type="special_key">
+        <block type="normal_key" id="w=(0Me7g6uu$Rn9BoB^8" x="-925" y="-52">
             <field name="normal_key">A</field>
+        </block>
+        <block type="special_key" id="?-vDL9wq|0G4}/)L.EKY" x="-933" y="-9">
+            <field name="special_key">Enter</field>
         </block>
         <block type="return"></block>
     </category>
@@ -618,11 +618,29 @@
     </category>
 
     <category name="文字" colour="#5BA58C">
-        <block type="msgbox"></block>
-        <block type="send_text"></block>
-        <block type="paste_text"></block>
         <block type="text">
             <field name="TEXT">文字</field>
+        </block>
+        <block type="msgbox" id="R1WMDFH+Qu_Ih(MfG1Qp" x="51" y="163">
+            <value name="NAME">
+            <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
+                <field name="TEXT">OK!</field>
+            </block>
+            </value>
+        </block>
+        <block type="send_text" id="^prMARg}%1]-k}fwMC3z" x="49" y="230">
+            <value name="NAME">
+            <block type="text" id="N$Hh{c1~s)%D~8X]]/?4">
+                <field name="TEXT">123</field>
+            </block>
+            </value>
+        </block>
+        <block type="paste_text" id="1m%*5%Ax8-Qqn+#6_EJj" x="53" y="295">
+            <value name="NAME">
+            <block type="text" id="qz8!|o+jx,Z+:`qJa^+H">
+                <field name="TEXT">沒問題👍</field>
+            </block>
+            </value>
         </block>
         <block type="text_join">
             <mutation items="2" />
@@ -904,6 +922,184 @@
         <block type="volume_mute"></block>
     </category>
 
+    <category name="網頁操作" colour="#C79304">
+        <block type="web_element" id="A4}DC-W}T(bX2YolMZ83" x="-96" y="145">
+            <field name="elt_address">js_path</field>
+            <field name="NAME">&lt;在此輸入元素路徑&gt;</field>
+            <comment pinned="false" h="92" w="259">對網頁物件按右鍵＞檢查
+將反白的HTML區塊按右鍵＞Copy
+選擇複製JS path或CSS選擇器</comment>
+        </block>
+        <block type="web_element_click" id="R^Z#RgOC6tyDf3ygke6O" x="-116" y="68">
+            <value name="NAME">
+            <block type="web_element" id="A4}DC-W}T(bX2YolMZ83">
+                <field name="elt_address">js_path</field>
+                <field name="NAME">document.querySelector("#更新日誌")</field>
+                <comment pinned="false" h="43" w="249">該元素為本網頁的更新日誌子分頁</comment>
+            </block>
+            </value>
+        </block>
+        <block type="web_element_focus" id="Wu~aQ{A(e0Mpy_{iq=1G" x="-110" y="146">
+            <value name="NAME">
+            <block type="web_element" id="$zX9Lgd1.E%WF^A4iZOk">
+                <field name="elt_address">js_path</field>
+                <field name="NAME">document.querySelector("#SELECT_function")</field>
+                <comment pinned="false" h="45" w="349">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
+            </block>
+            </value>
+        </block>
+        <block type="web_element_setValue" id="!aK^`sw,lB6*#YDIzr04" x="-111" y="215">
+            <value name="NAME">
+            <block type="web_element" id="V2;uy6:^Kgfowq7R]e4@">
+                <field name="elt_address">js_path</field>
+                <field name="NAME">document.querySelector("#DIV_func_conent &gt; input[type=text]")</field>
+                <comment pinned="false" h="46" w="308">該元素為本網頁的首頁&gt;設定功能的文字框</comment>
+            </block>
+            </value>
+            <value name="to_value">
+            <block type="text" id="7*,Np)3o8,vcL@vP60KU">
+                <field name="TEXT">123</field>
+            </block>
+            </value>
+        </block>
+        <block type="web_element_selectedindex" id="Qj^!JAddbJ`PaPm`:U_=" x="-110" y="324">
+            <value name="NAME">
+            <block type="web_element" id="_qHG+!j.6.V|nelURl=x">
+                <field name="elt_address">js_path</field>
+                <field name="NAME">document.querySelector("#SELECT_function")</field>
+                <comment pinned="false" h="43" w="330">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
+            </block>
+            </value>
+            <value name="to_value">
+            <block type="math_number" id="P}f~~!Vahc?9dLCM*l4=">
+                <field name="NUM">2</field>
+            </block>
+            </value>
+        </block>
+        <block type="web_element_alert" id=",}Hyiy{yl+6C58bqamhY" x="90" y="396">
+            <value name="NAME">
+            <block type="text" id="g2L}jr,=(F=%TNyUy-pB">
+                <field name="TEXT">OK！</field>
+            </block>
+            </value>
+        </block>
+        <block type="procedures_defnoreturn" id="4ldh1WBM~F`t0J?*x+^U" x="92" y="45">
+            <mutation>
+            <arg name="JS程式碼" varid="(Y3G~q,sBzY0NeXr_C0g"></arg>
+            </mutation>
+            <field name="NAME">執行Javascript</field>
+            <comment pinned="false" h="69" w="189">請按右鍵＞創造函式積木，來使用此函式積木</comment>
+            <statement name="STACK">
+            <block type="win_get_active_title" id="_X$G8nF~Hi,WxbKdj6V@">
+                <value name="NAME">
+                <block type="variables_get">
+                    <field name="VAR">視窗標題</field>
+                </block>
+                </value>
+                <next>
+                <block type="controls_if" id="THQPV}jiH}78Dzj[^i22">
+                    <mutation else="1"></mutation>
+                    <value name="IF0">
+                    <block type="in_str" id="extK?,jPJKj^m9VTZMpB">
+                        <field name="NAME">contain</field>
+                        <value name="text">
+                        <block type="variables_get">
+                            <field name="VAR">視窗標題</field>
+                        </block>
+                        </value>
+                        <value name="sub_text">
+                        <block type="text" id="b_*CEb|VmtrG%3f*X1J1">
+                            <field name="TEXT"> - Google Chrome</field>
+                        </block>
+                        </value>
+                    </block>
+                    </value>
+                    <statement name="DO0">
+                    <block type="block_input" id="165$[{QCmm3gcW%S,{r.">
+                        <statement name="DO">
+                        <block type="send_key" id="a1/4HGKEW=Z.?nn~-E(|">
+                            <comment pinned="false" h="47" w="118">聚焦在網址列</comment>
+                            <value name="NAME">
+                            <block type="function_key" id="0/|SFkGfS2;X)ke:$`8U">
+                                <field name="function_key">Ctrl</field>
+                                <value name="function_key">
+                                <block type="normal_key" id="(WtGZt@jQyP4_:@qmN$p">
+                                    <field name="normal_key">L</field>
+                                </block>
+                                </value>
+                            </block>
+                            </value>
+                            <next>
+                            <block type="paste_text" id="#]9k!1}QNE`~{P#22^2j">
+                                <value name="NAME">
+                                <block type="text_join" id="wlEEX{X-Z.39JD8!.oap">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                    <block type="text" id="YIqCQ)9:f^oUGkUVTKPh">
+                                        <field name="TEXT">_Javascript:</field>
+                                    </block>
+                                    </value>
+                                    <value name="ADD1">
+                                    <block type="variables_get" id="KM^=j!K4)q07(714b:@K">
+                                        <field name="VAR" id="(Y3G~q,sBzY0NeXr_C0g">JS程式碼</field>
+                                    </block>
+                                    </value>
+                                    <value name="ADD2">
+                                    <block type="text" id=";!Q)#Slc]g67p1YG-r)t">
+                                        <field name="TEXT">;void(0);</field>
+                                    </block>
+                                    </value>
+                                </block>
+                                </value>
+                                <next>
+                                <block type="send_key" id="#*0fu66G5i~16MQ/wT2*">
+                                    <value name="NAME">
+                                    <block type="special_key" id="3]2i;4r_u4m)+*GdNLiz">
+                                        <field name="special_key">Home</field>
+                                    </block>
+                                    </value>
+                                    <next>
+                                    <block type="send_key" id="`|4x%`h890DGg7j/?~}0">
+                                        <value name="NAME">
+                                        <block type="special_key" id="@CNEb)F=/q-Q+=eR.^3M">
+                                            <field name="special_key">Delete</field>
+                                        </block>
+                                        </value>
+                                        <next>
+                                        <block type="send_key" id="Y*csfnmE|aR~8PJQP`R/">
+                                            <value name="NAME">
+                                            <block type="special_key" id="WbXW3I,-ojh1zH06)F9p">
+                                                <field name="special_key">Enter</field>
+                                            </block>
+                                            </value>
+                                        </block>
+                                        </next>
+                                    </block>
+                                    </next>
+                                </block>
+                                </next>
+                            </block>
+                            </next>
+                        </block>
+                        </statement>
+                    </block>
+                    </statement>
+                    <statement name="ELSE">
+                    <block type="msgbox" id="(.0t7Lt#Td8Y6t_J.i4A">
+                        <value name="NAME">
+                        <block type="text" id="hpr~*Nyxzu4-IM.fZKz6">
+                            <field name="TEXT">只有Google瀏覽器才可以執行該函式</field>
+                        </block>
+                        </value>
+                    </block>
+                    </statement>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
+    </category>
+
     <category name="選取文字後" colour="#8FBC8F">
         <block type="open_select_url"></block>
         <block type="search_selected_keyword"></block>
@@ -995,7 +1191,15 @@
                 <field name="TEXT">App</field>
             </block>
             </value>
-        </block> 
+        </block>
+        <block type="get_key_state" id="YO!{H(G43CM2:YSIa(o#" x="130" y="223">
+            <value name="NAME">
+            <block type="special_key" id="a`*^O%1zVMePqI$Q}!Gp">
+                <field name="special_key">Ctrl</field>
+            </block>
+            </value>
+        </block>
+        
     </category>
 
     <category name="循環" colour="#006400">

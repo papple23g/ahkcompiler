@@ -1,6 +1,117 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['get_key_state'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(['normal_key', 'special_key'])
+            .appendField("按鍵");
+        this.appendDummyInput()
+            .appendField("是被按著的");
+        this.setInputsInline(true);
+        this.setOutput(true, null);
+        this.setColour(210);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['web_element_alert'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(null)
+            .appendField("跳出網頁訊息");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C79304");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['web_element_selectedindex'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck('web_element')
+            .appendField("下拉選單");
+        this.appendValueInput("to_value")
+            .setCheck("Number")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("選擇第");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("　　　　　　　項目");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C79304");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['web_element_setValue'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck('web_element')
+            .appendField("文字框");
+        this.appendValueInput("to_value")
+            .setCheck(["Number", "String"])
+            .appendField("設值為");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C79304");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['web_element_focus'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck('web_element')
+            .appendField("聚焦在");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C79304");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['web_element_click'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck('web_element')
+            .appendField("點擊");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour("#C79304");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['web_element'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("網頁元素")
+            .appendField(new Blockly.FieldDropdown([
+                ["JS path", "js_path"],
+                ["CSS selector", "css"]
+            ]), "elt_address")
+            .appendField(":")
+            .appendField(new Blockly.FieldTextInput("#button"), "NAME");
+        this.setInputsInline(false);
+        this.setOutput(true, 'web_element');
+        this.setColour("#E3B776");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['str_replace'] = {
     init: function() {
         this.appendValueInput("text")
@@ -487,7 +598,7 @@ Blockly.Blocks['set_clipboard'] = {
 Blockly.Blocks['built_in_wday_zh'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("現週(一 ~ 日)");
+            .appendField("現星期(一 ~ 日)");
         this.setOutput(true, "String");
         this.setColour(160);
         this.setTooltip("");

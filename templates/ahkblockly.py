@@ -91,6 +91,7 @@ def XmlToAHK(ev):
         'logic_negate',
         'in_str',
         'right_click_menu', #不讓右鍵清單獨立執行，否則會無限循環跳出清單
+        'get_key_state',
     ]
 
     if ev.type in ["input","click"]:
@@ -173,19 +174,25 @@ def AHK_statement(statement_elt,for_hotkey=False,Indentation=True):
 
 #定義函式:解析block元素為AHK語法
 def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
+
+    # print(block_elt.attrs['type'])
+
     com_str=""
     comment_str=""
 
-    #判斷是否要轉譯該Block
+    #判斷是否要無視該Block
     block_is_disabled_bool=True
     if block_elt:
+        #若該blockly已經被禁用，就不該轉譯這個Block
         if block_elt.attrs.get("disabled",None):
             if block_elt.attrs["disabled"]=="true":
                 block_is_disabled_bool=True
             else:
-                block_is_disabled_bool=False        
+                block_is_disabled_bool=False
         else:
             block_is_disabled_bool=False
+    
+    
 
     #若需要轉譯
     if not block_is_disabled_bool:
@@ -457,7 +464,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         #文字
         elif block_elt.attrs['type']=="text":
             field_elt=FindCurrent(block_elt,'field')
-            field_elt_str=field_elt.text.replace('`','``')
+            #替換特殊字元文字
+            field_elt_str=field_elt.text.replace('`','``').replace('"','""')
             if field_elt:
                 com_str+=f'"{field_elt_str}"'
 
@@ -783,6 +791,109 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 偵測圖片Blockly
 
+        #region 網頁操作
+        elif "web_element_" in block_elt.attrs['type']:
+
+            block_webAction_elt=block_elt
+            
+            #獲取連續的網頁操作blockly
+            block_webAction_elt_list=[block_webAction_elt]
+            while True:
+                next_elt=FindCurrent(block_webAction_elt,'next')
+                if next_elt:
+                    block_webAction_elt=FindCurrent(next_elt,'block')
+                    if "web_element_" in block_webAction_elt.attrs['type']:
+                        block_webAction_elt_list.append(block_webAction_elt)
+                    else:
+                        #若循環到斷點(下一個積木不是網頁操作blockly)，就將block_elt退回到之前，給後面程式碼「#處理下一個block」章節處理
+                        block_elt=block_webAction_elt.parent.parent
+                        break
+                else:
+                    #若循環到斷點(沒有下一個積木了)，就將傳送當前的block_elt給後面程式碼「#處理下一個block」章節處理
+                    block_elt=block_webAction_elt
+                    break
+            
+            #print([block_webAction_elt.attrs['id'] for block_webAction_elt in block_webAction_elt_list])
+
+            #逐個處理每個網頁操作blockly，匯出完整JS程式碼
+            com_js_code_str=""
+            for block_webAction_elt in block_webAction_elt_list:
+                #獲取網頁元素的JS路徑
+                if block_webAction_elt.attrs['type']!='web_element_alert':
+                    #獲取網頁元素blockly
+                    value_block_webElt_elt=FindCurrent(block_webAction_elt,'value[name="NAME"]')
+                    #若沒有放網頁元素blockly，就跳過這個循環
+                    if not value_block_webElt_elt:
+                        continue
+                    block_webElt_elt=FindCurrent(value_block_webElt_elt,'block[type="web_element"]')
+                    #獲取網頁元素JS path
+                    field_elt=FindCurrent(block_webElt_elt,'field[name="NAME"]')
+                    #根據地址類型轉換元素地址文字
+                    web_elt_JSpath_str=field_elt.text if FindCurrent(block_webElt_elt,f'field[name="elt_address"]').text=="js_path" else f'document.querySelector("{field_elt.text}")'
+                #若為點擊
+                if block_webAction_elt.attrs['type']=='web_element_click':
+                    com_js_code_str+=f"{web_elt_JSpath_str}.click();\n"
+                #若為聚焦
+                elif block_webAction_elt.attrs['type']=='web_element_focus':
+                    com_js_code_str+=f"{web_elt_JSpath_str}.focus();\n"
+                #若為更改文字框內容
+                elif block_webAction_elt.attrs['type']=='web_element_setValue':
+                    #獲取設值blockly
+                    value_toValue_elt=FindCurrent(block_webAction_elt,'value[name="to_value"]')
+                    value_toValue_str,value_toValue_comment=AHK_value(value_toValue_elt)
+                    com_str+=value_toValue_comment
+                    com_js_code_str+=f'{web_elt_JSpath_str}.value={value_toValue_str};\n'
+                #若為更改下拉選單
+                elif block_webAction_elt.attrs['type']=='web_element_selectedindex':
+                    #獲取設值blockly
+                    value_toValue_elt=FindCurrent(block_webAction_elt,'value[name="to_value"]')
+                    value_toValue_str,value_toValue_comment=AHK_value(value_toValue_elt)
+                    com_str+=value_toValue_comment
+                    com_js_code_str+=f'{web_elt_JSpath_str}.selectedIndex={value_toValue_str}-1;\n'
+                #若為alert()
+                elif block_webAction_elt.attrs['type']=='web_element_alert':
+                    #獲取設值blockly
+                    value_text_elt=FindCurrent(block_webAction_elt,'value[name="NAME"]')
+                    value_text_str,value_text_comment=AHK_value(value_text_elt)
+                    com_str+=value_text_comment
+                    com_js_code_str+=f'alert({value_text_str});\n'
+
+
+            
+            #JS程式碼預處理 (將反斜線正常化)
+            com_js_code_str=com_js_code_str.replace('\\','\\\\')
+
+            #JS程式碼不為空
+            if com_js_code_str:
+                com_str+='\n'.join([
+                    f'__JS程式碼=',
+                    f'(',
+                    f'{com_js_code_str}void(0);',
+                    f')',
+                    f'WinGetActiveTitle, __視窗標題',
+                    f'if InStr(__視窗標題," - Google Chrome") {{',
+                    f'{TAB_SPACE}BlockInput, On',
+                    f'{TAB_SPACE}Send, ^l',
+                    f'{TAB_SPACE}clipboard_save := clipboard',
+                    f'{TAB_SPACE}clipboard:=',
+                    f'{TAB_SPACE}clipboard:="_Javascript:" . __JS程式碼',
+                    f'{TAB_SPACE}ClipWait',
+                    f'{TAB_SPACE}Sleep 100',
+                    f'{TAB_SPACE}Send ^v',
+                    f'{TAB_SPACE}clipboard = %clipboard_save%',
+                    f'{TAB_SPACE}Send, {{Home}}',
+                    f'{TAB_SPACE}Send, {{Delete}}',
+                    f'{TAB_SPACE}Send, {{Enter}}',
+                    f'{TAB_SPACE}BlockInput, Off',
+                    f'}} else {{',
+                    f'{TAB_SPACE}Msgbox % "只有Google瀏覽器才可以執行該函式"',
+                    f'}}\n',
+                ])
+
+
+        #endregion 網頁操作
+
+
         #region 函式Blockly
 
         elif block_elt.attrs['type']=="procedures_defnoreturn":
@@ -1017,6 +1128,14 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #輸出程式
             com_str+=f'{func_str}({value_text_str},{value_subtext_str})'
 
+        #按鍵狀態
+        elif block_elt.attrs['type']=="get_key_state":
+            #獲取按鍵名稱
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt)
+            com_str+=value_comment
+            #輸出程式
+            com_str+=f'GetKeyState("{value_str}")'
             
 
 
@@ -1678,6 +1797,11 @@ AddStyle('''
 
     #div_copy_ahkfile_btns_area a:hover {
         color:#4a7aff !important;
+    }
+
+    .blocklyText, .blocklyHtmlInput, .blocklyTreeLabel {
+        font-family: '微軟正黑體', sans-serif !important;
+        font-weight: 600;
     }
 ''')
 #調整workspace為符合當前頁面的尺寸
