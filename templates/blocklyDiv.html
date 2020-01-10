@@ -59,40 +59,35 @@
                 </block>
             </statement>
         </block>
-        <block type="hotkey_execute">
-            <comment pinned="true" h="34.44447326660156" w="134.44442749023438">清空資源回收桶</comment>
+        <block type="hotkey_execute" id="wc|zj,Z#qS,ji}XwP.B)" x="81" y="156">
+            <comment pinned="false" h="34" w="134">清空資源回收桶</comment>
             <value name="NAME">
-                <block type="function_key" id="5SbVV-d66$U%w-pkE/Oa">
-                    <field name="function_key">Ctrl</field>
+            <block type="function_key" id="L{L$C_UEc@RTzNI+wiG{">
+                <field name="function_key">Ctrl</field>
+                <value name="function_key">
+                <block type="function_key" id="~8FRK/F:X16Ji[;b3V4f">
+                    <field name="function_key">Win</field>
                     <value name="function_key">
-                        <block type="function_key" id="?wtrVXxd#VOa`16u]{+W">
-                            <field name="function_key">Win</field>
-                            <value name="function_key">
-                                <block type="function_key" id="K$V@_QkoaGRJL/cEHpi!">
-                                    <field name="function_key">Alt</field>
-                                    <value name="function_key">
-                                        <block type="normal_key" id="o3FZWp=#nW1:@--``xDc">
-                                            <field name="normal_key">T</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </value>
-                        </block>
+                    <block type="special_key" id="~z2/%i^jA_N!o;d/PakD">
+                        <field name="special_key">Enter</field>
+                    </block>
                     </value>
                 </block>
+                </value>
+            </block>
             </value>
             <statement name="DO">
-                <block type="file_recycle_empty" id=";=(]0kDwE-?ptu3@Gkn:">
-                    <next>
-                        <block type="msgbox" id="zMTmYSi(ln79)7S@WZoX">
-                            <value name="NAME">
-                                <block type="text" id="Y3qX:9z`xdS0*gs@6=2]">
-                                    <field name="TEXT">垃圾桶清除完畢!</field>
-                                </block>
-                            </value>
-                        </block>
-                    </next>
+            <block type="file_recycle_empty" id="l5zK^VW_Jev5LPsq+ae0">
+                <next>
+                <block type="msgbox" id="s==Od5;U;,!o=gBEm*9Q">
+                    <value name="NAME">
+                    <block type="text" id=";||,I=o]WxN%h;J-%Kxp">
+                        <field name="TEXT">垃圾桶清除完畢!</field>
+                    </block>
+                    </value>
                 </block>
+                </next>
+            </block>
             </statement>
         </block>
         <block type="open">
@@ -156,6 +151,55 @@
             <field name="special_key">Enter</field>
         </block>
         <block type="return"></block>
+        <block type="hotkey_execute_with_setting" id="^Cq,F^Fh1_]sY2y(Xgjz" x="19" y="227">
+            <value name="NAME">
+            <block type="special_key" id="qG{./^UA5Qan=.cfImnu">
+                <field name="special_key">F8</field>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="send_key_times" id="4pVO#,oPXzXS!sr_AYZV">
+                <comment pinned="false" h="46" w="257">將Youtube影片播放速度設為(x2)</comment>
+                <value name="KEY">
+                <block type="function_key" id="Hv,di|635`3]M;JWd_$+">
+                    <field name="function_key">Shift</field>
+                    <value name="function_key">
+                    <block type="special_key" id="Kad+TZ*RDNl+y3@~v}vF">
+                        <field name="special_key">.</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+                <value name="TIMES">
+                <block type="math_number" id="A|p?c/NIOXHBf}]IUhTW">
+                    <field name="NUM">7</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+            <statement name="SETTING">
+            <block type="hotkey_execute_setting_keepkeyfuncdefalut" id="_r]aVjNI$K2RHXy#4Fi%">
+                <next>
+                <block type="hotkey_execute_setting_donottriggeritself" id=").t^W?/1)bnr+v2J/tv%">
+                    <next>
+                    <block type="hotkey_execute_setting_cantriggeronotherhotkey" id="kM$K%(j7TvTf)F[pXo0_">
+                        <next>
+                        <block type="hotkey_execute_setting_ifwinactive" id="kiiZK)i~jiW7HaO5k_.8">
+                            <field name="text">YouTube</field>
+                        </block>
+                        </next>
+                    </block>
+                    </next>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
+        <block type="hotkey_execute_with_setting"></block>
+        <block type="hotkey_execute_setting_keepkeyfuncdefalut"></block>
+        <block type="hotkey_execute_setting_donottriggeritself"></block>
+        <block type="hotkey_execute_setting_cantriggeronotherhotkey"></block>
+        <block type="hotkey_execute_setting_ifwinactive"></block>
     </category>
 
     <category name="熱字串" colour="#CD5C5C">
@@ -252,7 +296,24 @@
         <block type="set_clipboard"></block>
         <block type="paste_text"></block>
         <block type="file_recycle_empty"></block>
+        <block type="reload"></block>
         <block type="close_process"></block>
+        <block type="open" id="LC}d{N~0pgzHLB/*+L%=" x="97" y="182">
+            <value name="NAME">
+            <block type="open_with_main_program" id="v-c7aIXUtju?aVCk)3G0">
+                <value name="main_program">
+                <block type="built_in_program" id="]52i6}l)1RYmrt*2EDKv">
+                    <field name="NAME">notepad</field>
+                </block>
+                </value>
+                <value name="file">
+                <block type="built_in_program" id=",xU7gzD~AszYae=5(xmV">
+                    <field name="NAME">ahkfile</field>
+                </block>
+                </value>
+            </block>
+            </value>
+        </block>
         <block type="win_activate" id="qTbeo*`67*e/^?)n?ePd" x="92" y="241">
             <value name="title">
                 <block type="text" id="A@?fM8GKg=6]O.7QK:TD">
@@ -298,16 +359,16 @@
         <block type="text">
             <field name="TEXT">文字</field>
         </block>
-        <block type="path_combined">
+        <block type="path_combined" id=".YephFSjv,#DrG](`uIh">
             <value name="main_path">
-                <block type="built_in_dirpath">
-                    <field name="NAME">desktop</field>
-                </block>
+            <block type="built_in_dirpath" id="n~AK1G2^+`mb-P[p41*^">
+                <field name="NAME">desktop</field>
+            </block>
             </value>
             <value name="sub_path">
-                <block type="filepath">
-                    <field name="NAME">圖片\01.png</field>
-                </block>
+            <block type="filepath" id="cS9`O2a[#K$LVUKFifAV">
+                <field name="NAME">圖片\01.png</field>
+            </block>
             </value>
         </block>
         <block type="built_in_time"></block>
@@ -711,70 +772,77 @@
         <block type="built_in_time">
             <field name="NAME">sec</field>
         </block>
-        <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
-            <mutation statements="false"></mutation>
-            <field name="NAME">現在時間</field>
-            <comment pinned="true" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
-            <value name="RETURN">
-            <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
+        <block type="variables_set" x="125" y="95">
+            <field name="VAR">現在時間</field>
+            <value name="VALUE">
+            <block type="text_join" id="NE`lp;|d#vk!I9XY/cm0">
                 <mutation items="11"></mutation>
                 <value name="ADD0">
-                <block type="built_in_time" id="3*b_Ao:WS1JMA~pdCo@1">
+                <block type="built_in_time" id="{Lg6W|tj+O{)T(s/?;(?">
                     <field name="NAME">year</field>
                 </block>
                 </value>
                 <value name="ADD1">
-                <block type="text" id="s)pS:L;BF`;kflQBLVNR">
+                <block type="text" id="%UkxyDArz@~p5z|Goq8e">
                     <field name="TEXT">/</field>
                 </block>
                 </value>
                 <value name="ADD2">
-                <block type="built_in_time" id="N)U2e8AB{xaJHW!c;h#/">
+                <block type="built_in_time" id="dz5JxlX#/ai@t4FsXi%Q">
                     <field name="NAME">month</field>
                 </block>
                 </value>
                 <value name="ADD3">
-                <block type="text" id="Hin^|y$w@)Bz-3fxYJo_">
+                <block type="text" id="D.lwwbld!s~mpGBssT;n">
                     <field name="TEXT">/</field>
                 </block>
                 </value>
                 <value name="ADD4">
-                <block type="built_in_time" id="Tfi4BII%@Ap31W]Fg9%l">
+                <block type="built_in_time" id="v!6nOp({lNx)}[.8q96$">
                     <field name="NAME">day</field>
                 </block>
                 </value>
                 <value name="ADD5">
-                <block type="text" id="r_0%Xpw_71L_L[Ao-8oo">
+                <block type="text" id="xYirTfNGRl]zLK]C$tES">
                     <field name="TEXT">-</field>
                 </block>
                 </value>
                 <value name="ADD6">
-                <block type="built_in_time" id="G|$^aoRw?.-nvdlw)h!-">
+                <block type="built_in_time" id="V0(m_UU0)3a5qW#NPhoc">
                     <field name="NAME">hour</field>
                 </block>
                 </value>
                 <value name="ADD7">
-                <block type="text" id="Z!nnU}TwQHz|QeNz_J=|">
+                <block type="text" id="6cI8wm0_Vl8M,W#+^h-/">
                     <field name="TEXT">:</field>
                 </block>
                 </value>
                 <value name="ADD8">
-                <block type="built_in_time" id="14gg/Elks,(H;_T}(=lO">
+                <block type="built_in_time" id="qAalO8p-6t9P!U$Vqq,G">
                     <field name="NAME">min</field>
                 </block>
                 </value>
                 <value name="ADD9">
-                <block type="text" id="]h^=X9AaM^g5^w/CakfK">
+                <block type="text" id="9T!}boIqYku@y/iZ?%oL">
                     <field name="TEXT">:</field>
                 </block>
                 </value>
                 <value name="ADD10">
-                <block type="built_in_time" id="mpTd{yebnp:R/%H30rj3">
+                <block type="built_in_time" id="B9@Ag9WbyY$=6?`L!Ho;">
                     <field name="NAME">sec</field>
                 </block>
                 </value>
             </block>
             </value>
+            <next>
+            <block type="msgbox" id="nP%S,,up2?i@%,BLtsRJ">
+                <value name="NAME">
+                <block type="variables_get">
+                    <field name="VAR" id="3Dk+V}!R{Ow,#mH@oT!C">現在時間</field>
+                </block>
+                </value>
+            </block>
+            </next>
         </block>
     </category>
     

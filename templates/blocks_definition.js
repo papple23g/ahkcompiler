@@ -1,6 +1,104 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+
+Blockly.Blocks['open_with_main_program'] = {
+    init: function() {
+        this.appendValueInput("main_program")
+            .setCheck(["filepath", "String"])
+            .appendField("用");
+        this.appendValueInput("file")
+            .setCheck(["dirpath", "filepath", "link", "String"])
+            .appendField("程式來開啟");
+        this.appendDummyInput()
+            .appendField("檔案");
+        this.setInputsInline(true);
+        this.setOutput(true, "filepath");
+        this.setColour(290);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['reload'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("刷新AHK腳本");
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['hotkey_execute_setting_ifwinactive'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("只生效於當前視窗標題含文字 : ")
+            .appendField(new Blockly.FieldTextInput(""), "text");
+        this.setPreviousStatement(true, "hotkey_execute_setting");
+        this.setNextStatement(true, "hotkey_execute_setting");
+        this.setColour(195);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['hotkey_execute_setting_cantriggeronotherhotkey'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("可在其他組合鍵觸發");
+        this.setPreviousStatement(true, "hotkey_execute_setting");
+        this.setNextStatement(true, "hotkey_execute_setting");
+        this.setColour(195);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['hotkey_execute_setting_donottriggeritself'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("避免自我觸發");
+        this.setPreviousStatement(true, "hotkey_execute_setting");
+        this.setNextStatement(true, "hotkey_execute_setting");
+        this.setColour(195);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['hotkey_execute_setting_keepkeyfuncdefalut'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("保留預設按鍵功能");
+        this.setPreviousStatement(true, "hotkey_execute_setting");
+        this.setNextStatement(true, "hotkey_execute_setting");
+        this.setColour(195);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['hotkey_execute_with_setting'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["normal_key", "function_key", "special_key"])
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("當按下");
+        this.appendStatementInput("DO")
+            .setCheck("action")
+            .appendField("執行");
+        this.appendStatementInput("SETTING")
+            .setCheck("hotkey_execute_setting")
+            .appendField("設定");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['get_key_state'] = {
     init: function() {
         this.appendValueInput("NAME")
@@ -22,8 +120,8 @@ Blockly.Blocks['web_element_alert'] = {
             .setCheck(null)
             .appendField("跳出網頁訊息");
         this.setInputsInline(false);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C79304");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -43,8 +141,8 @@ Blockly.Blocks['web_element_selectedindex'] = {
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("　　　　　　　項目");
         this.setInputsInline(false);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C79304");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -59,8 +157,8 @@ Blockly.Blocks['web_element_setValue'] = {
         this.appendValueInput("to_value")
             .setCheck(["Number", "String"])
             .appendField("設值為");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C79304");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -72,8 +170,8 @@ Blockly.Blocks['web_element_focus'] = {
         this.appendValueInput("NAME")
             .setCheck('web_element')
             .appendField("聚焦在");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C79304");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -85,8 +183,8 @@ Blockly.Blocks['web_element_click'] = {
         this.appendValueInput("NAME")
             .setCheck('web_element')
             .appendField("點擊");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C79304");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -148,7 +246,7 @@ Blockly.Blocks['win_activate'] = {
 Blockly.Blocks['run_or_active'] = {
     init: function() {
         this.appendValueInput("run")
-            .setCheck(null)
+            .setCheck(["dirpath", "filepath", "link", "String"])
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("開啟");
         this.appendValueInput("title")
@@ -169,8 +267,8 @@ Blockly.Blocks['while_true'] = {
             .appendField("無限循環");
         this.appendStatementInput("DO")
             .setCheck(null);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(120);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -183,7 +281,7 @@ Blockly.Blocks['get_picture_pos'] = {
             .appendField("在當前畫面搜尋圖片")
             .appendField(new Blockly.FieldTextInput("C:\\*.png"), "img_filepath");
         this.appendDummyInput()
-            .appendField("並將位置座標輸出至(")
+            .appendField("並將位置座標紀錄至(")
             .appendField(new Blockly.FieldVariable("圖片座標X"), "pos_x")
             .appendField(",")
             .appendField(new Blockly.FieldVariable("圖片座標Y"), "pos_y")
@@ -197,8 +295,8 @@ Blockly.Blocks['get_picture_pos'] = {
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("找不到時");
         this.setInputsInline(false);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#DB7093");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -212,8 +310,8 @@ Blockly.Blocks['block_input'] = {
         this.appendStatementInput("DO")
             .setCheck(null)
             .setAlign(Blockly.ALIGN_RIGHT);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#708090");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -232,8 +330,8 @@ Blockly.Blocks['search_selected_keyword_custom'] = {
         this.appendDummyInput()
             .appendField("    關鍵字之後的網址:")
             .appendField(new Blockly.FieldTextInput("&btnG="), "url_b");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -259,8 +357,8 @@ Blockly.Blocks['search_selected_keyword'] = {
                 ["推特搜尋", "twitter"],
                 ["萌典(中文字典)", "moedict"]
             ]), "NAME");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -271,8 +369,8 @@ Blockly.Blocks['open_select_url'] = {
     init: function() {
         this.appendDummyInput()
             .appendField("進入被選取的網址文字");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -284,8 +382,8 @@ Blockly.Blocks['paste_text'] = {
         this.appendValueInput("NAME")
             .setCheck(null)
             .appendField("貼上文字");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(160);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -302,8 +400,8 @@ Blockly.Blocks['key_pressing'] = {
         this.appendStatementInput("DO")
             .setCheck(null)
             .appendField("執行");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -318,8 +416,8 @@ Blockly.Blocks['key_wait'] = {
             .appendField("等待按鍵");
         this.appendDummyInput()
             .appendField("釋放");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#80ADC4");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -337,8 +435,8 @@ Blockly.Blocks['cmd'] = {
                 ["關閉視窗", "close"],
                 ["不關閉視窗", "dont_close"]
             ]), "do_close");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C4C4C4");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -350,8 +448,8 @@ Blockly.Blocks['volume_mute'] = {
         this.appendDummyInput()
             .appendField("靜音 / 取消靜音");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C95E00");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -372,8 +470,8 @@ Blockly.Blocks['volume_adjust'] = {
         this.appendDummyInput()
             .appendField("%");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#C95E00");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -396,8 +494,8 @@ Blockly.Blocks['shutdown'] = {
             .appendField("　")
             .appendField(new Blockly.FieldCheckbox("TRUE"), "force")
             .appendField("強制執行");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -444,8 +542,8 @@ Blockly.Blocks['right_click_menu'] = {
         this.appendStatementInput("NAME")
             .setCheck("right_click_menu_item");
         this.setInputsInline(false);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#00CED1");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -477,11 +575,11 @@ Blockly.Blocks['win_get_active_title'] = {
     init: function() {
         this.appendValueInput("NAME")
             .setCheck(null)
-            .appendField("將目前視窗名稱輸出至");
+            .appendField("將目前視窗名稱紀錄至");
         this.appendDummyInput()
             .appendField("變數");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#956D49");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -491,14 +589,14 @@ Blockly.Blocks['win_get_active_title'] = {
 Blockly.Blocks['mouse_get_pos'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("將目前滑鼠座標輸出至(")
+            .appendField("將目前滑鼠座標紀錄至(")
             .appendField(new Blockly.FieldVariable("滑鼠座標X"), "posX")
             .appendField(",")
             .appendField(new Blockly.FieldVariable("滑鼠座標Y"), "posY")
             .appendField(") 兩個變數");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(60);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -516,8 +614,8 @@ Blockly.Blocks['coord_mode'] = {
         this.appendDummyInput()
             .appendField("為座標原點");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(60);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -538,8 +636,8 @@ Blockly.Blocks['click_x_y'] = {
         this.appendDummyInput()
             .appendField("次");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(60);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -552,8 +650,8 @@ Blockly.Blocks['ahk_code'] = {
         this.appendDummyInput()
             .appendField("AHK碼")
             .appendField(new Blockly.FieldTextInput("Msgbox % \"Hellow World !\""), "NAME");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#818181");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -587,8 +685,8 @@ Blockly.Blocks['set_clipboard'] = {
         this.appendValueInput("NAME")
             .setCheck(null)
             .appendField("剪貼簿內容 設為");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(160);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -610,8 +708,8 @@ Blockly.Blocks['return'] = {
     init: function() {
         this.appendDummyInput()
             .appendField("禁用該熱鍵");
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#555555");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -638,8 +736,8 @@ Blockly.Blocks['sleep'] = {
         this.appendDummyInput()
             .appendField("毫秒");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour("#80ADC4");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -908,8 +1006,8 @@ Blockly.Blocks['send_key_times'] = {
         this.appendDummyInput()
             .appendField("次");
         this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
         this.setColour(260);
         this.setTooltip("");
         this.setHelpUrl("");
@@ -984,7 +1082,7 @@ Blockly.Blocks['webpage'] = {
 Blockly.Blocks['open'] = {
     init: function() {
         this.appendValueInput("NAME")
-            .setCheck(["dirpath", "filepath", "link"])
+            .setCheck(["dirpath", "filepath", "link", "String"])
             .appendField("開啟");
         this.setPreviousStatement(true, "action");
         this.setNextStatement(true, "action");
@@ -1183,4 +1281,4 @@ Blockly.Blocks['msgbox'] = {
         this.setTooltip("");
         this.setHelpUrl("");
     }
-};
+}

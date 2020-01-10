@@ -109,6 +109,12 @@ def XmlToAHK(ev):
         div_parseXml_elt=DIV()
         div_parseXml_elt.innerHTML=xml_str
         block_elt_list=div_parseXml_elt.select('xml>block')
+
+        #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭做SetTitleMatchMode設定
+        if div_parseXml_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]') or div_parseXml_elt.select_one('block[type="win_activate"]') or div_parseXml_elt.select_one('block[type="run_or_active"]'):
+            ahk_code+=";請確保下面這行程式碼在腳本最頂部\nSetTitleMatchMode, 2\n\n"
+        
+        #將逐個blockly轉譯為AHK
         for block_elt in block_elt_list:
             #不要轉譯落單的field block
             if block_elt.attrs['type'] not in OBJ_BLOCK_LIST:
@@ -177,7 +183,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
     # print(block_elt.attrs['type'])
 
+    #預設輸出程式碼
     com_str=""
+    #預設輸出註解
     comment_str=""
 
     #判斷是否要無視該Block
@@ -200,9 +208,13 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 按鍵Blockly
 
-        if block_elt.attrs['type']=="hotkey_execute":
+        if block_elt.attrs['type']=="hotkey_execute" or block_elt.attrs['type']=="hotkey_execute_with_setting":
+            #預設輸出的ahk熱鍵碼
             hotkey_str=""
+            #預設輸出的ahk執行碼
             statement_str=""
+            #預設是否已#if結尾
+            ending_with_if_bool=False
 
             value_elt=FindCurrent(block_elt,'value[name="NAME"]')
             if value_elt:
@@ -223,8 +235,32 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 statement_elt=FindCurrent(block_elt,'statement[name="DO"]')
                 if statement_elt:
                     statement_str=AHK_statement(statement_elt,for_hotkey=True)
-                    
-            com_str+=hotkey_str+f"::{statement_str}\n"
+
+            #若為進階的熱鍵設定###
+            if block_elt.attrs['type']=="hotkey_execute_with_setting":
+                #獲取熱鍵設定元素
+                statement_elt=FindCurrent(block_elt,'statement[name="SETTING"]')
+                if statement_elt:
+                    #獲取所有設定註解
+                    hotkey_setting_all_comment_str=Comment(statement_elt,get_all_comment=True)
+                    com_str+=hotkey_setting_all_comment_str
+                    #若設定避免自我觸發
+                    if statement_elt.select_one('block[type="hotkey_execute_setting_donottriggeritself"]'):
+                        hotkey_str='$'+hotkey_str
+                    #若設定可被其他按鍵觸發
+                    if statement_elt.select_one('block[type="hotkey_execute_setting_cantriggeronotherhotkey"]'):
+                        hotkey_str='*'+hotkey_str
+                    #若設定保持原有熱鍵功能
+                    if statement_elt.select_one('block[type="hotkey_execute_setting_keepkeyfuncdefalut"]'):
+                        hotkey_str='~'+hotkey_str
+                    if statement_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]'):
+                        #獲取標題文字元素
+                        block_ifwinactive_elt=statement_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]')
+                        field_text_elt=FindCurrent(block_ifwinactive_elt,'field[name="text"]')
+                        hotkey_str=f'#IfWinActive, {field_text_elt.text}\n'+hotkey_str
+                        ending_with_if_bool=True
+
+            com_str+=hotkey_str+f"::{statement_str}"+"#If"*ending_with_if_bool+"\n"
                 
         elif block_elt.attrs['type']=="function_key":
             field_elt=FindCurrent(block_elt,'field')
@@ -344,7 +380,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_title_comment
 
             com_str+='\n'.join([
-                f'SetTitleMatchMode, 2',
                 f'WinActivate % {value_title_str}\n',
             ])
 
@@ -360,7 +395,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_title_comment
 
             com_str+='\n'.join([
-                f'SetTitleMatchMode, 2',
                 f'IfWinExist % {value_title_str}',
                 f'{{',
                 f'{TAB_SPACE}IfWinNotActive % {value_title_str}',
@@ -376,6 +410,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         elif block_elt.attrs['type']=="file_recycle_empty":
             com_str+='FileRecycleEmpty\n'
+
+        elif block_elt.attrs['type']=="reload":
+            com_str+='Reload\n'
 
         elif block_elt.attrs['type']=="msgbox":
             value_elt=FindCurrent(block_elt,'value')
@@ -459,7 +496,12 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #若為網頁，則需要替換特殊字元
             if block_elt.attrs['type']=="webpage":
                 filed_str=filed_str.replace("%","`%").replace(",","`,")
-            com_str+=f'"{filed_str}"'
+            #若路徑有空白，就使用三個引號夾起
+            if " " in filed_str:
+                com_str+=f'"""{filed_str}"""'
+            #若路徑沒有空白，就使用一個引號夾起
+            else:
+                com_str+=f'"{filed_str}"'
         
         #文字
         elif block_elt.attrs['type']=="text":
@@ -546,6 +588,19 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 }
                 field_str=built_in_webpage_dict[field_elt.text]
                 com_str+=f'"{field_str}"'
+
+        #用主程式開啟檔案
+        elif block_elt.attrs['type']=="open_with_main_program":
+            #獲取主程式積木
+            value_mainProgram_elt=FindCurrent(block_elt,'value[name="main_program"]')
+            value_mainProgram_str,value_mainProgram_comment=AHK_value(value_mainProgram_elt,get_all_comment=True)
+            com_str+=value_mainProgram_comment
+            #獲取檔案積木
+            value_file_elt=FindCurrent(block_elt,'value[name="file"]')
+            value_file_str,value_file_comment=AHK_value(value_file_elt,get_all_comment=True)
+            com_str+=value_file_comment
+
+            com_str+=f'{value_mainProgram_str} . " " . {value_file_str}'
 
         #路徑合併
         elif block_elt.attrs['type']=="path_combined":
@@ -762,7 +817,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取找到圖片後執行動作
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            print(statement_do_str)
             #獲取找不到圖片後執行動作
             statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
@@ -1366,7 +1420,7 @@ return
             #獲取執行式
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            com_str+=f"Loop {value_str} {{\n{statement_do_str}}}"
+            com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
 
         #while循環
         elif block_elt.attrs['type']=="controls_whileUntil":
@@ -1381,7 +1435,7 @@ return
             #獲取執行式
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            com_str+=f"{while_str} {value_str} {{\n{statement_do_str}}}"
+            com_str+=f"{while_str} {value_str} {{\n{statement_do_str}}}\n"
 
         #break或continue
         elif block_elt.attrs['type']=="controls_flow_statements":
@@ -1393,7 +1447,7 @@ return
             #獲取執行式
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            com_str+=f"while TRUE {{\n{statement_do_str}}}"
+            com_str+=f"while TRUE {{\n{statement_do_str}}}\n"
 
         #endregion 循環Blockly
 
