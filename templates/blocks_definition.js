@@ -1,6 +1,128 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['math_random'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("賦予")
+            .appendField(new Blockly.FieldVariable("隨機整數"), "NAME")
+            .appendField("一個從");
+        this.appendValueInput("min")
+            .setCheck("Number");
+        this.appendValueInput("max")
+            .setCheck("Number")
+            .appendField("至");
+        this.appendDummyInput()
+            .appendField("的隨機")
+            .appendField(new Blockly.FieldDropdown([
+                ["整數", "int"],
+                ["浮點數", "float"]
+            ]), "type");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['math_round'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck("Number");
+        this.appendValueInput("digit")
+            .setCheck("Number")
+            .appendField("四捨五入至小數點第");
+        this.appendDummyInput()
+            .appendField("位");
+        this.setInputsInline(true);
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['math_mod'] = {
+    init: function() {
+        this.appendValueInput("a")
+            .setCheck("Number");
+        this.appendValueInput("b")
+            .setCheck("Number")
+            .appendField("除以");
+        this.appendDummyInput()
+            .appendField("的")
+            .appendField(new Blockly.FieldDropdown([
+                ["餘數", "餘數"],
+                ["商數", "商數"]
+            ]), "NAME");
+        this.setInputsInline(true);
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['math_constant2'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([
+                ["π", "pi"],
+                ["e", "e"],
+                ["φ", "golden_ratio"]
+            ]), "NAME");
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['math_function2'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck("Number");
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([
+                ["的絕對值", "abs"],
+                ["向上取整數", "ceil"],
+                ["向下取整數", "floor"]
+            ]), "NAME");
+        this.setInputsInline(true);
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['math_function'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck("Number")
+            .appendField(new Blockly.FieldDropdown([
+                ["sin", "sin"],
+                ["cos", "cos"],
+                ["tan", "tan"],
+                ["asin", "asin"],
+                ["acos", "acos"],
+                ["atan", "atan"],
+                ["√", "sqrt"],
+                ["log", "log"],
+                ["ln", "ln"],
+                ["e^", "exp"]
+            ]), "NAME")
+            .appendField("(");
+        this.appendDummyInput()
+            .appendField(")");
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
 
 Blockly.Blocks['open_with_main_program'] = {
     init: function() {

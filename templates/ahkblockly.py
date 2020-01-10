@@ -92,6 +92,11 @@ def XmlToAHK(ev):
         'in_str',
         'right_click_menu', #不讓右鍵清單獨立執行，否則會無限循環跳出清單
         'get_key_state',
+        'math_function',
+        'math_function2',
+        'math_constant2',
+        'math_round',
+        'math_mod',
     ]
 
     if ev.type in ["input","click"]:
@@ -236,7 +241,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 if statement_elt:
                     statement_str=AHK_statement(statement_elt,for_hotkey=True)
 
-            #若為進階的熱鍵設定###
+            #若為進階的熱鍵設定
             if block_elt.attrs['type']=="hotkey_execute_with_setting":
                 #獲取熱鍵設定元素
                 statement_elt=FindCurrent(block_elt,'statement[name="SETTING"]')
@@ -639,7 +644,88 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
             com_str+=f'({value_a_str}{field_op_str}{value_b_str})'
 
+        #數學函數
+        elif block_elt.attrs['type'] in ["math_function","math_function2"]:
+            #獲取數字積木
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else "0"
+            com_str+=value_comment
+            #獲取數學函數名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #輸出語法
+            com_str+=f'{field_elt.text}({value_str})'
 
+        #數學常數
+        elif block_elt.attrs['type']=="math_constant2":
+            #獲取數學常數名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            if field_elt.text=="pi":
+                com_str+='4*atan(1)'
+            elif field_elt.text=="e":
+                com_str+='exp(1)'
+            elif field_elt.text=="golden_ratio":
+                com_str+='(1+sqrt(5))/2'
+        
+        #四捨五入
+        elif block_elt.attrs['type']=="math_round":
+            #獲取數字積木
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else "0"
+            com_str+=value_comment
+            #獲取位數積木
+            value_digit_elt=FindCurrent(block_elt,'value[name="digit"]')
+            value_digit_str,value_digit_comment=AHK_value(value_digit_elt,get_all_comment=True)
+            value_digit_str=value_digit_str if value_digit_str else "0"
+            com_str+=value_digit_comment
+            #
+            if value_digit_str=="0":
+                com_str+=f'round({value_str})'
+            else:
+                com_str+=f'round({value_str},{value_digit_str})'
+
+        #取餘數或商數
+        elif block_elt.attrs['type']=="math_mod":
+            #獲取被除數數字積木
+            value_a_elt=FindCurrent(block_elt,'value[name="a"]')
+            value_a_str,value_a_comment=AHK_value(value_a_elt,get_all_comment=True)
+            value_a_str=value_a_str if value_a_str else "0"
+            com_str+=value_a_comment
+            #獲取除數數字積木
+            value_b_elt=FindCurrent(block_elt,'value[name="b"]')
+            value_b_str,value_b_comment=AHK_value(value_b_elt,get_all_comment=True)
+            value_b_str=value_b_str if value_b_str else "1"
+            com_str+=value_b_comment
+            #獲取是取餘數或商數
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            if field_elt.text=="商數":
+                com_str+=f'{value_a_str}//{value_b_str}'
+            else:
+                com_str+=f'Mod({value_a_str}, {value_b_str})'
+
+        #取隨機數
+        ##
+        elif block_elt.attrs['type']=="math_random":
+            #獲取最小值數字積木
+            value_min_elt=FindCurrent(block_elt,'value[name="min"]')
+            value_min_str,value_min_comment=AHK_value(value_min_elt,get_all_comment=True)
+            value_min_str=value_min_str if value_min_str else "0"
+            com_str+=value_min_comment
+            #獲取最大值數字積木
+            value_max_elt=FindCurrent(block_elt,'value[name="max"]')
+            value_max_str,value_max_comment=AHK_value(value_max_elt,get_all_comment=True)
+            value_max_str=value_max_str if value_max_str else "0"
+            com_str+=value_max_comment
+            #獲取變數名稱
+            field_var_elt=FindCurrent(block_elt,f'field[name="NAME"]')
+            value_var_str=field_var_elt.text
+            #獲取亂數類型
+            field_type_elt=FindCurrent(block_elt,f'field[name="type"]')
+            if field_type_elt.text=="int":
+                com_str+=f'Random, {value_var_str}, ceil({value_min_str}), floor({value_max_str})\n'
+            else:
+                com_str+=f'Random, {value_var_str}, {value_min_str}*1.0, {value_max_str}*1.0\n'
 
         #日期時間
         elif block_elt.attrs['type']=="built_in_time":
@@ -1199,8 +1285,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 右鍵清單
 
-        ###
-
         elif block_elt.attrs['type']=="right_click_menu":
             MyMenu_str=f'MyMenu_{id(block_elt)}'
             menu_myMenu_add_str=""
@@ -1700,7 +1784,7 @@ sec_int=None
 def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
-    ###
+    ##
     host="https://76c1d48b.ngrok.io"
     btn_elt=ev.currentTarget
 

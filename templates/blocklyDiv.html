@@ -851,6 +851,7 @@
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
+        <block type="math_constant2"></block>
         <block type="math_arithmetic">
             <field name="OP">ADD</field>
             <value name="A">
@@ -863,6 +864,70 @@
                     <field name="NUM">2</field>
                 </block>
             </value>
+        </block>
+        <block type="math_function" id="{Me#8qr[9bQXXu-b;[Z7" x="206" y="77">
+            <field name="NAME">sin</field>
+            <value name="NAME">
+            <block type="math_constant2" id="rSj$cS`NUv{(+L)fT=;]">
+                <field name="NAME">pi</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_function2" id="$HG?09ZA[b*7MteZCBN6" x="201" y="138">
+            <field name="NAME">abs</field>
+            <value name="NAME">
+            <block type="math_number" id="m,XY+b4nAU[%~#4zotE8">
+                <field name="NUM">-2.5</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_round" id="oNvO}}Mc;0?34hP=x=*F" x="193" y="222">
+            <value name="NAME">
+            <block type="math_constant2" id=")r{=nl,4lH`=QM4xj87:">
+                <field name="NAME">pi</field>
+            </block>
+            </value>
+            <value name="digit">
+            <block type="math_number" id="wp$wGo1,PH-2kr+S=|6e">
+                <field name="NUM">2</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_mod" id="!$v?!Iurn##$X{_C9mR1" x="194" y="317">
+            <field name="NAME">餘數</field>
+            <value name="a">
+            <block type="math_number" id="E]~cAAl0o$rRgj$g0@[O">
+                <field name="NUM">5</field>
+            </block>
+            </value>
+            <value name="b">
+            <block type="math_number" id="n}:IF]}aS`KYURL})m1k">
+                <field name="NUM">2</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_random" id="?ROe98T.gX_Bl,`X`iEy" x="13" y="232">
+            <field name="NAME">X</field>
+            <field name="type">int</field>
+            <value name="min">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <value name="max">
+            <block type="math_number">
+                <field name="NUM">10</field>
+            </block>
+            </value>
+            <next>
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="variables_get">
+                    <field name="VAR">X</field>
+                </block>
+                </value>
+            </block>
+            </next>
         </block>
     </category>
 
