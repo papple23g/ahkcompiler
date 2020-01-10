@@ -4,9 +4,9 @@ var hotstringSetting_color = "#D0873E";
 Blockly.Blocks['math_random'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField("賦予")
-            .appendField(new Blockly.FieldVariable("隨機整數"), "NAME")
-            .appendField("一個從");
+            .appendField("設")
+            .appendField(new Blockly.FieldVariable("X"), "NAME")
+            .appendField("為一個從");
         this.appendValueInput("min")
             .setCheck("Number");
         this.appendValueInput("max")
