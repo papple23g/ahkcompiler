@@ -341,6 +341,7 @@
                 </block>
             </value>
         </block>
+
     </category>
 
     <category name="物件" colour="#9370DB">
@@ -847,7 +848,7 @@
     </category>
     
 
-    <category name="數學" colour="#7B68EE">
+    <category name="數字運算" colour="#7B68EE">
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
@@ -1041,6 +1042,143 @@
         <block type="right_click_menu"></block>
         <block type="right_click_menu_item"></block>
         <block type="right_click_menu_item_hr"></block>
+    </category>
+
+
+    <category name="跳出視窗" colour="#F5F5DC">
+        <block type="msgbox" id="R1WMDFH+Qu_Ih(MfG1Qp" x="51" y="163">
+            <value name="NAME">
+            <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
+                <field name="TEXT">OK!</field>
+            </block>
+            </value>
+        </block>
+        <block type="msgbox_yesorno" id="Fr4M,{.}{*|Eh?.__51)" x="139" y="204">
+            <value name="title">
+            <block type="text" id="7l+sAAWB)9/;?]owS]tj">
+                <field name="TEXT">標題文字</field>
+            </block>
+            </value>
+            <value name="text">
+            <block type="text" id="Dz`uGLyhV7M-7X$6MTS_">
+                <field name="TEXT">請按下 [是] 或 [否] </field>
+            </block>
+            </value>
+            <statement name="yes">
+            <block type="msgbox" id="mv%Xk:j?iBU7K*pJIX4h">
+                <value name="NAME">
+                <block type="text" id="(?/,LcjxT#]HcjKMnqH^">
+                    <field name="TEXT">您剛剛按了 [是]</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+            <statement name="no">
+            <block type="msgbox" id="%G~%K9x4U^#];Zch/*TY">
+                <value name="NAME">
+                <block type="text" id="?@g;R@qUP#c88,Rj^l03">
+                    <field name="TEXT">您剛剛按了 [否]</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="inputbox" id="McY+Rsw)#S6:HY8zogQR" inline="false" x="102" y="220">
+            <field name="NAME">輸入的文字</field>
+            <field name="w">400</field>
+            <field name="h">150</field>
+            <value name="title">
+            <block type="text" id="tyM~O.#Y_C60|tdd?u!|">
+                <field name="TEXT">標題文字</field>
+            </block>
+            </value>
+            <value name="text">
+            <block type="text" id="{0UGM3+M^.e@$]0K3#uj">
+                <field name="TEXT">請輸入任意文字：</field>
+            </block>
+            </value>
+            <next>
+            <block type="msgbox" id="VKSd9,OG+EpB,A_rGnwt">
+                <value name="NAME">
+                <block type="text_join" id="Gjhe`t:W2Hrq*3!ZwTvl">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                    <block type="text" id="c:]LO|8XM@mhhC9iV5AO">
+                        <field name="TEXT">您剛剛輸入了：</field>
+                    </block>
+                    </value>
+                    <value name="ADD1">
+                    <block type="variables_get">
+                        <field name="VAR">輸入的文字</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+            </block>
+            </next>
+        </block>
+        <block type="inputbox" id="`X7T.G5UI:I?#Vcu#W.n" inline="false" x="85" y="101">
+            <field name="NAME" id="BpbSa*dscl~6d4@PT:rd">A</field>
+            <field name="w">400</field>
+            <field name="h">150</field>
+            <value name="title">
+            <block type="text" id="a1lUwVWzLkA4WVh1XB$5">
+                <field name="TEXT">標題文字</field>
+            </block>
+            </value>
+            <value name="text">
+            <block type="text" id="4hHa[On9VrVbU`FVS@xG">
+                <field name="TEXT">請輸入數字 A</field>
+            </block>
+            </value>
+            <next>
+                <block type="inputbox" id="TSSuX(W5PTQ0H]5f#aKl" inline="false">
+                    <field name="NAME" id=")hOyk`6p=sC/lP^Yru/5">B</field>
+                    <field name="w">400</field>
+                    <field name="h">150</field>
+                    <value name="title">
+                    <block type="text" id=".:b~!s|HOD[rE$t),~{r">
+                        <field name="TEXT">標題文字</field>
+                    </block>
+                    </value>
+                    <value name="text">
+                    <block type="text" id="xSA;}F6=hzmnogCY9Hg8">
+                        <field name="TEXT">請輸入數字 B</field>
+                    </block>
+                    </value>
+                    <next>
+                    <block type="msgbox" id=",zvTfSMdVwBF?d$]%Kxu">
+                        <value name="NAME">
+                        <block type="text_join" id="z}H`VDm)6NWo~bH_I)mi">
+                            <mutation items="2"></mutation>
+                            <value name="ADD0">
+                            <block type="text" id="_])#}952:,u,=qPJ-yaj">
+                                <field name="TEXT">A + B = </field>
+                            </block>
+                            </value>
+                            <value name="ADD1">
+                            <block type="math_arithmetic" id=":7`5X*=l(Ev2dS:tioC~">
+                                <field name="OP">ADD</field>
+                                <value name="A">
+                                <block type="variables_get" id="SUF!AQ1}[6WKTUO4_!Rp">
+                                    <field name="VAR" id="BpbSa*dscl~6d4@PT:rd">A</field>
+                                </block>
+                                </value>
+                                <value name="B">
+                                <block type="variables_get" id="i)aM^XxKvaM(o[%(b;`v">
+                                    <field name="VAR" id=")hOyk`6p=sC/lP^Yru/5">B</field>
+                                </block>
+                                </value>
+                            </block>
+                            </value>
+                        </block>
+                        </value>
+                    </block>
+                    </next>
+                </block>
+            </next>
+        </block>
+        
     </category>
 
     <category name="音量控制" colour="#C95E00">

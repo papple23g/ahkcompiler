@@ -451,7 +451,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             com_str+=value_comment
             com_str+=f'Sleep % {value_str}\n'
 
-
         elif block_elt.attrs['type']=="shutdown":
             #獲取動作
             field_action_elt=FindCurrent(block_elt,'field[name="action"]')
@@ -484,6 +483,60 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 'Send ^v',
                 'clipboard = %clipboard_save%\n',
             ])
+
+        elif block_elt.attrs['type']=="inputbox":
+            #獲取變數名稱
+            field_var_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            field_var_str=field_var_elt.text
+            #獲取視窗寬度
+            field_w_elt=FindCurrent(block_elt,'field[name="w"]')
+            field_w_str=field_w_elt.text
+            #獲取視窗高度
+            field_h_elt=FindCurrent(block_elt,'field[name="h"]')
+            field_h_str=field_h_elt.text
+            #獲取標題文字
+            value_title_elt=FindCurrent(block_elt,'value[name="title"]')
+            value_title_str,value_title_comment=AHK_value(value_title_elt,get_all_comment=True)
+            com_str+=value_title_comment
+            #獲取內容文字
+            value_text_elt=FindCurrent(block_elt,'value[name="text"]')
+            value_text_str,value_text_comment=AHK_value(value_text_elt,get_all_comment=True)
+            com_str+=value_text_comment
+            #輸出程式碼
+            com_str+='\n'.join([
+                f'__title := {value_title_str}',
+                f'__text := {value_text_str}',
+                f'InputBox, {field_var_str},%__title%,%__text%,,{field_w_str},{field_h_str}\n',
+            ])
+
+        elif block_elt.attrs['type']=="msgbox_yesorno":
+            #獲取標題文字
+            value_title_elt=FindCurrent(block_elt,'value[name="title"]')
+            value_title_str,value_title_comment=AHK_value(value_title_elt,get_all_comment=True)
+            com_str+=value_title_comment
+            #獲取內容文字
+            value_text_elt=FindCurrent(block_elt,'value[name="text"]')
+            value_text_str,value_text_comment=AHK_value(value_text_elt,get_all_comment=True)
+            com_str+=value_text_comment
+            #獲取按下是之後執行的動作
+            statement_yes_elt=FindCurrent(block_elt,'statement[name="yes"]')
+            statement_yes_str=AHK_statement(statement_yes_elt)
+            #獲取按下是之後執行的動作
+            statement_no_elt=FindCurrent(block_elt,'statement[name="no"]')
+            statement_no_str=AHK_statement(statement_no_elt)
+            #輸出程式碼
+            com_str+='\n'.join([
+                f'__title := {value_title_str}',
+                f'__text := {value_text_str}',
+                f'MsgBox, 4,%__title%,%__text%',
+                f'IfMsgBox Yes',
+                f'{{',
+                f'{statement_yes_str}}}',
+                f'else',
+                f'{{',
+                f'{statement_no_str}}}\n',
+            ])
+    
 
 
         #endregion 動作Blockly

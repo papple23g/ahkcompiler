@@ -1,6 +1,62 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['msgbox_yesorno'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("跳出確認視窗");
+        this.appendValueInput("title")
+            .setCheck("String")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("標題");
+        this.appendValueInput("text")
+            .setCheck("String")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("內容");
+        this.appendStatementInput("yes")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_CENTRE)
+            .appendField("若按了[是]");
+        this.appendStatementInput("no")
+            .setCheck(null)
+            .appendField("若按了[否]");
+        this.setPreviousStatement(true, null);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['inputbox'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("待使用者輸入值");
+        this.appendDummyInput()
+            .appendField("紀錄至變數")
+            .appendField(new Blockly.FieldVariable("輸入值"), "NAME");
+        this.appendValueInput("title")
+            .setCheck("String")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("輸入框標題");
+        this.appendValueInput("text")
+            .setCheck("String")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("輸入框內容");
+        this.appendDummyInput()
+            .appendField("設定視窗寬度")
+            .appendField(new Blockly.FieldNumber(0, 400, Infinity, 1), "w")
+            .appendField("高度")
+            .appendField(new Blockly.FieldNumber(0, 150, Infinity, 1), "h");
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(330);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+}
+
 Blockly.Blocks['math_random'] = {
     init: function() {
         this.appendDummyInput()
