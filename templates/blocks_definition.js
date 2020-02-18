@@ -1,6 +1,30 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['screenshot'] = {
+    init: function() {
+        this.appendValueInput("path")
+            .setCheck("dirpath")
+            .appendField("擷取螢幕至路徑");
+        this.appendValueInput("filename")
+            .setCheck(["filepath", "dirpath", "String"])
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("圖片檔名為");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(new Blockly.FieldDropdown([
+                [".png", ".png"],
+                [".jpg", ".jpg"],
+                ["無 (自訂於檔名)", ""]
+            ]), "subfilename");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
 Blockly.Blocks['set_brightness'] = {
     init: function() {
         this.appendDummyInput()

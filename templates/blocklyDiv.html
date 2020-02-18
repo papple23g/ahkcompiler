@@ -1200,7 +1200,102 @@
             </block>
             </value>
         </block>
-        <block type="close_monitor"></block>        
+        <block type="close_monitor"></block>
+        <block type="screenshot">
+            <field name="subfilename">.png</field>
+            <value name="path">
+            <block type="built_in_dirpath">
+                <field name="NAME">desktop</field>
+            </block>
+            </value>
+            <value name="filename">
+            <block type="text">
+                <field name="TEXT">螢幕截圖</field>
+            </block>
+            </value>
+        </block>
+        <block type="hotkey_execute">
+            <value name="NAME">
+            <block type="function_key">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key">
+                    <field name="normal_key">Z</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="variables_set">
+                <field name="VAR">現在時間</field>
+                <value name="VALUE">
+                <block type="text_join">
+                    <mutation items="9"></mutation>
+                    <value name="ADD0">
+                    <block type="built_in_time">
+                        <field name="NAME">year</field>
+                    </block>
+                    </value>
+                    <value name="ADD1">
+                    <block type="built_in_time">
+                        <field name="NAME">month</field>
+                    </block>
+                    </value>
+                    <value name="ADD2">
+                    <block type="built_in_time">
+                        <field name="NAME">day</field>
+                    </block>
+                    </value>
+                    <value name="ADD3">
+                    <block type="text">
+                        <field name="TEXT">-</field>
+                    </block>
+                    </value>
+                    <value name="ADD4">
+                    <block type="built_in_time">
+                        <field name="NAME">hour</field>
+                    </block>
+                    </value>
+                    <value name="ADD5">
+                    <block type="text">
+                        <field name="TEXT">-</field>
+                    </block>
+                    </value>
+                    <value name="ADD6">
+                    <block type="built_in_time">
+                        <field name="NAME">min</field>
+                    </block>
+                    </value>
+                    <value name="ADD7">
+                    <block type="text">
+                        <field name="TEXT">-</field>
+                    </block>
+                    </value>
+                    <value name="ADD8">
+                    <block type="built_in_time">
+                        <field name="NAME">sec</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+                <next>
+                <block type="screenshot">
+                    <field name="subfilename">.png</field>
+                    <value name="path">
+                    <block type="built_in_dirpath">
+                        <field name="NAME">desktop</field>
+                    </block>
+                    </value>
+                    <value name="filename">
+                    <block type="variables_get">
+                        <field name="VAR">現在時間</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
     </category>
 
     <category name="網頁操作" colour="#C79304">
