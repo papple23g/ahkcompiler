@@ -115,15 +115,68 @@ def XmlToAHK(ev):
         div_parseXml_elt.innerHTML=xml_str
         block_elt_list=div_parseXml_elt.select('xml>block')
 
+        pre_ahk_code=""
+        end_ahk_code=""
         #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭做SetTitleMatchMode設定
         if div_parseXml_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]') or div_parseXml_elt.select_one('block[type="win_activate"]') or div_parseXml_elt.select_one('block[type="run_or_active"]'):
-            ahk_code+=";請確保下面這行程式碼在腳本最頂部\nSetTitleMatchMode, 2\n\n"
+            pre_ahk_code+="SetTitleMatchMode, 2\n"
+        #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭設定全域變數，在腳本結尾設定相關函數
+        if div_parseXml_elt.select_one('block[type="set_brightness"]'):
+            pre_ahk_code+="__vBright := 100\n"
+            end_ahk_code+="\n".join([
+                f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
+                f";'z dimmer.ahk' by jeeswg",
+                f'SetBrightness(__vBright){{',
+                f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
+                f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
+                f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
+                f'{TAB_SPACE}WinGet, hWnd, ID, A',
+                f'{TAB_SPACE}vNum := Round(((100-__vBright)/100) * 255)',
+                f'{TAB_SPACE}Gui, Color, 000000',
+                f'{TAB_SPACE};WS_EX_TRANSPARENT := 0x20 (click-through)',
+                f'{TAB_SPACE}Gui, -Caption +AlwaysOnTop +E0x20 +HwndhGui +ToolWindow',
+                f'{TAB_SPACE};獲取顯示器總數',
+                f'{TAB_SPACE}SysGet, __nb_monitor, MonitorCount',
+                f'{TAB_SPACE}Gui, Show, % Format("x0 y0 w{{}} h{{}}", A_ScreenWidth*__nb_monitor, A_ScreenHeight), dimmer',
+                f'{TAB_SPACE}WinSet, Transparent, % vNum, % "ahk_id " hGui',
+                f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+                f'{TAB_SPACE}return',
+                "}",
+                ";hide window (turn dimmer off)",
+                "MsgMonitor(wParam, lParam, uMsg)",
+                "{",
+                f'{TAB_SPACE}global',
+                f'{TAB_SPACE}Gui, Hide',
+                "}",
+                ";show window (turn dimmer on)",
+                "MsgMonitor2(wParam, lParam, uMsg)",
+                "{",
+                f'{TAB_SPACE}global',
+                f'{TAB_SPACE}WinGet, hWnd, ID, A',
+                f'{TAB_SPACE}Gui, Show',
+                f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+                "}",
+                ";return dimmer level",
+                "MsgMonitor3(wParam, lParam, msg)",
+                "{",
+                f'{TAB_SPACE}global',
+                f'{TAB_SPACE}return __vBright',
+                "}\n"
+            ])
+        
+        #為AHK碼加上前段程式碼
+        ahk_code+=";請確保下段程式碼在腳本最頂部\n"*(pre_ahk_code!="") + pre_ahk_code + ";=====================\n\n"*(pre_ahk_code!="")
         
         #將逐個blockly轉譯為AHK
         for block_elt in block_elt_list:
             #不要轉譯落單的field block
             if block_elt.attrs['type'] not in OBJ_BLOCK_LIST:
                 ahk_code+=AHK_block(block_elt)+'\n'
+
+                ###若有使用調整螢幕亮度的積木，就新增functions至程式碼底部
+
+        #為AHK碼加上後段程式碼
+        ahk_code+="\n;=====================\n"*(end_ahk_code!="") + end_ahk_code
 
         textarea_ahk_elt.innerHTML=ahk_code
 
@@ -1605,6 +1658,36 @@ return
             com_str+=f'Run %comspec% {arg_str} {cmd_code_str}\n'
 
         #endregion 自訂程式碼Blockly
+
+        #region 螢幕亮度控制
+        ####
+        elif block_elt.attrs['type']=="set_brightness":
+            #獲取同整動作
+            field_action_elt=FindCurrent(block_elt,'field[name="action"]')
+            field_action_str=field_action_elt.text
+            add_or_sub_symbol_str='+' if field_action_str=="add" else '-' if field_action_str=="sub" else ""
+            #獲取調整數值
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else 0
+            com_str+=value_comment
+            #輸出程式碼
+            com_str+='\n'.join([
+                'global __vBright',
+                f'__vBright{add_or_sub_symbol_str}={value_str}',
+                '__vBright:=Max(Min(100,__vBright),0)',
+                'SetBrightness(__vBright)\n',
+            ])
+
+
+        elif block_elt.attrs['type']=="close_monitor":
+            #輸出程式碼
+            com_str+='\n'.join([
+                "Sleep 1000 ; 設定一秒延遲以防釋放按鍵時會喚醒螢幕",
+                "SendMessage 0x112, 0xF170, 2,,Program Manager ; send the monitor into standby (off) mode\n"
+            ])
+
+        #endregion 螢幕亮度控制
 
         #處理下一個block
         next_elt=FindCurrent(block_elt,'next',get_one=True)

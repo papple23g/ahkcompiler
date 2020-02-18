@@ -1,6 +1,40 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['set_brightness'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("螢幕亮度");
+        this.appendValueInput("NAME")
+            .setCheck("Number")
+            .appendField(new Blockly.FieldDropdown([
+                ["增加", "add"],
+                ["減少", "sub"],
+                ["設為", "set"]
+            ]), "action");
+        this.appendDummyInput()
+            .appendField("%");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(90);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['close_monitor'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("關閉顯示器");
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['msgbox_yesorno'] = {
     init: function() {
         this.appendDummyInput()
@@ -641,7 +675,7 @@ Blockly.Blocks['volume_adjust'] = {
             .appendField(new Blockly.FieldDropdown([
                 ["增加", "add"],
                 ["降低", "sub"],
-                ["變更為", "set"],
+                ["設為", "set"],
             ]), "action");
         this.appendValueInput("NAME")
             .setCheck("Number");

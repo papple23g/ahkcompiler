@@ -1181,7 +1181,7 @@
         
     </category>
 
-    <category name="音量控制" colour="#C95E00">
+    <category name="音量/螢幕" colour="#C95E00">
         <block type="volume_adjust">
             <field name="action">add</field>
             <value name="NAME">
@@ -1191,6 +1191,16 @@
             </value>
         </block>
         <block type="volume_mute"></block>
+        <block type="set_brightness">
+            <field name="action">sub</field>
+            <comment pinned="true" h="53" w="188">預設當前亮度為100%</comment>
+            <value name="NAME">
+            <block type="math_number">
+                <field name="NUM">5</field>
+            </block>
+            </value>
+        </block>
+        <block type="close_monitor"></block>        
     </category>
 
     <category name="網頁操作" colour="#C79304">
