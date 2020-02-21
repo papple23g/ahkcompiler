@@ -4143,7 +4143,14 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 邏輯Blockly
 
-        #region 右鍵清單
+        #region 右鍵清單Blockly
+
+        #region 文字Blockly (其他)
+        elif block_elt.attrs['type']=="break_line_chr":
+            com_str+="\"`n\""
+
+        #endregion 文字Blockly (其他)
+
 
         elif block_elt.attrs['type']=="right_click_menu":
             MyMenu_str=f'MyMenu_{id(block_elt)}'
@@ -4365,6 +4372,43 @@ return
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
             com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
+
+        #For Loop 循環
+        elif block_elt.attrs['type']=="controls_for":
+            #獲取開始數
+            value_from_elt=FindCurrent(block_elt,'value[name="FROM"]')
+            value_from_str,value_from_comment=AHK_value(value_from_elt,get_all_comment=True)
+            com_str+=value_from_comment
+            #獲取中止數
+            value_to_elt=FindCurrent(block_elt,'value[name="TO"]')
+            value_to_str,value_to_comment=AHK_value(value_to_elt,get_all_comment=True)
+            com_str+=value_to_comment
+            #獲取間隔數
+            value_by_elt=FindCurrent(block_elt,'value[name="BY"]')
+            value_by_str,value_by_comment=AHK_value(value_by_elt,get_all_comment=True)
+            com_str+=value_by_comment
+            #獲取變數名稱
+            field_var_elt=FindCurrent(block_elt,'field[name="VAR"]')
+            field_var_str=field_var_elt.text
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #輸出程式碼
+            start_var_str=f"_start_{id(block_elt)}"
+            end_var_str=f"_end_{id(block_elt)}"
+            step_var_str=f"_step_{id(block_elt)}"
+            looptime_var_str=f"_looptime_{id(block_elt)}"
+            com_str+='\n'.join([
+                f"{start_var_str}:={value_from_str}",
+                f"{end_var_str}:={value_to_str}",
+                f"{step_var_str}:=({end_var_str}>{start_var_str})?Abs({value_by_str}):-Abs({value_by_str})",
+                f"{looptime_var_str}:=(Abs({start_var_str}-{end_var_str})//Abs({step_var_str}))+1",
+                f"Loop % {looptime_var_str} {{",
+                f"{TAB_SPACE}{field_var_str}:={start_var_str}+(A_index-1)*{step_var_str}",
+                f"{statement_do_str}}}\n"
+            ])
+
+            #com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
 
         #while循環
         elif block_elt.attrs['type']=="controls_whileUntil":

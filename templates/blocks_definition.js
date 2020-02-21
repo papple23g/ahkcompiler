@@ -1,6 +1,17 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['break_line_chr'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("↵ 換行");
+        this.setOutput(true, "String");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['screenshot'] = {
     init: function() {
         this.appendValueInput("path")

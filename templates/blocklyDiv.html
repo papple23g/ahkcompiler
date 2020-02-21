@@ -704,6 +704,7 @@
             </block>
             </value>
         </block>
+        <block type="break_line_chr"></block>
         <block type="text_join">
             <mutation items="2" />
         </block>
@@ -716,6 +717,48 @@
             </value>
             <value name="ADD1">
                 <block type="built_in_wday_zh"></block>
+            </value>
+        </block>
+        <block type="text_join" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+            <block type="text_join" inline="true">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                <block type="text">
+                    <field name="TEXT">第一行文字</field>
+                </block>
+                </value>
+                <value name="ADD1">
+                <block type="break_line_chr"></block>
+                </value>
+            </block>
+            </value>
+            <value name="ADD1">
+            <block type="text_join" inline="true">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                <block type="text">
+                    <field name="TEXT">第二行文字</field>
+                </block>
+                </value>
+                <value name="ADD1">
+                <block type="break_line_chr"></block>
+                </value>
+            </block>
+            </value>
+            <value name="ADD2">
+            <block type="text_join" inline="true">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                <block type="text">
+                    <field name="TEXT">第三行文字</field>
+                </block>
+                </value>
+                <value name="ADD1">
+                <block type="break_line_chr"></block>
+                </value>
+            </block>
             </value>
         </block>
         <block type="str_replace">
@@ -1586,6 +1629,33 @@
                 </block>
             </value>
         </block>
+        <block type="controls_for">
+            <field name="VAR">i</field>
+            <value name="FROM">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <value name="TO">
+            <block type="math_number">
+                <field name="NUM">5</field>
+            </block>
+            </value>
+            <value name="BY">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="variables_get">
+                    <field name="VAR">i</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
         <block type="controls_whileUntil">
             <field name="MODE">WHILE</field>
         </block>
@@ -1657,6 +1727,103 @@
                 </statement>
             </block>
             </next>
+        </block>
+        <block type="hotkey_execute">
+            <comment pinned="true" h="46" w="187">範例: 3x3 乘法表</comment>
+            <value name="NAME">
+            <block type="function_key">
+                <field name="function_key">Win</field>
+                <value name="function_key">
+                <block type="normal_key">
+                    <field name="normal_key">Z</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="controls_for">
+                <field name="VAR">i</field>
+                <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+                </value>
+                <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">3</field>
+                </block>
+                </value>
+                <value name="BY">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+                </value>
+                <statement name="DO">
+                <block type="controls_for">
+                    <field name="VAR">j</field>
+                    <value name="FROM">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                    </value>
+                    <value name="TO">
+                    <block type="math_number">
+                        <field name="NUM">3</field>
+                    </block>
+                    </value>
+                    <value name="BY">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                    </value>
+                    <statement name="DO">
+                    <block type="msgbox">
+                        <value name="NAME">
+                        <block type="text_join">
+                            <mutation items="5"></mutation>
+                            <value name="ADD0">
+                            <block type="variables_get">
+                                <field name="VAR">i</field>
+                            </block>
+                            </value>
+                            <value name="ADD1">
+                            <block type="text">
+                                <field name="TEXT">x</field>
+                            </block>
+                            </value>
+                            <value name="ADD2">
+                            <block type="variables_get">
+                                <field name="VAR">j</field>
+                            </block>
+                            </value>
+                            <value name="ADD3">
+                            <block type="text">
+                                <field name="TEXT">=</field>
+                            </block>
+                            </value>
+                            <value name="ADD4">
+                            <block type="math_arithmetic">
+                                <field name="OP">MULTIPLY</field>
+                                <value name="A">
+                                <block type="variables_get">
+                                    <field name="VAR">i</field>
+                                </block>
+                                </value>
+                                <value name="B">
+                                <block type="variables_get">
+                                    <field name="VAR">j</field>
+                                </block>
+                                </value>
+                            </block>
+                            </value>
+                        </block>
+                        </value>
+                    </block>
+                    </statement>
+                </block>
+                </statement>
+            </block>
+            </statement>
         </block>
         
 
