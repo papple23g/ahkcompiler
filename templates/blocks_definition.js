@@ -1,6 +1,18 @@
 var hotstring_color = "#CD5C5C";
 var hotstringSetting_color = "#D0873E";
 
+Blockly.Blocks['list_str'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck("Array")
+            .appendField("串列文字化");
+        this.setOutput(true, null);
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['break_line_chr'] = {
     init: function() {
         this.appendDummyInput()

@@ -5,174 +5,96 @@ from browser import ajax, timer
 #全域變數
 Blockly=window.Blockly
 workspace=window.workspace
+TAB_SPACE="    "  #縮排
 
-#縮排
-TAB_SPACE="    "
-
-
-#定義函式:將xml格式化
-def FormatXML(xml_str):
-    xml_str=FormatHTML(xml_str)
-    xml_str_line_list=xml_str.split('\n')
-    xml_str_line_list=[xml_str_line for xml_str_line in xml_str_line_list if xml_str_line.strip()!=""]
-    return "\n".join(xml_str_line_list)
-
-#定義動作:尋找該層下的選擇器
-def FindCurrent(elt,css_selector,get_one=True):
-    com_elt_list=[elt_child for elt_child in elt.select(css_selector) if elt_child.parent==elt]
-    if get_one:
-        if com_elt_list:
-            return com_elt_list[0]
-        else:
-            return None
-    else:
-        return com_elt_list
-
-#設置解析xml用的隱藏div容器
-div_xml_elt=DIV(id="div_xml",style={'display':'none'})
-doc<=div_xml_elt
-
-#定義動作:轉換xml為block
-def XmlToBlockly(ev):
-    #若xml的更改事件不是起源於blockly，就繼續執行
-    if not hasattr(ev,"changeStartFromBlockly"):
-        #print('xml>block')
-        #獲取textarea_xml元素中的xml_str
-        textarea_elt=doc['textarea_xml']
-        xml_str=textarea_elt.value
-        #製作臨時div容器以生成xml元素
-        div_xml_elt=doc["div_xml"]
-        div_xml_elt.innerHTML=xml_str
-        xml_elt=div_xml_elt.select_one('xml')
-        #若xml元素產生成功，就將xml元素嵌入至blockly區塊顯示
-        if xml_elt:
-            Blockly.Xml.clearWorkspaceAndLoadFromXml(xml_elt,workspace)
-        #輸出格式化xml到
-        xml_format_str=FormatXML(textarea_elt.value)
-        textarea_elt.value=xml_format_str
-        
-#定義動作:顯示blocks的xml (必須等待Block載入完成)
-def BlocklyToXml(ev):
-    #啟用複製和下載AHK檔案按鈕
-    for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
-        btn_elt.disabled=False
-        btn_elt.classList.remove('disabled_button')
-    #print('block>xml')
-    #自blockly獲取xml_str
-    xml_blockly_elt=Blockly.Xml.workspaceToDom(workspace)
-    doc['textarea_xml'].value=FormatXML(xml_blockly_elt.outerHTML)
-    #製作input事件，觸發XmlToAHK，並附加起源資訊到事件元素中
-    input_ev = window.Event.new("input")
-    input_ev.changeStartFromBlockly=True
-    doc['textarea_xml'].dispatchEvent(input_ev)
-
-#定義動作:轉譯xml為AHK語法
-def XmlToAHK(ev):
-    ##註冊物件型Block元素列表 (不能被獨立轉譯)
-    OBJ_BLOCK_LIST=[
-        'function_key',
-        'special_key',
-        'normal_key',
-        'filepath',
-        'text',
-        'webpage',
-        'built_in_program',
-        'built_in_dirpath',
-        'built_in_webpage',
-        'path_combined',
-        'built_in_time',
-        'math_arithmetic',
-        'math_number',
-        'variables_get',
-        'logic_boolean',
-        'logic_compare',
-        'logic_operation',
-        'logic_null',
-        'logic_negate',
-        'in_str',
-        'right_click_menu', #不讓右鍵清單獨立執行，否則會無限循環跳出清單
-        'get_key_state',
-        'math_function',
-        'math_function2',
-        'math_constant2',
-        'math_round',
-        'math_mod',
-    ]
-
-    if ev.type in ["input","click"]:
-        #print('xml>ahk')
-        # print('XmlToAHK',"ev.type:",ev.type)
-        #至textarea_xml元素獲取xml
-        textarea_xml_elt=ev.currentTarget
-        xml_str=textarea_xml_elt.value
-        #獲取要輸出到指定的textarea元素
-        textarea_ahk_elt=doc['textarea_ahk']
-
-        #生成AHK程式碼
-        ahk_code=""
-        #建立暫時的div容器用來解析xml
-        div_parseXml_elt=DIV()
-        div_parseXml_elt.innerHTML=xml_str
-        block_elt_list=div_parseXml_elt.select('xml>block')
-
-        pre_ahk_code=""
-        end_ahk_code=""
-
-        '''
-        ### 200218 
-        TODO: 填充關聯方程式，後期應要改用set集合設定
-        '''
-
-        #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭做SetTitleMatchMode設定
-        if div_parseXml_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]') or div_parseXml_elt.select_one('block[type="win_activate"]') or div_parseXml_elt.select_one('block[type="run_or_active"]'):
-            pre_ahk_code+="SetTitleMatchMode, 2\n"
-        #若xml裡有出現螢幕亮度調整相關的blockly，就在腳本開頭設定全域變數，在腳本結尾設定相關函數
-        if div_parseXml_elt.select_one('block[type="set_brightness"]'):
-            pre_ahk_code+="__vBright := 100\n"
-            end_ahk_code+="\n".join([
-                f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
-                f";'z dimmer.ahk' by jeeswg",
-                f'SetBrightness(__vBright){{',
-                f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
-                f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
-                f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
-                f'{TAB_SPACE}WinGet, hWnd, ID, A',
-                f'{TAB_SPACE}vNum := Round(((100-__vBright)/100) * 255)',
-                f'{TAB_SPACE}Gui, Color, 000000',
-                f'{TAB_SPACE};WS_EX_TRANSPARENT := 0x20 (click-through)',
-                f'{TAB_SPACE}Gui, -Caption +AlwaysOnTop +E0x20 +HwndhGui +ToolWindow',
-                f'{TAB_SPACE};獲取顯示器總數',
-                f'{TAB_SPACE}SysGet, __nb_monitor, MonitorCount',
-                f'{TAB_SPACE}Gui, Show, % Format("x0 y0 w{{}} h{{}}", A_ScreenWidth*__nb_monitor, A_ScreenHeight), dimmer',
-                f'{TAB_SPACE}WinSet, Transparent, % vNum, % "ahk_id " hGui',
-                f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
-                f'{TAB_SPACE}return',
-                "}",
-                ";hide window (turn dimmer off)",
-                "MsgMonitor(wParam, lParam, uMsg)",
-                "{",
-                f'{TAB_SPACE}global',
-                f'{TAB_SPACE}Gui, Hide',
-                "}",
-                ";show window (turn dimmer on)",
-                "MsgMonitor2(wParam, lParam, uMsg)",
-                "{",
-                f'{TAB_SPACE}global',
-                f'{TAB_SPACE}WinGet, hWnd, ID, A',
-                f'{TAB_SPACE}Gui, Show',
-                f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
-                "}",
-                ";return dimmer level",
-                "MsgMonitor3(wParam, lParam, msg)",
-                "{",
-                f'{TAB_SPACE}global',
-                f'{TAB_SPACE}return __vBright',
-                "}\n"
-            ])
-
-        #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數(檔案命名改為全形符號)
-        if div_parseXml_elt.select_one('block[type="screenshot"]'):
-            end_ahk_code+=''';轉換符號為全行字，避免檔案名稱出錯
+#region 腳本函數字典
+FUNC_DICT={
+    #region ArrayStr
+    'ArrayStr':{
+        'end':
+'''
+;定義函數:判斷是否為Array
+IsArray(oArray)
+{
+    if (ArrayStr(oArray)=="[]") {
+        oArray.Push(1)
+        if (oArray.MaxIndex())
+            return True
+        return False
+    } else {
+        return True
+    }
+}
+;定義函數，串列字串化
+ArrayStr(arr) {
+    com_str := "["
+    for i_index, i in arr
+    {
+        if IsArray(i) {
+            com_str .= ArrayStr(i)
+        } else {
+            com_str .= i
+        }
+        com_str .= ", "
+    }
+    com_str := SubStr(com_str,1,StrLen(com_str)-2)
+    com_str .= "]"
+    if (com_str="]")
+        return "[]"
+    return com_str
+}
+'''
+    },
+    #region ArrayStr
+    'SetBrightness':{
+        'pre':"__vBright := 100\n",
+        'end':"\n".join([
+            f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
+            f";'z dimmer.ahk' by jeeswg",
+            f'SetBrightness(__vBright){{',
+            f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
+            f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
+            f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
+            f'{TAB_SPACE}WinGet, hWnd, ID, A',
+            f'{TAB_SPACE}vNum := Round(((100-__vBright)/100) * 255)',
+            f'{TAB_SPACE}Gui, Color, 000000',
+            f'{TAB_SPACE};WS_EX_TRANSPARENT := 0x20 (click-through)',
+            f'{TAB_SPACE}Gui, -Caption +AlwaysOnTop +E0x20 +HwndhGui +ToolWindow',
+            f'{TAB_SPACE};獲取顯示器總數',
+            f'{TAB_SPACE}SysGet, __nb_monitor, MonitorCount',
+            f'{TAB_SPACE}Gui, Show, % Format("x0 y0 w{{}} h{{}}", A_ScreenWidth*__nb_monitor, A_ScreenHeight), dimmer',
+            f'{TAB_SPACE}WinSet, Transparent, % vNum, % "ahk_id " hGui',
+            f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+            f'{TAB_SPACE}return',
+            "}",
+            ";hide window (turn dimmer off)",
+            "MsgMonitor(wParam, lParam, uMsg)",
+            "{",
+            f'{TAB_SPACE}global',
+            f'{TAB_SPACE}Gui, Hide',
+            "}",
+            ";show window (turn dimmer on)",
+            "MsgMonitor2(wParam, lParam, uMsg)",
+            "{",
+            f'{TAB_SPACE}global',
+            f'{TAB_SPACE}WinGet, hWnd, ID, A',
+            f'{TAB_SPACE}Gui, Show',
+            f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+            "}",
+            ";return dimmer level",
+            "MsgMonitor3(wParam, lParam, msg)",
+            "{",
+            f'{TAB_SPACE}global',
+            f'{TAB_SPACE}return __vBright',
+            "}\n"
+        ])
+    },
+    'SetTitleMatchMode':{
+        'pre':"SetTitleMatchMode, 2\n"
+    },
+    'FullwidthSymbol':{
+        'end':
+''';轉換符號為全行字，避免檔案名稱出錯
 FullwidthSymbol(input_text){
     input_text:=StrReplace(input_text,"\","＼")
     input_text:=StrReplace(input_text,"/","／")
@@ -184,24 +106,22 @@ FullwidthSymbol(input_text){
     input_text:=StrReplace(input_text,"|","｜")
     return input_text
 }
-'''
-        #endregion
-
-        #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數
-        if div_parseXml_elt.select_one('block[type="screenshot"]'):
-            end_ahk_code+='''
-; Gdip standard library v1.45 by tic (Tariq Porter) 07/09/11
+'''},
+    #region Screenshot
+    'Screenshot':{
+        'end':
+'''; Gdip standard library v1.45 by tic (Tariq Porter) 07/09/11
 ; Modifed by Rseding91 using fincs 64 bit compatible Gdip library 5/1/2013
 ; Supports: Basic, _L ANSi, _L Unicode x86 and _L Unicode x64
 ;
 ; Updated 2/20/2014 - fixed Gdip_CreateRegion() and Gdip_GetClipRegion() on AHK Unicode x86
 ; Updated 5/13/2013 - fixed Gdip_SetBitmapToClipboard() on AHK Unicode x64
 ;
-;#####################################################################################
-;#####################################################################################
+;-------------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------
 ; STATUS ENUMERATION
 ; Return values for functions specified to have status enumerated return type
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ;
 ; Ok =						= 0
 ; GenericError				= 1
@@ -226,10 +146,10 @@ FullwidthSymbol(input_text){
 ; PropertyNotSupported		= 20
 ; ProfileNotFound			= 21
 ;
-;#####################################################################################
-;#####################################################################################
+;-------------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------------
 ; FUNCTIONS
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ;
 ; UpdateLayeredWindow(hwnd, hdc, x="", y="", w="", h="", Alpha=255)
 ; BitBlt(ddc, dx, dy, dw, dh, sdc, sx, sy, Raster="")
@@ -240,7 +160,7 @@ FullwidthSymbol(input_text){
 ; CreateSizeF(ByRef SizeF, w, h)
 ; CreateDIBSection
 ;
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function:     			UpdateLayeredWindow
 ; Description:  			Updates a layered window with the handle to the DC of a gdi bitmap
@@ -280,7 +200,7 @@ UpdateLayeredWindow(hwnd, hdc, x="", y="", w="", h="", Alpha=255)
 					, "uint", 2)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				BitBlt
 ; Description			The BitBlt function performs a bit-block transfer of the color data corresponding to a rectangle 
@@ -334,7 +254,7 @@ BitBlt(ddc, dx, dy, dw, dh, sdc, sx, sy, Raster="")
 					, "uint", Raster ? Raster : 0x00CC0020)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				StretchBlt
 ; Description			The StretchBlt function copies a bitmap from a source rectangle into a destination rectangle, 
@@ -375,7 +295,7 @@ StretchBlt(ddc, dx, dy, dw, dh, sdc, sx, sy, sw, sh, Raster="")
 					, "uint", Raster ? Raster : 0x00CC0020)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				SetStretchBltMode
 ; Description			The SetStretchBltMode function sets the bitmap stretching mode in the specified device context
@@ -397,7 +317,7 @@ SetStretchBltMode(hdc, iStretchMode=4)
 					, "int", iStretchMode)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				SetImage
 ; Description			Associates a new image with a static control
@@ -415,7 +335,7 @@ SetImage(hwnd, hBitmap)
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				SetSysColorToControl
 ; Description			Sets a solid colour to a control
@@ -479,7 +399,7 @@ SetSysColorToControl(hwnd, SysColor=15)
    return 0
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_BitmapFromScreen
 ; Description			Gets a gdi+ bitmap from the screen
@@ -535,7 +455,7 @@ Gdip_BitmapFromScreen(Screen=0, Raster="")
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_BitmapFromHWND
 ; Description			Uses PrintWindow to get a handle to the specified window and return a bitmap from it
@@ -556,7 +476,7 @@ Gdip_BitmapFromHWND(hwnd)
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function    			CreateRectF
 ; Description			Creates a RectF object, containing a the coordinates and dimensions of a rectangle
@@ -575,7 +495,7 @@ CreateRectF(ByRef RectF, x, y, w, h)
    NumPut(x, RectF, 0, "float"), NumPut(y, RectF, 4, "float"), NumPut(w, RectF, 8, "float"), NumPut(h, RectF, 12, "float")
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function    			CreateRect
 ; Description			Creates a Rect object, containing a the coordinates and dimensions of a rectangle
@@ -593,7 +513,7 @@ CreateRect(ByRef Rect, x, y, w, h)
 	VarSetCapacity(Rect, 16)
 	NumPut(x, Rect, 0, "uint"), NumPut(y, Rect, 4, "uint"), NumPut(w, Rect, 8, "uint"), NumPut(h, Rect, 12, "uint")
 }
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function		    	CreateSizeF
 ; Description			Creates a SizeF object, containing an 2 values
@@ -609,7 +529,7 @@ CreateSizeF(ByRef SizeF, w, h)
    VarSetCapacity(SizeF, 8)
    NumPut(w, SizeF, 0, "float"), NumPut(h, SizeF, 4, "float")     
 }
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function		    	CreatePointF
 ; Description			Creates a SizeF object, containing an 2 values
@@ -625,7 +545,7 @@ CreatePointF(ByRef PointF, x, y)
    VarSetCapacity(PointF, 8)
    NumPut(x, PointF, 0, "float"), NumPut(y, PointF, 4, "float")     
 }
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				CreateDIBSection
 ; Description			The CreateDIBSection function creates a DIB (Device Independent Bitmap) that applications can write to directly
@@ -667,7 +587,7 @@ CreateDIBSection(w, h, hdc="", bpp=32, ByRef ppvBits=0)
 	return hbm
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				PrintWindow
 ; Description			The PrintWindow function copies a visual window into the specified device context (DC), typically a printer DC
@@ -687,7 +607,7 @@ PrintWindow(hwnd, hdc, Flags=0)
 	return DllCall("PrintWindow", Ptr, hwnd, Ptr, hdc, "uint", Flags)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				DestroyIcon
 ; Description			Destroys an icon and frees any memory the icon occupied
@@ -701,21 +621,21 @@ DestroyIcon(hIcon)
 	return DllCall("DestroyIcon", A_PtrSize ? "UPtr" : "UInt", hIcon)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 PaintDesktop(hdc)
 {
 	return DllCall("PaintDesktop", A_PtrSize ? "UPtr" : "UInt", hdc)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 CreateCompatibleBitmap(hdc, w, h)
 {
 	return DllCall("gdi32\CreateCompatibleBitmap", A_PtrSize ? "UPtr" : "UInt", hdc, "int", w, "int", h)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				CreateCompatibleDC
 ; Description			This function creates a memory device context (DC) compatible with the specified device
@@ -731,7 +651,7 @@ CreateCompatibleDC(hdc=0)
    return DllCall("CreateCompatibleDC", A_PtrSize ? "UPtr" : "UInt", hdc)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				SelectObject
 ; Description			The SelectObject function selects an object into the specified device context (DC). The new object replaces the previous object of the same type
@@ -761,7 +681,7 @@ SelectObject(hdc, hgdiobj)
 	return DllCall("SelectObject", Ptr, hdc, Ptr, hgdiobj)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				DeleteObject
 ; Description			This function deletes a logical pen, brush, font, bitmap, region, or palette, freeing all system resources associated with the object
@@ -776,7 +696,7 @@ DeleteObject(hObject)
    return DllCall("DeleteObject", A_PtrSize ? "UPtr" : "UInt", hObject)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				GetDC
 ; Description			This function retrieves a handle to a display device context (DC) for the client area of the specified window.
@@ -791,7 +711,7 @@ GetDC(hwnd=0)
 	return DllCall("GetDC", A_PtrSize ? "UPtr" : "UInt", hwnd)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; DCX_CACHE = 0x2
 ; DCX_CLIPCHILDREN = 0x8
@@ -814,7 +734,7 @@ GetDCEx(hwnd, flags=0, hrgnClip=0)
     return DllCall("GetDCEx", Ptr, hwnd, Ptr, hrgnClip, "int", flags)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				ReleaseDC
 ; Description			This function releases a device context (DC), freeing it for use by other applications. The effect of ReleaseDC depends on the type of device context
@@ -835,7 +755,7 @@ ReleaseDC(hdc, hwnd=0)
 	return DllCall("ReleaseDC", Ptr, hwnd, Ptr, hdc)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				DeleteDC
 ; Description			The DeleteDC function deletes the specified device context (DC)
@@ -850,7 +770,7 @@ DeleteDC(hdc)
 {
    return DllCall("DeleteDC", A_PtrSize ? "UPtr" : "UInt", hdc)
 }
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_LibraryVersion
 ; Description			Get the current library version
@@ -864,7 +784,7 @@ Gdip_LibraryVersion()
 	return 1.45
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_LibrarySubVersion
 ; Description			Get the current library sub version
@@ -877,7 +797,7 @@ Gdip_LibrarySubVersion()
 	return 1.47
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function:    			Gdip_BitmapFromBRA
 ; Description: 			Gets a pointer to a gdi+ bitmap from a BRA file
@@ -934,7 +854,7 @@ Gdip_BitmapFromBRA(ByRef BRAFromMemIn, File, Alternate=0)
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawRectangle
 ; Description			This function uses a pen to draw the outline of a rectangle into the Graphics of a bitmap
@@ -957,7 +877,7 @@ Gdip_DrawRectangle(pGraphics, pPen, x, y, w, h)
 	return DllCall("gdiplus\GdipDrawRectangle", Ptr, pGraphics, Ptr, pPen, "float", x, "float", y, "float", w, "float", h)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawRoundedRectangle
 ; Description			This function uses a pen to draw the outline of a rounded rectangle into the Graphics of a bitmap
@@ -992,7 +912,7 @@ Gdip_DrawRoundedRectangle(pGraphics, pPen, x, y, w, h, r)
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawEllipse
 ; Description			This function uses a pen to draw the outline of an ellipse into the Graphics of a bitmap
@@ -1015,7 +935,7 @@ Gdip_DrawEllipse(pGraphics, pPen, x, y, w, h)
 	return DllCall("gdiplus\GdipDrawEllipse", Ptr, pGraphics, Ptr, pPen, "float", x, "float", y, "float", w, "float", h)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawBezier
 ; Description			This function uses a pen to draw the outline of a bezier (a weighted curve) into the Graphics of a bitmap
@@ -1052,7 +972,7 @@ Gdip_DrawBezier(pGraphics, pPen, x1, y1, x2, y2, x3, y3, x4, y4)
 					, "float", y4)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawArc
 ; Description			This function uses a pen to draw the outline of an arc into the Graphics of a bitmap
@@ -1085,7 +1005,7 @@ Gdip_DrawArc(pGraphics, pPen, x, y, w, h, StartAngle, SweepAngle)
 					, "float", SweepAngle)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawPie
 ; Description			This function uses a pen to draw the outline of a pie into the Graphics of a bitmap
@@ -1110,7 +1030,7 @@ Gdip_DrawPie(pGraphics, pPen, x, y, w, h, StartAngle, SweepAngle)
 	return DllCall("gdiplus\GdipDrawPie", Ptr, pGraphics, Ptr, pPen, "float", x, "float", y, "float", w, "float", h, "float", StartAngle, "float", SweepAngle)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawLine
 ; Description			This function uses a pen to draw a line into the Graphics of a bitmap
@@ -1137,7 +1057,7 @@ Gdip_DrawLine(pGraphics, pPen, x1, y1, x2, y2)
 					, "float", y2)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawLines
 ; Description			This function uses a pen to draw a series of joined lines into the Graphics of a bitmap
@@ -1161,7 +1081,7 @@ Gdip_DrawLines(pGraphics, pPen, Points)
 	return DllCall("gdiplus\GdipDrawLines", Ptr, pGraphics, Ptr, pPen, Ptr, &PointF, "int", Points0)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillRectangle
 ; Description			This function uses a brush to fill a rectangle in the Graphics of a bitmap
@@ -1188,7 +1108,7 @@ Gdip_FillRectangle(pGraphics, pBrush, x, y, w, h)
 					, "float", h)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillRoundedRectangle
 ; Description			This function uses a brush to fill a rounded rectangle in the Graphics of a bitmap
@@ -1223,7 +1143,7 @@ Gdip_FillRoundedRectangle(pGraphics, pBrush, x, y, w, h, r)
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillPolygon
 ; Description			This function uses a brush to fill a polygon in the Graphics of a bitmap
@@ -1252,7 +1172,7 @@ Gdip_FillPolygon(pGraphics, pBrush, Points, FillMode=0)
 	return DllCall("gdiplus\GdipFillPolygon", Ptr, pGraphics, Ptr, pBrush, Ptr, &PointF, "int", Points0, "int", FillMode)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillPie
 ; Description			This function uses a brush to fill a pie in the Graphics of a bitmap
@@ -1283,7 +1203,7 @@ Gdip_FillPie(pGraphics, pBrush, x, y, w, h, StartAngle, SweepAngle)
 					, "float", SweepAngle)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillEllipse
 ; Description			This function uses a brush to fill an ellipse in the Graphics of a bitmap
@@ -1304,7 +1224,7 @@ Gdip_FillEllipse(pGraphics, pBrush, x, y, w, h)
 	return DllCall("gdiplus\GdipFillEllipse", Ptr, pGraphics, Ptr, pBrush, "float", x, "float", y, "float", w, "float", h)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillRegion
 ; Description			This function uses a brush to fill a region in the Graphics of a bitmap
@@ -1324,7 +1244,7 @@ Gdip_FillRegion(pGraphics, pBrush, Region)
 	return DllCall("gdiplus\GdipFillRegion", Ptr, pGraphics, Ptr, pBrush, Ptr, Region)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_FillPath
 ; Description			This function uses a brush to fill a path in the Graphics of a bitmap
@@ -1342,7 +1262,7 @@ Gdip_FillPath(pGraphics, pBrush, Path)
 	return DllCall("gdiplus\GdipFillPath", Ptr, pGraphics, Ptr, pBrush, Ptr, Path)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawImagePointsRect
 ; Description			This function draws a bitmap into the Graphics of another bitmap and skews it
@@ -1405,7 +1325,7 @@ Gdip_DrawImagePointsRect(pGraphics, pBitmap, Points, sx="", sy="", sw="", sh="",
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_DrawImage
 ; Description			This function draws a bitmap into the Graphics of another bitmap
@@ -1487,7 +1407,7 @@ Gdip_DrawImage(pGraphics, pBitmap, dx="", dy="", dw="", dh="", sx="", sy="", sw=
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_SetImageAttributesColorMatrix
 ; Description			This function creates an image matrix ready for drawing
@@ -1518,7 +1438,7 @@ Gdip_SetImageAttributesColorMatrix(Matrix)
 	return ImageAttr
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GraphicsFromImage
 ; Description			This function gets the graphics for a bitmap used for drawing functions
@@ -1535,7 +1455,7 @@ Gdip_GraphicsFromImage(pBitmap)
 	return pGraphics
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GraphicsFromHDC
 ; Description			This function gets the graphics from the handle to a device context
@@ -1552,7 +1472,7 @@ Gdip_GraphicsFromHDC(hdc)
     return pGraphics
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetDC
 ; Description			This function gets the device context of the passed Graphics
@@ -1567,7 +1487,7 @@ Gdip_GetDC(pGraphics)
 	return hdc
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_ReleaseDC
 ; Description			This function releases a device context from use for further use
@@ -1584,7 +1504,7 @@ Gdip_ReleaseDC(pGraphics, hdc)
 	return DllCall("gdiplus\GdipReleaseDC", Ptr, pGraphics, Ptr, hdc)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GraphicsClear
 ; Description			Clears the graphics of a bitmap ready for further drawing
@@ -1602,7 +1522,7 @@ Gdip_GraphicsClear(pGraphics, ARGB=0x00ffffff)
     return DllCall("gdiplus\GdipGraphicsClear", A_PtrSize ? "UPtr" : "UInt", pGraphics, "int", ARGB)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_BlurBitmap
 ; Description			Gives a pointer to a blurred bitmap from a pointer to a bitmap
@@ -1640,7 +1560,7 @@ Gdip_BlurBitmap(pBitmap, Blur)
 	return pBitmap2
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function:     		Gdip_SaveBitmapToFile
 ; Description:  		Saves a bitmap to a file in any supported format onto disk
@@ -1738,7 +1658,7 @@ Gdip_SaveBitmapToFile(pBitmap, sOutput, Quality=75)
 	return E ? -5 : 0
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetPixel
 ; Description			Gets the ARGB of a pixel in a bitmap
@@ -1755,7 +1675,7 @@ Gdip_GetPixel(pBitmap, x, y)
 	return ARGB
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_SetPixel
 ; Description			Sets the ARGB of a pixel in a bitmap
@@ -1771,7 +1691,7 @@ Gdip_SetPixel(pBitmap, x, y, ARGB)
    return DllCall("gdiplus\GdipBitmapSetPixel", A_PtrSize ? "UPtr" : "UInt", pBitmap, "int", x, "int", y, "int", ARGB)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetImageWidth
 ; Description			Gives the width of a bitmap
@@ -1786,7 +1706,7 @@ Gdip_GetImageWidth(pBitmap)
    return Width
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetImageHeight
 ; Description			Gives the height of a bitmap
@@ -1801,7 +1721,7 @@ Gdip_GetImageHeight(pBitmap)
    return Height
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetDimensions
 ; Description			Gives the width and height of a bitmap
@@ -1820,14 +1740,14 @@ Gdip_GetImageDimensions(pBitmap, ByRef Width, ByRef Height)
 	DllCall("gdiplus\GdipGetImageHeight", Ptr, pBitmap, "uint*", Height)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetDimensions(pBitmap, ByRef Width, ByRef Height)
 {
 	Gdip_GetImageDimensions(pBitmap, Width, Height)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetImagePixelFormat(pBitmap)
 {
@@ -1835,7 +1755,7 @@ Gdip_GetImagePixelFormat(pBitmap)
 	return Format
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Function				Gdip_GetDpiX
 ; Description			Gives the horizontal dots per inch of the graphics of a bitmap
@@ -1853,7 +1773,7 @@ Gdip_GetDpiX(pGraphics)
 	return Round(dpix)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetDpiY(pGraphics)
 {
@@ -1861,7 +1781,7 @@ Gdip_GetDpiY(pGraphics)
 	return Round(dpiy)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetImageHorizontalResolution(pBitmap)
 {
@@ -1869,7 +1789,7 @@ Gdip_GetImageHorizontalResolution(pBitmap)
 	return Round(dpix)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetImageVerticalResolution(pBitmap)
 {
@@ -1877,14 +1797,14 @@ Gdip_GetImageVerticalResolution(pBitmap)
 	return Round(dpiy)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_BitmapSetResolution(pBitmap, dpix, dpiy)
 {
 	return DllCall("gdiplus\GdipBitmapSetResolution", A_PtrSize ? "UPtr" : "uint", pBitmap, "float", dpix, "float", dpiy)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateBitmapFromFile(sFile, IconNumber=1, IconSize="")
 {
@@ -1957,7 +1877,7 @@ Gdip_CreateBitmapFromFile(sFile, IconNumber=1, IconSize="")
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateBitmapFromHBITMAP(hBitmap, Palette=0)
 {
@@ -1967,7 +1887,7 @@ Gdip_CreateBitmapFromHBITMAP(hBitmap, Palette=0)
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateHBITMAPFromBitmap(pBitmap, Background=0xffffffff)
 {
@@ -1975,7 +1895,7 @@ Gdip_CreateHBITMAPFromBitmap(pBitmap, Background=0xffffffff)
 	return hbm
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateBitmapFromHICON(hIcon)
 {
@@ -1983,7 +1903,7 @@ Gdip_CreateBitmapFromHICON(hIcon)
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateHICONFromBitmap(pBitmap)
 {
@@ -1991,7 +1911,7 @@ Gdip_CreateHICONFromBitmap(pBitmap)
 	return hIcon
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateBitmap(Width, Height, Format=0x26200A)
 {
@@ -1999,7 +1919,7 @@ Gdip_CreateBitmap(Width, Height, Format=0x26200A)
     Return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateBitmapFromClipboard()
 {
@@ -2019,7 +1939,7 @@ Gdip_CreateBitmapFromClipboard()
 	return pBitmap
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_SetBitmapToClipboard(pBitmap)
 {
@@ -2039,7 +1959,7 @@ Gdip_SetBitmapToClipboard(pBitmap)
 	DllCall("CloseClipboard")
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CloneBitmapArea(pBitmap, x, y, w, h, Format=0x26200A)
 {
@@ -2054,9 +1974,9 @@ Gdip_CloneBitmapArea(pBitmap, x, y, w, h, Format=0x26200A)
 	return pBitmapDest
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Create resources
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreatePen(ARGB, w)
 {
@@ -2064,7 +1984,7 @@ Gdip_CreatePen(ARGB, w)
    return pPen
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreatePenFromBrush(pBrush, w)
 {
@@ -2072,7 +1992,7 @@ Gdip_CreatePenFromBrush(pBrush, w)
 	return pPen
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_BrushCreateSolid(ARGB=0xff000000)
 {
@@ -2080,7 +2000,7 @@ Gdip_BrushCreateSolid(ARGB=0xff000000)
 	return pBrush
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; HatchStyleHorizontal = 0
 ; HatchStyleVertical = 1
@@ -2142,7 +2062,7 @@ Gdip_BrushCreateHatch(ARGBfront, ARGBback, HatchStyle=0)
 	return pBrush
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateTextureBrush(pBitmap, WrapMode=1, x=0, y=0, w="", h="")
 {
@@ -2156,7 +2076,7 @@ Gdip_CreateTextureBrush(pBitmap, WrapMode=1, x=0, y=0, w="", h="")
 	return pBrush
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; WrapModeTile = 0
 ; WrapModeTileFlipX = 1
@@ -2172,7 +2092,7 @@ Gdip_CreateLineBrush(x1, y1, x2, y2, ARGB1, ARGB2, WrapMode=1)
 	return LGpBrush
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; LinearGradientModeHorizontal = 0
 ; LinearGradientModeVertical = 1
@@ -2185,7 +2105,7 @@ Gdip_CreateLineBrushFromRect(x, y, w, h, ARGB1, ARGB2, LinearGradientMode=1, Wra
 	return LGpBrush
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CloneBrush(pBrush)
 {
@@ -2193,74 +2113,74 @@ Gdip_CloneBrush(pBrush)
 	return pBrushClone
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Delete resources
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeletePen(pPen)
 {
    return DllCall("gdiplus\GdipDeletePen", A_PtrSize ? "UPtr" : "UInt", pPen)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteBrush(pBrush)
 {
    return DllCall("gdiplus\GdipDeleteBrush", A_PtrSize ? "UPtr" : "UInt", pBrush)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DisposeImage(pBitmap)
 {
    return DllCall("gdiplus\GdipDisposeImage", A_PtrSize ? "UPtr" : "UInt", pBitmap)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteGraphics(pGraphics)
 {
    return DllCall("gdiplus\GdipDeleteGraphics", A_PtrSize ? "UPtr" : "UInt", pGraphics)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DisposeImageAttributes(ImageAttr)
 {
 	return DllCall("gdiplus\GdipDisposeImageAttributes", A_PtrSize ? "UPtr" : "UInt", ImageAttr)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteFont(hFont)
 {
    return DllCall("gdiplus\GdipDeleteFont", A_PtrSize ? "UPtr" : "UInt", hFont)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteStringFormat(hFormat)
 {
    return DllCall("gdiplus\GdipDeleteStringFormat", A_PtrSize ? "UPtr" : "UInt", hFormat)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteFontFamily(hFamily)
 {
    return DllCall("gdiplus\GdipDeleteFontFamily", A_PtrSize ? "UPtr" : "UInt", hFamily)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DeleteMatrix(Matrix)
 {
    return DllCall("gdiplus\GdipDeleteMatrix", A_PtrSize ? "UPtr" : "UInt", Matrix)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Text functions
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_TextToGraphics(pGraphics, Text, Options, Font="Arial", Width="", Height="", Measure=0)
 {
@@ -2344,7 +2264,7 @@ Gdip_TextToGraphics(pGraphics, Text, Options, Font="Arial", Width="", Height="",
 	return E ? E : ReturnRC
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_DrawString(pGraphics, sString, hFont, hFormat, pBrush, ByRef RectF)
 {
@@ -2367,7 +2287,7 @@ Gdip_DrawString(pGraphics, sString, hFont, hFormat, pBrush, ByRef RectF)
 					, Ptr, pBrush)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_MeasureString(pGraphics, sString, hFont, hFormat, ByRef RectF)
 {
@@ -2449,9 +2369,9 @@ Gdip_FontFamilyCreate(Font)
 	return hFamily
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Matrix functions
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_CreateAffineMatrix(m11, m12, m21, m22, x, y)
 {
@@ -2465,9 +2385,9 @@ Gdip_CreateMatrix()
    return Matrix
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; GraphicsPath functions
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; Alternate = 0
 ; Winding = 1
@@ -2502,9 +2422,9 @@ Gdip_DeletePath(Path)
 	return DllCall("gdiplus\GdipDeletePath", A_PtrSize ? "UPtr" : "UInt", Path)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Quality functions
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 ; SystemDefault = 0
 ; SingleBitPerPixelGridFit = 1
@@ -2546,9 +2466,9 @@ Gdip_SetCompositingMode(pGraphics, CompositingMode=0)
    return DllCall("gdiplus\GdipSetCompositingMode", A_PtrSize ? "UPtr" : "UInt", pGraphics, "int", CompositingMode)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; Extra functions
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_Startup()
 {
@@ -2686,9 +2606,9 @@ Gdip_DeleteRegion(Region)
 	return DllCall("gdiplus\GdipDeleteRegion", A_PtrSize ? "UPtr" : "UInt", Region)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 ; BitmapLockBits
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_LockBits(pBitmap, x, y, w, h, ByRef Stride, ByRef Scan0, ByRef BitmapData, LockMode = 3, PixelFormat = 0x26200a)
 {
@@ -2702,7 +2622,7 @@ Gdip_LockBits(pBitmap, x, y, w, h, ByRef Stride, ByRef Scan0, ByRef BitmapData, 
 	return E
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_UnlockBits(pBitmap, ByRef BitmapData)
 {
@@ -2711,21 +2631,21 @@ Gdip_UnlockBits(pBitmap, ByRef BitmapData)
 	return DllCall("Gdiplus\GdipBitmapUnlockBits", Ptr, pBitmap, Ptr, &BitmapData)
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_SetLockBitPixel(ARGB, Scan0, x, y, Stride)
 {
 	Numput(ARGB, Scan0+0, (x*4)+(y*Stride), "UInt")
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GetLockBitPixel(Scan0, x, y, Stride)
 {
 	return NumGet(Scan0+0, (x*4)+(y*Stride), "UInt")
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_PixelateBitmap(pBitmap, ByRef pBitmapOut, BlockSize)
 {
@@ -2813,14 +2733,14 @@ Gdip_PixelateBitmap(pBitmap, ByRef pBitmapOut, BlockSize)
 	return 0
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_ToARGB(A, R, G, B)
 {
 	return (A << 24) | (R << 16) | (G << 8) | B
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_FromARGB(ARGB, ByRef A, ByRef R, ByRef G, ByRef B)
 {
@@ -2830,35 +2750,35 @@ Gdip_FromARGB(ARGB, ByRef A, ByRef R, ByRef G, ByRef B)
 	B := 0x000000ff & ARGB
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_AFromARGB(ARGB)
 {
 	return (0xff000000 & ARGB) >> 24
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_RFromARGB(ARGB)
 {
 	return (0x00ff0000 & ARGB) >> 16
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_GFromARGB(ARGB)
 {
 	return (0x0000ff00 & ARGB) >> 8
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 Gdip_BFromARGB(ARGB)
 {
 	return 0x000000ff & ARGB
 }
 
-;#####################################################################################
+;-------------------------------------------------------------------------------------
 
 StrGetB(Address, Length=-1, Encoding=0)
 {
@@ -2916,11 +2836,189 @@ Screenshot(outfile)
     Gdip_DisposeImage(pBitmap)
     Gdip_Shutdown(pToken)
 }
-'''
+'''},
+    #endregion Screenshot
+}
+#endregion 腳本函數字典
+
+
+#定義函式:將xml格式化
+def FormatXML(xml_str):
+    xml_str=FormatHTML(xml_str)
+    xml_str_line_list=xml_str.split('\n')
+    xml_str_line_list=[xml_str_line for xml_str_line in xml_str_line_list if xml_str_line.strip()!=""]
+    return "\n".join(xml_str_line_list)
+
+#定義動作:尋找該層下的選擇器
+def FindCurrent(elt,css_selector,get_one=True):
+    com_elt_list=[elt_child for elt_child in elt.select(css_selector) if elt_child.parent==elt]
+    if get_one:
+        if com_elt_list:
+            return com_elt_list[0]
+        else:
+            return None
+    else:
+        return com_elt_list
+
+#設置解析xml用的隱藏div容器
+div_xml_elt=DIV(id="div_xml",style={'display':'none'})
+doc<=div_xml_elt
+
+#定義動作:轉換xml為block
+def XmlToBlockly(ev):
+    #若xml的更改事件不是起源於blockly，就繼續執行
+    if not hasattr(ev,"changeStartFromBlockly"):
+        #print('xml>block')
+        #獲取textarea_xml元素中的xml_str
+        textarea_elt=doc['textarea_xml']
+        xml_str=textarea_elt.value
+        #製作臨時div容器以生成xml元素
+        div_xml_elt=doc["div_xml"]
+        div_xml_elt.innerHTML=xml_str
+        xml_elt=div_xml_elt.select_one('xml')
+        #若xml元素產生成功，就將xml元素嵌入至blockly區塊顯示
+        if xml_elt:
+            Blockly.Xml.clearWorkspaceAndLoadFromXml(xml_elt,workspace)
+        #輸出格式化xml到
+        xml_format_str=FormatXML(textarea_elt.value)
+        textarea_elt.value=xml_format_str
+        
+#定義動作:顯示blocks的xml (必須等待Block載入完成)
+def BlocklyToXml(ev):
+    #啟用複製和下載AHK檔案按鈕
+    for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
+        btn_elt.disabled=False
+        btn_elt.classList.remove('disabled_button')
+    #print('block>xml')
+    #自blockly獲取xml_str
+    xml_blockly_elt=Blockly.Xml.workspaceToDom(workspace)
+    doc['textarea_xml'].value=FormatXML(xml_blockly_elt.outerHTML)
+    #製作input事件，觸發XmlToAHK，並附加起源資訊到事件元素中
+    input_ev = window.Event.new("input")
+    input_ev.changeStartFromBlockly=True
+    doc['textarea_xml'].dispatchEvent(input_ev)
+
+
+#預設欲生成後來要追加在AHK腳本置頂處或最尾處的字典鍵值集合
+func_dict_key_set=set()
+#定義動作:轉譯xml為AHK語法
+def XmlToAHK(ev):
+    #藉由點擊觸發轉譯事件
+    if ev.type in ["input","click"]:
+        global func_dict_key_set
+        #清空:預設欲生成後來要追加在AHK腳本置頂處或最尾處的字典鍵值集合
+        func_dict_key_set=set()
+
+        ##註冊物件型Block元素列表 (不能被獨立轉譯)
+        OBJ_BLOCK_LIST=[
+            'function_key',
+            'special_key',
+            'normal_key',
+            'filepath',
+            'text',
+            'webpage',
+            'built_in_program',
+            'built_in_dirpath',
+            'built_in_webpage',
+            'path_combined',
+            'built_in_time',
+            'math_arithmetic',
+            'math_number',
+            'variables_get',
+            'logic_boolean',
+            'logic_compare',
+            'logic_operation',
+            'logic_null',
+            'logic_negate',
+            'in_str',
+            'right_click_menu', #不讓右鍵清單獨立執行，否則會無限循環跳出清單
+            'get_key_state',
+            'math_function',
+            'math_function2',
+            'math_constant2',
+            'math_round',
+            'math_mod',
+            'lists_create_with',
+            'list_str',
+        ]
+        #print('xml>ahk')
+        # print('XmlToAHK',"ev.type:",ev.type)
+
+        #至textarea_xml元素獲取xml
+        textarea_xml_elt=ev.currentTarget
+        xml_str=textarea_xml_elt.value
+        #獲取要輸出到指定的textarea元素
+        textarea_ahk_elt=doc['textarea_ahk']
+
+        #預設生成AHK程式碼
+        ahk_code=""
+        
+        #建立暫時的div容器用來解析xml
+        div_parseXml_elt=DIV()
+        div_parseXml_elt.innerHTML=xml_str
+        block_elt_list=div_parseXml_elt.select('xml>block')
+        
+
+        # #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭做SetTitleMatchMode設定
+        # if div_parseXml_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]') or div_parseXml_elt.select_one('block[type="win_activate"]') or div_parseXml_elt.select_one('block[type="run_or_active"]'):
+        #     pre_ahk_code+="SetTitleMatchMode, 2\n"
+
+        # #若xml裡有出現螢幕亮度調整相關的blockly，就在腳本開頭設定全域變數，在腳本結尾設定相關函數
+        # if div_parseXml_elt.select_one('block[type="set_brightness"]'):
+        #     pre_ahk_code+="__vBright := 100\n"
+        #     end_ahk_code+="\n".join([
+        #         f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
+        #         f";'z dimmer.ahk' by jeeswg",
+        #         f'SetBrightness(__vBright){{',
+        #         f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
+        #         f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
+        #         f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
+        #         f'{TAB_SPACE}WinGet, hWnd, ID, A',
+        #         f'{TAB_SPACE}vNum := Round(((100-__vBright)/100) * 255)',
+        #         f'{TAB_SPACE}Gui, Color, 000000',
+        #         f'{TAB_SPACE};WS_EX_TRANSPARENT := 0x20 (click-through)',
+        #         f'{TAB_SPACE}Gui, -Caption +AlwaysOnTop +E0x20 +HwndhGui +ToolWindow',
+        #         f'{TAB_SPACE};獲取顯示器總數',
+        #         f'{TAB_SPACE}SysGet, __nb_monitor, MonitorCount',
+        #         f'{TAB_SPACE}Gui, Show, % Format("x0 y0 w{{}} h{{}}", A_ScreenWidth*__nb_monitor, A_ScreenHeight), dimmer',
+        #         f'{TAB_SPACE}WinSet, Transparent, % vNum, % "ahk_id " hGui',
+        #         f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+        #         f'{TAB_SPACE}return',
+        #         "}",
+        #         ";hide window (turn dimmer off)",
+        #         "MsgMonitor(wParam, lParam, uMsg)",
+        #         "{",
+        #         f'{TAB_SPACE}global',
+        #         f'{TAB_SPACE}Gui, Hide',
+        #         "}",
+        #         ";show window (turn dimmer on)",
+        #         "MsgMonitor2(wParam, lParam, uMsg)",
+        #         "{",
+        #         f'{TAB_SPACE}global',
+        #         f'{TAB_SPACE}WinGet, hWnd, ID, A',
+        #         f'{TAB_SPACE}Gui, Show',
+        #         f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
+        #         "}",
+        #         ";return dimmer level",
+        #         "MsgMonitor3(wParam, lParam, msg)",
+        #         "{",
+        #         f'{TAB_SPACE}global',
+        #         f'{TAB_SPACE}return __vBright',
+        #         "}\n"
+        #     ])
+
+        # #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數(檔案命名改為全形符號)
+        # if div_parseXml_elt.select_one('block[type="screenshot"]'):
+        #     end_ahk_code+=FUNC_DICT['FullwidthSymbol']
+        # #endregion
+
+        # #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數
+        # if div_parseXml_elt.select_one('block[type="screenshot"]'):
+        #     end_ahk_code+='''
+
 #endregion
 
-        #為AHK碼加上前段程式碼
-        ahk_code+=";請確保下段程式碼在腳本最頂部\n"*(pre_ahk_code!="") + pre_ahk_code + ";=====================\n\n"*(pre_ahk_code!="")
+        
         
         #將逐個blockly轉譯為AHK
         for block_elt in block_elt_list:
@@ -2928,7 +3026,19 @@ Screenshot(outfile)
             if block_elt.attrs['type'] not in OBJ_BLOCK_LIST:
                 ahk_code+=AHK_block(block_elt)+'\n'
 
+    
+        #預設欲生成後來要追加在AHK腳本置頂處或最尾處的字典鍵值集合
+        pre_ahk_code=""
+        end_ahk_code=""
+        #根據關聯函數字典鍵值集合生成前置和後置程式碼
+        for func_dict_key in func_dict_key_set:
+            pre_ahk_code+=FUNC_DICT[func_dict_key].get('pre','')
+            end_ahk_code+=FUNC_DICT[func_dict_key].get('end','')
 
+
+        #為AHK碼加上前段程式碼
+        ahk_code=";請確保下段程式碼在腳本最頂部\n"*(pre_ahk_code!="") + pre_ahk_code + ";=====================\n\n"*(pre_ahk_code!="") + ahk_code
+        
         #為AHK碼加上後段程式碼
         ahk_code+="\n;=====================\n"*(end_ahk_code!="") + end_ahk_code
 
@@ -2992,6 +3102,8 @@ def AHK_statement(statement_elt,for_hotkey=False,Indentation=True):
 
 #定義函式:解析block元素為AHK語法
 def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
+    #獲取全域變數:關聯函數字典鍵值集合
+    global func_dict_key_set 
 
     # print(block_elt.attrs['type'])
 
@@ -3067,6 +3179,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                         hotkey_str='~'+hotkey_str
                     if statement_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]'):
                         #獲取標題文字元素
+                        func_dict_key_set.update(['SetTitleMatchMode'])
                         block_ifwinactive_elt=statement_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]')
                         field_text_elt=FindCurrent(block_ifwinactive_elt,'field[name="text"]')
                         hotkey_str=f'#IfWinActive, {field_text_elt.text}\n'+hotkey_str
@@ -3565,7 +3678,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 com_str+=f'Mod({value_a_str}, {value_b_str})'
 
         #取隨機數
-        ##
         elif block_elt.attrs['type']=="math_random":
             #獲取最小值數字積木
             value_min_elt=FindCurrent(block_elt,'value[name="min"]')
@@ -3995,7 +4107,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             var_name=field_elt.text.replace(" ","_").replace("　","_")
             #獲取賦值內容
             value_elt=FindCurrent(block_elt,'value[name="VALUE"]')
-            value_str,value_comment=AHK_value(value_elt)
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
             com_str+=value_comment
             #輸出程式
             com_str+=f'{var_name} := {value_str}\n'
@@ -4437,7 +4549,50 @@ return
             statement_do_str=AHK_statement(statement_do_elt)
             com_str+=f"while TRUE {{\n{statement_do_str}}}\n"
 
+        elif block_elt.attrs['type']=="controls_forEach":
+            #獲取循環用的變量名稱
+            field_var_elt=FindCurrent(block_elt,'field[name="VAR"]')
+            field_var_str=field_var_elt.text
+            #獲取串列物件
+            value_elt=FindCurrent(block_elt,'value[name="LIST"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else "Array()" #若沒有放入串列積木，則預設為空字串
+            com_str+=value_comment       
+            #獲取執行式
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #輸出程式碼
+            com_str+=f'For _,{field_var_str} in {value_str} {{\n{statement_do_str}}}\n'
+
+        
+
         #endregion 循環Blockly
+
+        #串列
+        elif block_elt.attrs['type']=="lists_create_with":
+            #獲取串列長度
+            mutation_elt=FindCurrent(block_elt,'mutation')
+            mutation_items_int=int(mutation_elt.attrs['items'])
+            value_str_list=[]
+            #
+            for i_item in range(mutation_items_int):
+                value_elt=FindCurrent(block_elt,f'value[name="ADD{i_item}"]')
+                value_str,value_comment=AHK_value(value_elt)
+                value_str_list.append(value_str)
+            #輸出程式碼
+            com_str+=f'Array({", ".join(value_str_list)})'
+
+        #字串化串列
+        elif block_elt.attrs['type']=="list_str":
+            #註冊關聯函數
+            func_dict_key_set.update(['ArrayStr'])
+            #獲取串列物件
+            value_elt=FindCurrent(block_elt,'value[name="NAME"]')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+            value_str=value_str if value_str else "Array()" #若沒有放入串列積木，則預設為空字串
+            com_str+=f'ArrayStr({value_str})'
+            
+
 
         #region 自訂程式碼Blockly
 
@@ -4461,6 +4616,8 @@ return
 
         #亮度控制
         elif block_elt.attrs['type']=="set_brightness":
+            #註冊關聯函數
+            func_dict_key_set.update(['SetBrightness'])
             #獲取同整動作
             field_action_elt=FindCurrent(block_elt,'field[name="action"]')
             field_action_str=field_action_elt.text
@@ -4487,6 +4644,8 @@ return
             ])
 
         elif block_elt.attrs['type']=="screenshot":
+            #增加關聯函數鍵值集合
+            func_dict_key_set.update(['FullwidthSymbol','Screenshot'])
             #獲取檔案路徑
             value_path_elt=FindCurrent(block_elt,'value[name="path"]')
             value_path_str,value_path_comment=AHK_value(value_path_elt,get_all_comment=True)

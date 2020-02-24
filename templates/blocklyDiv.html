@@ -1656,6 +1656,44 @@
             </block>
             </statement>
         </block>
+        <block type="controls_forEach">
+            <field name="VAR">i</field>
+            <comment pinned="true" h="42" w="206" x="0" y="0">模擬跨年倒數(使用範例)</comment>
+            <value name="LIST">
+            <block type="lists_create_with">
+                <mutation items="4"></mutation>
+                <value name="ADD0">
+                <block type="math_number">
+                    <field name="NUM">3</field>
+                </block>
+                </value>
+                <value name="ADD1">
+                <block type="math_number">
+                    <field name="NUM">2</field>
+                </block>
+                </value>
+                <value name="ADD2">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+                </value>
+                <value name="ADD3">
+                <block type="text">
+                    <field name="TEXT">Happy New Year!</field>
+                </block>
+                </value>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="variables_get">
+                    <field name="VAR">i</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
         <block type="controls_whileUntil">
             <field name="MODE">WHILE</field>
         </block>
@@ -1825,8 +1863,44 @@
             </block>
             </statement>
         </block>
-        
+    </category>
 
+    <category name="串列" colour="#7B68EE">
+        <block type="lists_create_with">
+        <mutation items="3"></mutation>
+        </block>
+        <block type="lists_create_with">
+        <mutation items="0"></mutation>
+        </block>
+        <block type="msgbox">
+            <value name="NAME">
+            <block type="list_str">
+                    <comment pinned="false" h="72" w="382">必須透過此積木才能將串列以文字方式顯示出來
+因為AHK語法: Msgbox % Array(1,2,3) 並不會顯示串列</comment>
+                    <value name="NAME">
+                    <block type="lists_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                        <block type="math_number">
+                            <field name="NUM">1</field>
+                        </block>
+                        </value>
+                        <value name="ADD1">
+                        <block type="math_number">
+                            <field name="NUM">2</field>
+                        </block>
+                        </value>
+                        <value name="ADD2">
+                        <block type="math_number">
+                            <field name="NUM">3</field>
+                        </block>
+                        </value>
+                    </block>
+                    </value>
+                </block>
+                </value>
+            </block>
+        <block type="list_str"></block>
     </category>
 
 
