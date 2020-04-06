@@ -2957,64 +2957,6 @@ def XmlToAHK(ev):
         div_parseXml_elt=DIV()
         div_parseXml_elt.innerHTML=xml_str
         block_elt_list=div_parseXml_elt.select('xml>block')
-        
-
-        # #若xml裡有出現標題文字匹配相關的blockly，就在腳本開頭做SetTitleMatchMode設定
-        # if div_parseXml_elt.select_one('block[type="hotkey_execute_setting_ifwinactive"]') or div_parseXml_elt.select_one('block[type="win_activate"]') or div_parseXml_elt.select_one('block[type="run_or_active"]'):
-        #     pre_ahk_code+="SetTitleMatchMode, 2\n"
-
-        # #若xml裡有出現螢幕亮度調整相關的blockly，就在腳本開頭設定全域變數，在腳本結尾設定相關函數
-        # if div_parseXml_elt.select_one('block[type="set_brightness"]'):
-        #     pre_ahk_code+="__vBright := 100\n"
-        #     end_ahk_code+="\n".join([
-        #         f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
-        #         f";'z dimmer.ahk' by jeeswg",
-        #         f'SetBrightness(__vBright){{',
-        #         f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
-        #         f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
-        #         f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
-        #         f'{TAB_SPACE}WinGet, hWnd, ID, A',
-        #         f'{TAB_SPACE}vNum := Round(((100-__vBright)/100) * 255)',
-        #         f'{TAB_SPACE}Gui, Color, 000000',
-        #         f'{TAB_SPACE};WS_EX_TRANSPARENT := 0x20 (click-through)',
-        #         f'{TAB_SPACE}Gui, -Caption +AlwaysOnTop +E0x20 +HwndhGui +ToolWindow',
-        #         f'{TAB_SPACE};獲取顯示器總數',
-        #         f'{TAB_SPACE}SysGet, __nb_monitor, MonitorCount',
-        #         f'{TAB_SPACE}Gui, Show, % Format("x0 y0 w{{}} h{{}}", A_ScreenWidth*__nb_monitor, A_ScreenHeight), dimmer',
-        #         f'{TAB_SPACE}WinSet, Transparent, % vNum, % "ahk_id " hGui',
-        #         f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
-        #         f'{TAB_SPACE}return',
-        #         "}",
-        #         ";hide window (turn dimmer off)",
-        #         "MsgMonitor(wParam, lParam, uMsg)",
-        #         "{",
-        #         f'{TAB_SPACE}global',
-        #         f'{TAB_SPACE}Gui, Hide',
-        #         "}",
-        #         ";show window (turn dimmer on)",
-        #         "MsgMonitor2(wParam, lParam, uMsg)",
-        #         "{",
-        #         f'{TAB_SPACE}global',
-        #         f'{TAB_SPACE}WinGet, hWnd, ID, A',
-        #         f'{TAB_SPACE}Gui, Show',
-        #         f'{TAB_SPACE}WinActivate, % "ahk_id " hWnd',
-        #         "}",
-        #         ";return dimmer level",
-        #         "MsgMonitor3(wParam, lParam, msg)",
-        #         "{",
-        #         f'{TAB_SPACE}global',
-        #         f'{TAB_SPACE}return __vBright',
-        #         "}\n"
-        #     ])
-
-        # #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數(檔案命名改為全形符號)
-        # if div_parseXml_elt.select_one('block[type="screenshot"]'):
-        #     end_ahk_code+=FUNC_DICT['FullwidthSymbol']
-        # #endregion
-
-        # #region 若xml裡有出現截圖的blockly，在腳本結尾設定相關函數
-        # if div_parseXml_elt.select_one('block[type="screenshot"]'):
-        #     end_ahk_code+='''
 
 #endregion
 
@@ -3883,11 +3825,12 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 'if FileExist(__ImageFilePath){',
                 TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
-                TAB_SPACE+';獲取顯示器總數',
-                TAB_SPACE+'SysGet, __nb_monitor, MonitorCount',
+                TAB_SPACE+';獲取顯示器長寬',
+                TAB_SPACE+'SysGet, VirtualWidth, 78',
+                TAB_SPACE+'SysGet, VirtualHeight, 79',
                 TAB_SPACE+'CoordMode Pixel',
                 TAB_SPACE+';搜尋圖片',
-                TAB_SPACE+'ImageSearch, __FoundX, __FoundY, 0, 0, A_ScreenWidth*__nb_monitor, A_ScreenHeight,%__ImageFilePath%',
+                TAB_SPACE+'ImageSearch, __FoundX, __FoundY, 0, 0, VirtualWidth, VirtualHeight,%__ImageFilePath%',
                 TAB_SPACE+'CoordMode Mouse',
                 TAB_SPACE+';獲取圖片中心座標',
                 TAB_SPACE+f'{posXVar_str}:=__FoundX + __img_w/2',
