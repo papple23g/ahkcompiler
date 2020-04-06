@@ -3804,6 +3804,48 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 偵測圖片Blockly
 
+        ###
+        elif block_elt.attrs['type']=="get_picture_pos_ver200406":
+            #獲取設值blockly
+            value_imgFilepath_elt=FindCurrent(block_elt,'value[name="image_filepath"]')
+            value_imgFilepath_str,value_imgFilepath_comment=AHK_value(value_imgFilepath_elt)
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            com_str+='\n'.join([
+                f'__ImageFilePath:={value_imgFilepath_str}',
+                'if FileExist(__ImageFilePath){',
+                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
+                TAB_SPACE+';獲取顯示器長寬',
+                TAB_SPACE+'SysGet, VirtualWidth, 78',
+                TAB_SPACE+'SysGet, VirtualHeight, 79',
+                TAB_SPACE+'CoordMode Pixel',
+                TAB_SPACE+';搜尋圖片',
+                TAB_SPACE+'ImageSearch, __FoundX, __FoundY, 0, 0, VirtualWidth, VirtualHeight,%__ImageFilePath%',
+                TAB_SPACE+'CoordMode Mouse',
+                TAB_SPACE+';獲取圖片中心座標',
+                TAB_SPACE+f'{posXVar_str}:=__FoundX + __img_w/2',
+                TAB_SPACE+f'{posYVar_str}:=__FoundY + __img_h/2',
+                TAB_SPACE+'if (ErrorLevel=0) {',
+                TAB_SPACE+f'{statement_do_str}'+TAB_SPACE+'} else {',
+                TAB_SPACE+f'{statement_elseDo_str}'+TAB_SPACE+'}',
+                '} else {',
+                TAB_SPACE+'Msgbox % "圖片路徑不存在"',
+                '}\n',
+            ])
+
+
+
         elif block_elt.attrs['type']=="get_picture_pos":
             #獲取圖片路徑
             field_imgFilepath_elt=FindCurrent(block_elt,'field[name="img_filepath"]')

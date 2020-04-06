@@ -534,6 +534,35 @@ Blockly.Blocks['while_true'] = {
     }
 };
 
+Blockly.Blocks['get_picture_pos_ver200406'] = {
+    init: function() {
+        this.appendValueInput("image_filepath")
+            .setCheck(["filepath", "String"])
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("在當前畫面搜尋圖片");
+        this.appendDummyInput()
+            .appendField("獲得座標(")
+            .appendField(new Blockly.FieldVariable("圖片座標X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片座標Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到圖片後");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck(null)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['get_picture_pos'] = {
     init: function() {
         this.appendDummyInput()
@@ -1094,7 +1123,7 @@ Blockly.Blocks['path_combined'] = {
             .setCheck(["dirpath", "filepath"])
             .appendField("底下的");
         this.setInputsInline(true);
-        this.setOutput(true, "dirpath");
+        this.setOutput(true, "filepath");
         this.setColour(290);
         this.setTooltip("");
         this.setHelpUrl("");

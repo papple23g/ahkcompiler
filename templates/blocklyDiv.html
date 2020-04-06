@@ -595,33 +595,37 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos" id="]WzcYqQA{#g,=`}Lz4{a" x="22" y="279">
-            <field name="img_filepath">C:\*.png</field>
-            <field name="pos_x" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
-            <field name="pos_y" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+        <block type="get_picture_pos_ver200406">
+            <field name="pos_x">圖片座標X</field>
+            <field name="pos_y">圖片座標Y</field>
+            <value name="image_filepath">
+            <block type="filepath">
+                <field name="NAME">C:\*.png</field>
+            </block>
+            </value>
             <statement name="DO">
-            <block type="msgbox" id="x}cfui-{(eob(?l.ww8l">
+            <block type="msgbox">
                 <value name="NAME">
-                <block type="text_join" id="K9wAX5M[a+T+iA[I{mLa">
+                <block type="text_join">
                     <mutation items="4"></mutation>
                     <value name="ADD0">
-                    <block type="text" id="qj*+OM`K+$t+PxvE@TNa">
+                    <block type="text">
                         <field name="TEXT">圖片座標為: </field>
                     </block>
                     </value>
                     <value name="ADD1">
-                    <block type="variables_get" id="zZ9JNzS4r:5%Ytyy{mT:">
-                        <field name="VAR" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+                    <block type="variables_get">
+                        <field name="VAR">圖片座標X</field>
                     </block>
                     </value>
                     <value name="ADD2">
-                    <block type="text" id="$cR{2.ut6Al8.gk=ANah">
+                    <block type="text">
                         <field name="TEXT">, </field>
                     </block>
                     </value>
                     <value name="ADD3">
-                    <block type="variables_get" id="EaxJKy|H;_^+S/in$o}!">
-                        <field name="VAR" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+                    <block type="variables_get">
+                        <field name="VAR">圖片座標Y</field>
                     </block>
                     </value>
                 </block>
@@ -629,36 +633,49 @@
             </block>
             </statement>
             <statement name="ELSE_DO">
-            <block type="msgbox" id=",`lafHqh|:A(=4O^#pO|">
+            <block type="msgbox">
                 <value name="NAME">
-                <block type="text" id=")@F2O$M_@nzhSI2eN^m@">
+                <block type="text">
                     <field name="TEXT">圖片未找到</field>
                 </block>
                 </value>
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos" id="$=;G2eTm(yK*ji[%9qJ#" x="32" y="229">
-            <field name="img_filepath">C:\*.png</field>
-            <field name="pos_x" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
-            <field name="pos_y" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+        <block type="get_picture_pos_ver200406">
+            <field name="pos_x">圖片座標X</field>
+            <field name="pos_y">圖片座標Y</field>
+            <value name="image_filepath">
+            <block type="path_combined">
+                <value name="main_path">
+                <block type="built_in_dirpath">
+                    <field name="NAME">desktop</field>
+                </block>
+                </value>
+                <value name="sub_path">
+                <block type="filepath">
+                    <field name="NAME">*.png</field>
+                </block>
+                </value>
+            </block>
+            </value>
             <statement name="DO">
-            <block type="coord_mode" id="CU.lnqXZ`il8LE)PL{1g">
+            <block type="coord_mode">
                 <field name="NAME">screen</field>
                 <next>
-                <block type="click_x_y" id="XRd3hyw!bDuYJ49^}:S2">
+                <block type="click_x_y">
                     <value name="X">
-                    <block type="variables_get" id="}dLAPui?tG29hq{-ioM2">
-                        <field name="VAR" id="sCYNzK3;-|F-e2m)|KPp">圖片座標X</field>
+                    <block type="variables_get">
+                        <field name="VAR">圖片座標X</field>
                     </block>
                     </value>
                     <value name="Y">
-                    <block type="variables_get" id="gnb_IJ+-L=oTNlSY*K@N">
-                        <field name="VAR" id="xB@q{qR#`@kUE3x]S+5s">圖片座標Y</field>
+                    <block type="variables_get">
+                        <field name="VAR">圖片座標Y</field>
                     </block>
                     </value>
                     <value name="TIMES">
-                    <block type="math_number" id="d8sZL/6)iLy!X;!nO}*B">
+                    <block type="math_number">
                         <field name="NUM">1</field>
                     </block>
                     </value>
@@ -667,16 +684,16 @@
             </block>
             </statement>
             <statement name="ELSE_DO">
-            <block type="msgbox" id="afGoGzo-${r%{;/Ihayp">
+            <block type="msgbox">
                 <value name="NAME">
-                <block type="text" id="M@vrDrp:UD#!4MygN=/,">
+                <block type="text">
                     <field name="TEXT">圖片未找到</field>
                 </block>
                 </value>
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos"></block>
+        <block type="get_picture_pos_ver200406"></block>
     </category>
 
     <category name="文字" colour="#5BA58C">
