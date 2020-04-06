@@ -3457,7 +3457,19 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #剪貼簿內容
         elif block_elt.attrs['type']=="clipboard":
-            com_str+='Clipboard'
+            #尋找該積木是否在「貼上文字」的積木之下
+            under_pasteText_block_bool=None
+            block_elt=block_elt.parent
+            while block_elt.tagName!="XML":
+                if block_elt.tagName=="BLOCK" and block_elt.attrs['type']=="paste_text":
+                    under_pasteText_block_bool=True
+                block_elt=block_elt.parent
+            #若是，則使用clipboard_save作為該積木的值
+            if under_pasteText_block_bool:
+                com_str+='clipboard_save'
+            #若否，則使用Clipboard作為該積木的值
+            else:
+                com_str+='Clipboard'
 
         #目錄、檔案、網頁
         elif block_elt.attrs['type'] in ["filepath","dirpath","webpage"]:
