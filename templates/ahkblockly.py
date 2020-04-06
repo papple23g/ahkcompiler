@@ -2990,6 +2990,56 @@ def XmlToAHK(ev):
         del div_parseXml_elt
 
 
+#region 基本函數
+
+#定義函數: 將半形符號轉換成全形符號
+def ToFullWidthString(text):
+    full_width_string_dict={
+        r'~':'～',
+        r'!':'！',
+        r'@':'＠',
+        r'#':'＃',
+        r'$':'＄',
+        r'%':'％',
+        r'^':'︿',
+        r'&':'＆',
+        r'*':'＊',
+        r'(':'（',
+        r')':'）',
+        r'_':'＿',
+        r'+':'＋',
+        r'`':'‵',
+        r'-':'－',
+        r'=':'＝',
+        r'{':'｛',
+        r'}':'｝',
+        r'[':'［',
+        r']':'］',
+        r':':'：',
+        r';':'；',
+        r'"':'＂',
+        r"'":'’',
+        r'<':'＜',
+        r'>':'＞',
+        r',':'，',
+        r'.':'．',
+        r'?':'？',
+        r'/':'／',
+        r'|':'｜',
+        '\\':'＼',
+        ' ':'_',
+        "　":"_",
+    }
+    chr_set=set(text)
+    com_text=str(text)
+    for c in chr_set:
+        if c in full_width_string_dict.keys():
+            com_text=com_text.replace(c,full_width_string_dict[c])
+    return com_text
+
+
+#endregion 基本函數
+
 #定義函式:抽出元素的註解
 def Comment(elt,get_all_comment=False):
     com_str=""
@@ -3804,7 +3854,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 偵測圖片Blockly
 
-        ###
         elif block_elt.attrs['type']=="get_picture_pos_ver200406":
             #獲取設值blockly
             value_imgFilepath_elt=FindCurrent(block_elt,'value[name="image_filepath"]')
@@ -4083,13 +4132,16 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         elif block_elt.attrs['type']=="variables_get":
             #獲取變數名稱(取代空白為底線)
             var_name=block_elt.select_one('field').text
-            var_name=var_name.replace(" ","_").replace("　","_")
+            #轉換變數名稱為全形
+            var_name=ToFullWidthString(var_name)
             com_str+=var_name
 
         elif block_elt.attrs['type']=="variables_set":
             #獲取變數名稱(取代空白為底線)
             field_elt=FindCurrent(block_elt,'field[name="VAR"]')
-            var_name=field_elt.text.replace(" ","_").replace("　","_")
+            var_name=field_elt.text
+            #轉換變數名稱為全形
+            var_name=ToFullWidthString(var_name)
             #獲取賦值內容
             value_elt=FindCurrent(block_elt,'value[name="VALUE"]')
             value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
@@ -4099,7 +4151,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         elif block_elt.attrs['type']=="math_change":
             field_elt=FindCurrent(block_elt,'field[name="VAR"]')
-            var_name=field_elt.text.replace(" ","_").replace("　","_")
+            var_name=field_elt.text
+            #轉換變數名稱為全形
+            var_name=ToFullWidthString(var_name)
             value_str="0"
             #獲取賦值內容
             value_delta_elt=FindCurrent(block_elt,'value[name="DELTA"]')
@@ -4272,8 +4326,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     #獲取項目名稱
                     field_itemName_elt=FindCurrent(block_item_elt,'field[name="item_name"]')
                     item_name_raw_str=field_itemName_elt.text
-                    item_name_str=item_name_raw_str.replace(" ","_").replace("　","_")
-                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_raw_str},{item_name_str}_{i_item}_{id(block_elt)}\n"
+                    #轉換變數名稱為全形
+                    item_name_str=ToFullWidthString(item_name_raw_str)
+                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_str},{item_name_str}_{i_item}_{id(block_elt)}\n"
                     #獲取執行式
                     statement_do_elt=FindCurrent(block_item_elt,'statement[name="DO"]')
                     statement_do_str=AHK_statement(statement_do_elt)
