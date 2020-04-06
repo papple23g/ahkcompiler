@@ -3341,8 +3341,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 'clipboard:=',
                 f'clipboard:={value_str}',
                 'ClipWait',
-                'Sleep 100',
                 'Send ^v',
+                'Sleep 100',
                 'clipboard = %clipboard_save%\n',
             ])
 
@@ -3933,8 +3933,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     f'{TAB_SPACE}clipboard:=',
                     f'{TAB_SPACE}clipboard:="_Javascript:" . __JS程式碼',
                     f'{TAB_SPACE}ClipWait',
-                    f'{TAB_SPACE}Sleep 100',
                     f'{TAB_SPACE}Send ^v',
+                    f'{TAB_SPACE}Sleep 100',
                     f'{TAB_SPACE}clipboard = %clipboard_save%',
                     f'{TAB_SPACE}Send, {{Home}}',
                     f'{TAB_SPACE}Send, {{Delete}}',
