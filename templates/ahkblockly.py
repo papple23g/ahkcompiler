@@ -3561,6 +3561,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     "google":'https://www.google.com',
                     "youtube":'https://www.youtube.com',
                     "facebook":'https://www.facebook.com',
+                    "baidu":'https://www.baidu.com/',
                     "wikipedia":'https://zh.wikipedia.org',
                     "pchome":"https://www.pchome.com.tw",
                     "yahoo":"https://yahoo.com",
@@ -4409,6 +4410,7 @@ return
             search_selected_keyword_url_tuple_dict={
                 'google':("https://www.google.com.tw/search?q=","","Google搜尋"),
                 'youtube':("https://www.youtube.com/results?search_query=","","Youtube搜尋"),
+                'baidu':("https://www.baidu.com/s?wd=","","百度搜尋"),
                 'wiki':("http://zh.wikipedia.org/w/index.php?title=Special:Search&search=","","WIKI搜尋"),
                 'google_map':("https://www.google.com.tw/maps/search/","","Google地圖搜尋"),
                 'google_trend':("https://www.google.com/trends/explore?q=","","Google搜尋趨勢"),
