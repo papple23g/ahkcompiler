@@ -3339,6 +3339,14 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
             com_str+=f"Msgbox % {value_str}\n"
 
+        elif block_elt.attrs['type']=="traytip":
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+
+            com_str+=value_comment
+
+            com_str+=f"TrayTip,,% {value_str}\n"
+
         elif block_elt.attrs['type']=="send_text":
             value_elt=FindCurrent(block_elt,'value')
             value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
