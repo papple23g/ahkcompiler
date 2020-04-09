@@ -1,10 +1,9 @@
 # AHK 語法產生器
 
-<a href="https://www.python.org/"><img src="https://img.shields.io/static/v1?label=Python&message=v3.7.4&color=blue"></a>
-<a href="https://github.com/brython-dev/brython"><img src="https://img.shields.io/static/v1?label=Brython&message=v3.7.5&color=purple"></a>
-<a href="https://www.djangoproject.com/"><img src="https://img.shields.io/static/v1?label=Django&message=v1.11.17&color=green"></a>
-<a href="https://www.autohotkey.com/"><img src="https://img.shields.io/static/v1?label=Autohotkey&message=v1.1.30.03&color=#3F627F"></a>
-
+[![](https://img.shields.io/static/v1?label=Python&message=v3.7.4&color=blue)](https://www.python.org/)
+[![](https://img.shields.io/static/v1?label=Brython&message=v3.7.5&color=purple)](https://github.com/brython-dev/brython)
+[![](https://img.shields.io/static/v1?label=Django&message=v1.11.17&color=green)](https://www.djangoproject.com/)
+[![](https://img.shields.io/static/v1?label=Autohotkey&message=v1.1.30.03&color=#3F627F)](https://www.autohotkey.com/)
 
 
 本網站使用 Django 架設 [Autohotkey](https://www.autohotkey.com/) 語法產生器
