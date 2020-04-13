@@ -33,8 +33,9 @@ doc['div_copy_ahkfile_btns_area']<=A("papple23g",href="https://papple23g-ahkcomp
 for need_to_replace_str_pairList in need_to_replace_str_pairList_list:
     html=html.replace(need_to_replace_str_pairList[0],need_to_replace_str_pairList[1])
 
-
-with open(r'C:\Users\Peter Wang\Desktop\AHK_Blockly\AHK_Blockly.html','w',encoding='utf-8') as f:
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
+with open(dir_path + '\\protable\\AHK_Blockly.html','w',encoding='utf-8') as f:
     f.write(html)
 
 
