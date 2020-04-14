@@ -1,5 +1,5 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/5b9bdf87-af50-4772-9f7f-b99451fe328e/resourceGroups/papple23gtest/providers/Microsoft.Web/sites/papple23gtest",
     "appService.deploySubpath": "",
-    "python.pythonPath": "C:\\Users\\Peter Wang\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
+    "python.pythonPath": "C:\\Users\\pappl\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"
 }
