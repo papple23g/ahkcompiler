@@ -574,6 +574,9 @@
     </category>
 
     <category name="偵測圖片" colour="#DB7093">
+        <block type="image_filepath"></block>
+        <block type="image_search_area"></block>
+
         <block type="hotkey_execute" id="HkwcUnN5parh[{Y/CYLZ" x="5" y="155">
             <comment pinned="false" h="46" w="327">這個積木放這裡，方便大家擷取畫面圖片:)</comment>
             <value name="NAME">
@@ -596,14 +599,42 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406">
+        <block type="get_picture_pos_ver200419">
             <field name="pos_x">圖片座標X</field>
             <field name="pos_y">圖片座標Y</field>
-            <value name="image_filepath">
-            <block type="filepath">
-                <field name="NAME">C:\*.png</field>
+            <statement name="get_picture_pos_setting">
+            <block type="image_filepath">
+                <value name="NAME">
+                <block type="filepath">
+                    <field name="NAME">C:\*.png</field>
+                </block>
+                </value>
+                <next>
+                <block type="image_search_area">
+                    <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="W">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_width</field>
+                    </block>
+                    </value>
+                    <value name="H">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_height</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
             </block>
-            </value>
+            </statement>
             <statement name="DO">
             <block type="msgbox">
                 <value name="NAME">
@@ -643,23 +674,42 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406">
+        <block type="get_picture_pos_ver200419">
             <field name="pos_x">圖片座標X</field>
             <field name="pos_y">圖片座標Y</field>
-            <value name="image_filepath">
-            <block type="path_combined">
-                <value name="main_path">
-                <block type="built_in_dirpath">
-                    <field name="NAME">desktop</field>
-                </block>
-                </value>
-                <value name="sub_path">
+            <statement name="get_picture_pos_setting">
+            <block type="image_filepath">
+                <value name="NAME">
                 <block type="filepath">
-                    <field name="NAME">*.png</field>
+                    <field name="NAME">C:\*.png</field>
                 </block>
                 </value>
+                <next>
+                <block type="image_search_area">
+                    <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="W">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_width</field>
+                    </block>
+                    </value>
+                    <value name="H">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_height</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
             </block>
-            </value>
+            </statement>
             <statement name="DO">
             <block type="coord_mode">
                 <field name="NAME">screen</field>
@@ -694,7 +744,68 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406"></block>
+        <block type="procedures_defnoreturn">
+            <mutation>
+            <arg name="圖片路徑" varid="eFt;pR*Y6h6c%#w%48iP"></arg>
+            </mutation>
+            <field name="NAME">等待圖片出現</field>
+            <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木
+來使用此函式積木</comment>
+            <statement name="STACK">
+            <block type="while_true">
+                <statement name="DO">
+                <block type="get_picture_pos_ver200419">
+                    <field name="pos_x">圖片座標X</field>
+                    <field name="pos_y">圖片座標Y</field>
+                    <statement name="get_picture_pos_setting">
+                    <block type="image_filepath">
+                        <value name="NAME">
+                        <block type="variables_get">
+                            <field name="VAR">圖片路徑</field>
+                        </block>
+                        </value>
+                        <next>
+                        <block type="image_search_area">
+                            <value name="X">
+                            <block type="math_number">
+                                <field name="NUM">0</field>
+                            </block>
+                            </value>
+                            <value name="Y">
+                            <block type="math_number">
+                                <field name="NUM">0</field>
+                            </block>
+                            </value>
+                            <value name="W">
+                            <block type="system_info_num">
+                                <field name="NAME">screen_width</field>
+                            </block>
+                            </value>
+                            <value name="H">
+                            <block type="system_info_num">
+                                <field name="NAME">screen_height</field>
+                            </block>
+                            </value>
+                        </block>
+                        </next>
+                    </block>
+                    </statement>
+                    <statement name="DO">
+                    <block type="controls_flow_statements">
+                        <field name="FLOW">BREAK</field>
+                    </block>
+                    </statement>
+                    <statement name="ELSE_DO">
+                    <block type="controls_flow_statements">
+                        <field name="FLOW">CONTINUE</field>
+                    </block>
+                    </statement>
+                </block>
+                </statement>
+            </block>
+            </statement>
+        </block>
+        <block type="get_picture_pos_ver200419"></block>
     </category>
 
     <category name="文字" colour="#5BA58C">
@@ -1560,8 +1671,8 @@
     <sep></sep>
 
     <category name="系統資訊" colour="#956D49">
-        <block type="user_name"></block>
-        <block type="computer_name"></block>
+        <block type="system_info_str"></block>
+        <block type="system_info_num"></block>
         <block type="win_get_active_title" id="R.^alvnwVH62{ocVJB*2" x="50" y="119">
             <value name="NAME">
             <block type="variables_get" id="Ntu}npMscT9(NC%1vI^]">

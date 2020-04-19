@@ -525,10 +525,75 @@ Blockly.Blocks['while_true'] = {
         this.appendDummyInput()
             .appendField("無限循環");
         this.appendStatementInput("DO")
-            .setCheck(null);
+            .setCheck("action");
         this.setPreviousStatement(true, "action");
         this.setNextStatement(true, "action");
         this.setColour(120);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['image_filepath'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["filepath", "String"])
+            .appendField("圖片來源");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, "get_picture_pos_setting");
+        this.setNextStatement(true, "get_picture_pos_setting");
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['image_search_area'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("偵測範圍 X:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y:");
+        this.appendValueInput("W")
+            .setCheck("Number")
+            .appendField("寬:");
+        this.appendValueInput("H")
+            .setCheck("Number")
+            .appendField("高:");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_picture_pos_setting");
+        this.setNextStatement(true, "get_picture_pos_setting");
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['get_picture_pos_ver200419'] = {
+    init: function() {
+        this.appendStatementInput("get_picture_pos_setting")
+            .setCheck("get_picture_pos_setting")
+            .appendField("偵測圖片");
+        this.appendDummyInput()
+            .appendField("將獲得的座標紀錄至變數(")
+            .appendField(new Blockly.FieldVariable("圖片座標X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片座標Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到圖片時");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour("#DB7093");
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -968,6 +1033,8 @@ Blockly.Blocks['user_name'] = {
         this.setHelpUrl("");
     }
 };
+
+
 
 Blockly.Blocks['set_clipboard'] = {
     init: function() {
@@ -1585,3 +1652,33 @@ Blockly.Blocks['traytip'] = {
         this.setHelpUrl("");
     }
 }
+
+Blockly.Blocks['system_info_num'] = {
+    init: function() {
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_CENTRE)
+            .appendField(new Blockly.FieldDropdown([
+                ["本螢幕寬度", "screen_width"],
+                ["本螢幕高度", "screen_height"],
+            ]), "NAME");
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['system_info_str'] = {
+    init: function() {
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_CENTRE)
+            .appendField(new Blockly.FieldDropdown([
+                ["本用戶名稱", "user_name"],
+                ["本電腦名稱", "computer_name"],
+            ]), "NAME");
+        this.setOutput(true, "Number");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};

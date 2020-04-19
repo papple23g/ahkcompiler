@@ -9,6 +9,13 @@ TAB_SPACE="    "  #縮排
 
 #region 腳本函數字典
 FUNC_DICT={
+    #螢幕寬高
+    'screen_width':{
+        'pre':'SysGet, VirtualWidth, 78\n'
+    },
+    'screen_height':{
+        'pre':'SysGet, VirtualHeight, 79\n'
+    },
     #region ArrayStr
     'ArrayStr':{
         'end':
@@ -45,7 +52,7 @@ ArrayStr(arr) {
 }
 '''
     },
-    #region ArrayStr
+    #endregion ArrayStr
     'SetBrightness':{
         'pre':"__vBright := 100\n",
         'end':"\n".join([
@@ -2940,6 +2947,8 @@ def XmlToAHK(ev):
             'math_mod',
             'lists_create_with',
             'list_str',
+            'system_info_str',
+            'system_info_num',
         ]
         #print('xml>ahk')
         # print('XmlToAHK',"ev.type:",ev.type)
@@ -3875,6 +3884,70 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 偵測圖片Blockly
 
+        ###
+        elif block_elt.attrs['type']=="get_picture_pos_ver200419":
+            #獲取偵測圖片設定區塊
+            statement_setting_elt=FindCurrent(block_elt,'statement[name="get_picture_pos_setting"]')
+            statement_setting_elt_comment=Comment(statement_setting_elt,get_all_comment=True)
+            com_str+=statement_setting_elt_comment
+
+            #獲取圖片路徑
+            block_imgFilepath_elt=statement_setting_elt.select_one('block[type="image_filepath"]')
+            value_imgFilepath_elt=FindCurrent(block_imgFilepath_elt,'value[name="NAME"]') if block_imgFilepath_elt else None
+            value_imgFilepath_str,value_imgFilepath_comment=AHK_value(value_imgFilepath_elt) if value_imgFilepath_elt else ("","")
+
+            #獲取搜尋範圍
+            block_image_search_area_elt=statement_setting_elt.select_one('block[type="image_search_area"]')
+            #獲取搜尋範圍X
+            value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
+            value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            #獲取搜尋範圍Y
+            value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
+            value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            #獲取搜尋範圍X
+            value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
+            value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
+            if not value_w_elt:func_dict_key_set.update(['screen_width'])
+            #獲取搜尋範圍X
+            value_h_elt=FindCurrent(block_image_search_area_elt,'value[name="H"]') if block_image_search_area_elt else None
+            value_h_elt_str,value_h_elt_comment=AHK_value(value_h_elt) if value_h_elt else ("0","")
+            if not value_h_elt:func_dict_key_set.update(['screen_height'])
+            
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            statement_do_str=statement_do_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            statement_elseDo_str=statement_elseDo_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            com_str+='\n'.join([
+                f'__ImageFilePath:={value_imgFilepath_str}',
+                'if FileExist(__ImageFilePath){',
+                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
+                TAB_SPACE+'CoordMode Pixel',
+                TAB_SPACE+';搜尋圖片',
+                TAB_SPACE+f'ImageSearch, __FoundX, __FoundY, {value_x_elt_str}, {value_y_elt_str}, {value_w_elt_str}, {value_h_elt_str},%__ImageFilePath%',
+                TAB_SPACE+'CoordMode Mouse',
+                TAB_SPACE+';獲取圖片中心座標',
+                TAB_SPACE+f'{posXVar_str}:=__FoundX + __img_w/2',
+                TAB_SPACE+f'{posYVar_str}:=__FoundY + __img_h/2',
+                TAB_SPACE+'if (ErrorLevel=0) {',
+                TAB_SPACE+f'{statement_do_str}'+''+'} else {',
+                TAB_SPACE+f'{statement_elseDo_str}'+''+'}',
+                '} else {',
+                TAB_SPACE+'Msgbox % "圖片路徑不存在"',
+                '}\n',
+            ])
+
+
         elif block_elt.attrs['type']=="get_picture_pos_ver200406":
             #獲取設值blockly
             value_imgFilepath_elt=FindCurrent(block_elt,'value[name="image_filepath"]')
@@ -4077,6 +4150,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取執行內容
             statement_elt=FindCurrent(block_elt,'statement[name="STACK"]')
             statement_str=AHK_statement(statement_elt)
+            #若函式裡有使用螢幕寬高的機木，就補充螢幕寬高的全域宣告
+            if block_elt.select_one('block[type="system_info_num"]'):
+                statement_str=f'{TAB_SPACE}global VirtualHeight,VirtualWidth\n'+statement_str
             #輸出程式碼
             com_str+=f'{function_name_str}({arg_str}){{\n{statement_str}}}\n'
 
@@ -4099,6 +4175,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             value_return_str,value_return_comment=AHK_value(value_return_elt)
             value_return_str=TAB_SPACE + f'Return {value_return_str}\n'
             com_str+=value_return_comment
+            #若函式裡有使用螢幕寬高的機木，就補充螢幕寬高的全域宣告
+            if block_elt.select_one('block[type="system_info_num"]'):
+                statement_str=f'{TAB_SPACE}global VirtualHeight,VirtualWidth\n'+statement_str
             #輸出程式碼
             com_str+=f'{function_name_str}({arg_str}){{\n{statement_str}{value_return_str}}}\n'
         
@@ -4517,7 +4596,31 @@ return
 
         #endregion 選取文字後
 
+
+
         #region 系統資訊Blockly
+
+        elif block_elt.attrs['type']=="system_info_str":
+            #獲取選取名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #若選擇本用戶名稱
+            if field_elt.text=="user_name":
+                com_str+="A_UserName"
+            elif field_elt.text=="computer_name":
+                com_str+="A_ComputerName"
+
+        elif block_elt.attrs['type']=="system_info_num":
+            #獲取選取名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #若選擇本用戶名稱
+            if field_elt.text=="screen_width":
+                com_str+="VirtualWidth"
+                func_dict_key_set.update(['screen_width'])
+            elif field_elt.text=="screen_height":
+                com_str+="VirtualHeight"
+                func_dict_key_set.update(['screen_height'])
+
+
         elif block_elt.attrs['type']=="computer_name":
             com_str+="A_ComputerName"
 
