@@ -574,9 +574,6 @@
     </category>
 
     <category name="偵測圖片" colour="#DB7093">
-        <block type="image_filepath"></block>
-        <block type="image_search_area"></block>
-
         <block type="hotkey_execute" id="HkwcUnN5parh[{Y/CYLZ" x="5" y="155">
             <comment pinned="false" h="46" w="327">這個積木放這裡，方便大家擷取畫面圖片:)</comment>
             <value name="NAME">
@@ -680,8 +677,17 @@
             <statement name="get_picture_pos_setting">
             <block type="image_filepath">
                 <value name="NAME">
-                <block type="filepath">
-                    <field name="NAME">C:\*.png</field>
+                <block type="path_combined">
+                    <value name="main_path">
+                    <block type="built_in_dirpath">
+                        <field name="NAME">desktop</field>
+                    </block>
+                    </value>
+                    <value name="sub_path">
+                    <block type="filepath">
+                        <field name="NAME">*.png</field>
+                    </block>
+                    </value>
                 </block>
                 </value>
                 <next>
@@ -805,7 +811,43 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200419"></block>
+        <block type="get_picture_pos_ver200419">
+            <field name="pos_x">圖片座標X</field>
+            <field name="pos_y">圖片座標Y</field>
+            <statement name="get_picture_pos_setting">
+            <block type="image_filepath">
+                <value name="NAME">
+                <block type="filepath">
+                    <field name="NAME">C:\*.png</field>
+                </block>
+                </value>
+                <next>
+                <block type="image_search_area">
+                    <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="W">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_width</field>
+                    </block>
+                    </value>
+                    <value name="H">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_height</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
     </category>
 
     <category name="文字" colour="#5BA58C">
