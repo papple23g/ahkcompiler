@@ -2893,7 +2893,7 @@ def XmlToBlockly(ev):
 #定義動作:顯示blocks的xml (必須等待Block載入完成)
 def BlocklyToXml(ev):
     #啟用複製和下載AHK檔案按鈕
-    for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
+    for btn_elt in [elt for elt in doc['div_copy_ahkfile_btns_area'].select('button') if elt.id!='btn_dl64exe']:
         btn_elt.disabled=False
         btn_elt.classList.remove('disabled_button')
     #print('block>xml')
@@ -5129,7 +5129,7 @@ def DownloadAhkExe(ev):
 div_showAhkAreaBtns_elt=DIV(id="div_copy_ahkfile_btns_area")
 div_showAhkAreaBtns_elt<=BUTTON("複製語法").bind("click",CopyAhkCode)
 div_showAhkAreaBtns_elt<=BUTTON("下載.ahk檔案").bind("click",DownloadAhkCode)
-div_showAhkAreaBtns_elt<=BUTTON("下載.exe檔(64-bit)",style={'color':'#000094'},id="btn_dl64exe").bind("click",DownloadAhkExe)
+div_showAhkAreaBtns_elt<=BUTTON("下載.exe檔(維修中)",style={'color':'#000094'},id="btn_dl64exe").bind("click",DownloadAhkExe)
 
 div_showAhkAreaBtns_elt<=SPAN("←測試功能 (")+A("檢測到病毒?有何風險?",href="https://hackmd.io/hcAlG6oeQNO1jpILguR5hw?view")+SPAN(")")
 
