@@ -2893,7 +2893,7 @@ def XmlToBlockly(ev):
 #定義動作:顯示blocks的xml (必須等待Block載入完成)
 def BlocklyToXml(ev):
     #啟用複製和下載AHK檔案按鈕
-    for btn_elt in [elt for elt in doc['div_copy_ahkfile_btns_area'].select('button'):
+    for btn_elt in doc['div_copy_ahkfile_btns_area'].select('button'):
         btn_elt.disabled=False
         btn_elt.classList.remove('disabled_button')
     #print('block>xml')
