@@ -4408,6 +4408,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 右鍵清單Blockly
         elif block_elt.attrs['type']=="right_click_menu":
+            #預設選單名稱紀錄串列
+            item_name_with_sapce_str_list=[]
+
             MyMenu_str=f'MyMenu_{id(block_elt)}'
             menu_myMenu_add_str=""
             label_str=""
@@ -4426,13 +4429,21 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             
             for block_item_elt in block_item_elt_list:
 
+
                 if block_item_elt.attrs['type']=="right_click_menu_item":
                     #獲取項目名稱
                     field_itemName_elt=FindCurrent(block_item_elt,'field[name="item_name"]')
                     item_name_raw_str=field_itemName_elt.text
-                    #轉換變數名稱為全形
+                    #製作選單項目名稱:轉換變數名稱為全形(排除空白)
                     item_name_with_sapce_str=ToFullWidthString(item_name_raw_str,excluded_str_list=[' '])
                     item_name_without_sapce_str=ToFullWidthString(item_name_raw_str)
+                    #若單項目名稱重複，就增加一個點(再重複就累加) #註:重複的選單名稱會使AHK失效
+                    while item_name_with_sapce_str in item_name_with_sapce_str_list:
+                        item_name_with_sapce_str=item_name_with_sapce_str + '.'
+                    #紀錄選單名稱
+                    item_name_with_sapce_str_list.append(item_name_with_sapce_str)
+                    print(item_name_with_sapce_str_list)
+
                     menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_with_sapce_str},{item_name_without_sapce_str}_{i_item}_{id(block_elt)}\n"
                     #獲取執行式
                     statement_do_elt=FindCurrent(block_item_elt,'statement[name="DO"]')
@@ -4453,6 +4464,7 @@ CoordMode, Mouse, Screen
 '''+ menu_myMenu_add_str +'''
 MouseGetPos,MX,MY
 Menu,'''+MyMenu_str+''',Show,% MX,% MY
+Menu,'''+MyMenu_str+''',DeleteAll
 return
 
 '''+ label_str +'''}\n'''
