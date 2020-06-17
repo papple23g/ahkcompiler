@@ -5080,7 +5080,7 @@ sec_int=None
 #定義動作:轉譯成AHK.exe檔並下載
 def DownloadAhkExe(ev):
     global countdown_timer,sec_int
-    host="https://88c7471d.ngrok.io"
+    host="https://bf1da9be8e3e.ngrok.io"
     btn_elt=ev.currentTarget
 
     #停用按鍵
