@@ -3546,7 +3546,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             if field_elt:
                 built_in_program_dict={
                     "notepad":'"Notepad.exe"',
-                    "mspaint":' windir . "\system32\mspaint.exe"',
+                    "mspaint":' '"mspaint.exe"',
                     "calc":' windir . "\system32\calc.exe"',
                     "SnippingTool":' windir . "\system32\SnippingTool.exe"',
                     "cmd":' windir . "\system32\cmd.exe"',
