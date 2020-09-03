@@ -2858,6 +2858,8 @@ def FormatXML(xml_str):
 
 #定義動作:尋找該層下的選擇器
 def FindCurrent(elt,css_selector,get_one=True):
+    if not elt:
+        return None
     com_elt_list=[elt_child for elt_child in elt.select(css_selector) if elt_child.parent==elt]
     if get_one:
         if com_elt_list:
@@ -3494,17 +3496,17 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #目錄、檔案、網頁
         elif block_elt.attrs['type'] in ["filepath","dirpath","webpage"]:
-            filed_elt=FindCurrent(block_elt,'field[name="NAME"]')
-            filed_str=filed_elt.text
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            field_str=field_elt.text
             #若為網頁，則需要替換特殊字元
             if block_elt.attrs['type']=="webpage":
-                filed_str=filed_str.replace("%","`%").replace(",","`,")
+                field_str=field_str.replace("%","`%").replace(",","`,")
             #若路徑有空白，就使用三個引號夾起
-            if " " in filed_str:
-                com_str+=f'"""{filed_str}"""'
+            if " " in field_str:
+                com_str+=f'"""{field_str}"""'
             #若路徑沒有空白，就使用一個引號夾起
             else:
-                com_str+=f'"{filed_str}"'
+                com_str+=f'"{field_str}"'
         
         #文字
         elif block_elt.attrs['type']=="text":
@@ -3781,9 +3783,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             if next_sendKey_elt:
                 next_sendKey_elt.remove()
             #獲取一般連續鍵
-            filed_elt=FindCurrent(block_elt,'field')
+            field_elt=FindCurrent(block_elt,'field')
             
-            com_str+=f'Send, {filed_elt.text}\n'
+            com_str+=f'Send, {field_elt.text}\n'
 
         elif block_elt.attrs['type']=="send_key_times":
             #移除next元素(使用虛擬DIV容器)
@@ -3888,7 +3890,86 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 偵測圖片Blockly
 
-        ###
+        #偵測像素
+        elif block_elt.attrs['type']=="get_pixel_pos":
+            #獲取偵測圖片設定區塊
+            statement_setting_elt=FindCurrent(block_elt,'statement[name="get_pixel_pos_setting"]')
+            statement_setting_elt_comment=Comment(statement_setting_elt,get_all_comment=True)
+            com_str+=statement_setting_elt_comment
+
+            #獲取像素顏色(RGB)
+            block_pixelRGBColor_elt=statement_setting_elt.select_one('block[type="pixel_rgb_color"]')
+            #獲取像素顏色(R)
+            value_R_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_R_elt_str,value_R_elt_comment=AHK_value(value_R_elt) if value_R_elt else ('0','')
+            value_R_elt_int=int(value_R_elt_str)
+            value_R_elt_int=max(0,min(value_R_elt_int,255))
+            #獲取像素顏色(G)
+            value_G_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_G_elt_str,value_G_elt_comment=AHK_value(value_G_elt) if value_G_elt else ('0','')
+            value_G_elt_int=int(value_G_elt_str)
+            value_G_elt_int=max(0,min(value_G_elt_int,255))
+            #獲取像素顏色(B)
+            value_B_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_B_elt_str,value_B_elt_comment=AHK_value(value_B_elt) if value_B_elt else ('0','')
+            value_B_elt_int=int(value_B_elt_str)
+            value_B_elt_int=max(0,min(value_B_elt_int,255))
+            #根據RGB像素顏色產生 ColorID
+            value_RGB_elt_str=f'{value_R_elt_int:02x}{value_G_elt_int:02x}{value_B_elt_int:02x}'
+
+            #獲取像素顏色(ColorID)
+            block_pixelColorId_elt=statement_setting_elt.select_one('block[type="pixel_color_id"]')
+            field_colorId_elt=FindCurrent(block_pixelColorId_elt,'field[name="ColorID"]')
+            field_colorId_str=field_colorId_elt.text if field_colorId_elt else value_RGB_elt_str if block_pixelRGBColor_elt else "FFFFFF"
+
+            #檢查偵測像素積木內是否有指定像素顏色，沒有的話就跳出警示訊息，並預設使用白色(FFFFFF)進行偵測
+            if (not block_pixelColorId_elt) and (not block_pixelRGBColor_elt):
+                alert("偵測像素積木內沒有指定像素顏色\n請填入RGB積木或色碼積木")
+
+            #獲取搜尋範圍
+            block_image_search_area_elt=statement_setting_elt.select_one('block[type="pixel_search_area"]')
+            #獲取搜尋範圍X
+            value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
+            value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            #獲取搜尋範圍Y
+            value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
+            value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            #獲取搜尋範圍W
+            value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
+            value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
+            if not value_w_elt:func_dict_key_set.update(['screen_width'])
+            #獲取搜尋範圍H
+            value_h_elt=FindCurrent(block_image_search_area_elt,'value[name="H"]') if block_image_search_area_elt else None
+            value_h_elt_str,value_h_elt_comment=AHK_value(value_h_elt) if value_h_elt else ("0","")
+            if not value_h_elt:func_dict_key_set.update(['screen_height'])
+            
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            # statement_elseDo_str=statement_elseDo_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            com_str+='\n'.join([
+                'CoordMode Pixel',
+                ';搜尋像素點',
+                f'PixelSearch, __FoundX, __FoundY, {value_x_elt_str}, {value_y_elt_str}, {value_w_elt_str}, {value_h_elt_str}, 0x{field_colorId_str},,Fast RGB',
+                'CoordMode Mouse',
+                ';獲取像素點座標',
+                f'{posXVar_str}:=__FoundX',
+                f'{posYVar_str}:=__FoundY',
+                'if (ErrorLevel=0) {',
+                f'{statement_do_str}'+''+'} else {',
+                f'{statement_elseDo_str}'+'}\n',
+            ])
+
+        #偵測圖片
         elif block_elt.attrs['type']=="get_picture_pos_ver200419":
             #獲取偵測圖片設定區塊
             statement_setting_elt=FindCurrent(block_elt,'statement[name="get_picture_pos_setting"]')
@@ -5082,7 +5163,7 @@ def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
     ##
-    host="https://5df6c443286d.ngrok.io"
+    host="https://9c2267d68009.ngrok.io"
     btn_elt=ev.currentTarget
 
     #停用按鍵
@@ -5180,7 +5261,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.11.0" ##
+VERSION="1.11.1" ##
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})

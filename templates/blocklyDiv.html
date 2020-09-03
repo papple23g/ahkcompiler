@@ -35,6 +35,22 @@
     <category name="基本" colour="#818181">
         <block type="hotkey_execute">
             <value name="NAME">
+            <block type="special_key">
+                <field name="special_key">F8</field>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="open">
+                <value name="NAME">
+                <block type="built_in_program">
+                    <field name="NAME">notepad</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="hotkey_execute">
+            <value name="NAME">
                 <block type="function_key">
                     <field name="function_key">Ctrl</field>
                     <value name="function_key">
@@ -129,6 +145,13 @@
     </category>
 
     <category name="熱鍵" colour="#0000CD">
+        <block type="hotkey_execute">
+            <value name="NAME">
+            <block type="special_key">
+                <field name="special_key">F8</field>
+            </block>
+            </value>
+        </block>
         <block type="hotkey_execute" id="ijf~}`xQflr[cT,i!IuZ" x="73" y="34">
             <value name="NAME">
             <block type="function_key" id="]{!*{~gp;ZCY?1fojJE/">
@@ -750,6 +773,43 @@
             </block>
             </statement>
         </block>
+        <block type="get_picture_pos_ver200419">
+            <field name="pos_x">圖片座標X</field>
+            <field name="pos_y">圖片座標Y</field>
+            <statement name="get_picture_pos_setting">
+            <block type="image_filepath">
+                <value name="NAME">
+                <block type="filepath">
+                    <field name="NAME">C:\*.png</field>
+                </block>
+                </value>
+                <next>
+                <block type="image_search_area">
+                    <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="W">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_width</field>
+                    </block>
+                    </value>
+                    <value name="H">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_height</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
         <block type="procedures_defnoreturn">
             <mutation>
             <arg name="圖片路徑" varid="eFt;pR*Y6h6c%#w%48iP"></arg>
@@ -811,18 +871,14 @@
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200419">
-            <field name="pos_x">圖片座標X</field>
-            <field name="pos_y">圖片座標Y</field>
-            <statement name="get_picture_pos_setting">
-            <block type="image_filepath">
-                <value name="NAME">
-                <block type="filepath">
-                    <field name="NAME">C:\*.png</field>
-                </block>
-                </value>
+        <block type="get_pixel_pos">
+            <field name="pos_x">圖片像素X</field>
+            <field name="pos_y">圖片像素Y</field>
+            <statement name="get_pixel_pos_setting">
+            <block type="pixel_color_id">
+                <field name="ColorID">FFFFFF</field>
                 <next>
-                <block type="image_search_area">
+                <block type="pixel_search_area">
                     <value name="X">
                     <block type="math_number">
                         <field name="NUM">0</field>
@@ -847,6 +903,165 @@
                 </next>
             </block>
             </statement>
+            <statement name="DO">
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="text_join">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                    <block type="text">
+                        <field name="TEXT">圖片座標為: </field>
+                    </block>
+                    </value>
+                    <value name="ADD1">
+                    <block type="variables_get">
+                        <field name="VAR">圖片像素X</field>
+                    </block>
+                    </value>
+                    <value name="ADD2">
+                    <block type="text">
+                        <field name="TEXT">, </field>
+                    </block>
+                    </value>
+                    <value name="ADD3">
+                    <block type="variables_get">
+                        <field name="VAR">圖片像素Y</field>
+                    </block>
+                    </value>
+                </block>
+                </value>
+            </block>
+            </statement>
+            <statement name="ELSE_DO">
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="text">
+                    <field name="TEXT">像素未找到</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="get_pixel_pos">
+            <field name="pos_x">圖片像素X</field>
+            <field name="pos_y">圖片像素Y</field>
+            <statement name="get_pixel_pos_setting">
+            <block type="pixel_rgb_color">
+                <value name="R">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+                </value>
+                <value name="G">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+                </value>
+                <value name="B">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+                </value>
+                <next>
+                <block type="pixel_search_area">
+                    <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                    </value>
+                    <value name="W">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_width</field>
+                    </block>
+                    </value>
+                    <value name="H">
+                    <block type="system_info_num">
+                        <field name="NAME">screen_height</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+            <statement name="DO">
+            <block type="coord_mode">
+                <field name="NAME">screen</field>
+                <next>
+                <block type="click_x_y">
+                    <value name="X">
+                    <block type="variables_get">
+                        <field name="VAR">圖片像素X</field>
+                    </block>
+                    </value>
+                    <value name="Y">
+                    <block type="variables_get">
+                        <field name="VAR">圖片像素Y</field>
+                    </block>
+                    </value>
+                    <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                    </value>
+                </block>
+                </next>
+            </block>
+            </statement>
+            <statement name="ELSE_DO">
+            <block type="msgbox">
+                <value name="NAME">
+                <block type="text">
+                    <field name="TEXT">像素未找到</field>
+                </block>
+                </value>
+            </block>
+            </statement>
+        </block>
+        <block type="pixel_rgb_color">
+            <value name="R">
+            <block type="math_number">
+                <field name="NUM">255</field>
+            </block>
+            </value>
+            <value name="G">
+            <block type="math_number">
+                <field name="NUM">255</field>
+            </block>
+            </value>
+            <value name="B">
+            <block type="math_number">
+                <field name="NUM">255</field>
+            </block>
+            </value>
+        </block>
+        <block type="pixel_color_id">
+        </block>
+        <block type="pixel_search_area">
+            <value name="X">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            </value>
+            <value name="Y">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            </value>
+            <value name="W">
+            <block type="system_info_num">
+                <field name="NAME">screen_width</field>
+            </block>
+            </value>
+            <value name="H">
+            <block type="system_info_num">
+                <field name="NAME">screen_height</field>
+            </block>
+            </value>
         </block>
     </category>
 

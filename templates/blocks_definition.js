@@ -571,6 +571,93 @@ Blockly.Blocks['image_search_area'] = {
     }
 };
 
+Blockly.Blocks['pixel_search_area'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("偵測範圍 X:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y:");
+        this.appendValueInput("W")
+            .setCheck("Number")
+            .appendField("寬:");
+        this.appendValueInput("H")
+            .setCheck("Number")
+            .appendField("高:");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['pixel_color_id'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("色碼 #")
+            .appendField(new Blockly.FieldTextInput("FFFFFF"), "ColorID");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['pixel_rgb_color'] = {
+    init: function() {
+        this.appendValueInput("R")
+            .setCheck("Number")
+            .appendField("R");
+        this.appendValueInput("G")
+            .setCheck("Number")
+            .appendField("G");
+        this.appendValueInput("B")
+            .setCheck("Number")
+            .appendField("B");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['get_pixel_pos'] = {
+    init: function() {
+        this.appendStatementInput("get_pixel_pos_setting")
+            .setCheck("get_pixel_pos_setting")
+            .appendField("偵測像素");
+        this.appendDummyInput()
+            .appendField("將獲得的座標紀錄至變數(")
+            .appendField(new Blockly.FieldVariable("圖片像素X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片像素Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到像素時");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['get_picture_pos_ver200419'] = {
     init: function() {
         this.appendStatementInput("get_picture_pos_setting")
