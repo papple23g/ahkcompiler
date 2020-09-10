@@ -5163,7 +5163,7 @@ def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
     ##
-    host="https://9c2267d68009.ngrok.io"
+    host="https://ahkcompiler.serverless.social"
     btn_elt=ev.currentTarget
 
     #停用按鍵
