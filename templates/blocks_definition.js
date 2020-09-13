@@ -552,16 +552,16 @@ Blockly.Blocks['image_search_area'] = {
     init: function() {
         this.appendValueInput("X")
             .setCheck("Number")
-            .appendField("偵測範圍 X:");
+            .appendField("偵測範圍 X1:");
         this.appendValueInput("Y")
             .setCheck("Number")
-            .appendField("Y:");
+            .appendField("Y1:");
         this.appendValueInput("W")
             .setCheck("Number")
-            .appendField("寬:");
+            .appendField("X2:");
         this.appendValueInput("H")
             .setCheck("Number")
-            .appendField("高:");
+            .appendField("Y2:");
         this.setInputsInline(true);
         this.setPreviousStatement(true, "get_picture_pos_setting");
         this.setNextStatement(true, "get_picture_pos_setting");
