@@ -4014,8 +4014,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             statement_elseDo_str=statement_elseDo_str.replace("\n","\n"+TAB_SPACE) #二次縮排
             com_str+='\n'.join([
                 f'__ImageFilePath:={value_imgFilepath_str}',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
-                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+'CoordMode Pixel',
                 TAB_SPACE+';搜尋圖片',
@@ -4051,8 +4051,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
             com_str+='\n'.join([
                 f'__ImageFilePath:={value_imgFilepath_str}',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
-                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
                 TAB_SPACE+'SysGet, VirtualWidth, 78',
@@ -4092,8 +4092,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
             com_str+='\n'.join([
                 f'__ImageFilePath:="{img_filepath_str}"',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
-                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
                 TAB_SPACE+'SysGet, VirtualWidth, 78',
