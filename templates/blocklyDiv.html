@@ -621,110 +621,101 @@
         </block>
         <block type="hotkey_execute">
             <value name="NAME">
-              <block type="function_key">
+            <block type="function_key">
                 <field name="function_key">Ctrl</field>
                 <value name="function_key">
-                  <block type="function_key">
+                <block type="function_key">
                     <field name="function_key">Shift</field>
                     <value name="function_key">
-                      <block type="normal_key">
+                    <block type="normal_key">
                         <field name="normal_key">A</field>
-                      </block>
+                    </block>
                     </value>
-                  </block>
+                </block>
                 </value>
-              </block>
+            </block>
             </value>
             <statement name="DO">
-              <block type="open">
-                <value name="NAME">
-                  <block type="webpage">
-                    <field name="NAME">https://www.autohotkey.com/</field>
-                  </block>
-                </value>
-                <next>
-                  <block type="get_picture_pos_ver200419">
-                    <field name="pos_x">圖片座標X</field>
-                    <field name="pos_y">圖片座標Y</field>
-                    <statement name="get_picture_pos_setting">
-                      <block type="image_filepath">
-                        <value name="NAME">
-                          <block type="filepath">
-                            <field name="NAME">C:\*.png</field>
-                          </block>
-                        </value>
-                        <next>
-                          <block type="image_search_area">
-                            <comment pinned="true" h="147" w="386">設定偵測範圍的方法 :
+            <block type="get_picture_pos_ver200419">
+                <field name="pos_x">圖片座標X</field>
+                <field name="pos_y">圖片座標Y</field>
+                <statement name="get_picture_pos_setting">
+                <block type="image_filepath">
+                    <value name="NAME">
+                    <block type="filepath">
+                        <field name="NAME">C:\*.png</field>
+                    </block>
+                    </value>
+                    <next>
+                    <block type="image_search_area">
+                        <comment pinned="false" h="147" w="386">設定偵測範圍的方法 :
 對著執行中的AHK圖示按右鍵＞選擇Window Spy
 可以看到Screen那行顯示滑鼠的座標
 偵測區域的左上角座標即為 (X1,Y1)
 偵測區域的右下角座標即為 (X2,Y2)</comment>
-                            <value name="X">
-                              <block type="math_number">
-                                <field name="NUM">0</field>
-                              </block>
-                            </value>
-                            <value name="Y">
-                              <block type="math_number">
-                                <field name="NUM">0</field>
-                              </block>
-                            </value>
-                            <value name="W">
-                              <block type="system_info_num">
-                                <field name="NAME">screen_width</field>
-                              </block>
-                            </value>
-                            <value name="H">
-                              <block type="system_info_num">
-                                <field name="NAME">screen_height</field>
-                              </block>
-                            </value>
-                          </block>
-                        </next>
-                      </block>
-                    </statement>
-                    <statement name="DO">
-                      <block type="msgbox">
-                        <value name="NAME">
-                          <block type="text_join">
-                            <mutation items="4"></mutation>
-                            <value name="ADD0">
-                              <block type="text">
-                                <field name="TEXT">圖片座標為: </field>
-                              </block>
-                            </value>
-                            <value name="ADD1">
-                              <block type="variables_get">
-                                <field name="VAR">圖片座標X</field>
-                              </block>
-                            </value>
-                            <value name="ADD2">
-                              <block type="text">
-                                <field name="TEXT">, </field>
-                              </block>
-                            </value>
-                            <value name="ADD3">
-                              <block type="variables_get">
-                                <field name="VAR">圖片座標Y</field>
-                              </block>
-                            </value>
-                          </block>
+                        <value name="X">
+                        <block type="math_number">
+                            <field name="NUM">0</field>
+                        </block>
                         </value>
-                      </block>
-                    </statement>
-                    <statement name="ELSE_DO">
-                      <block type="msgbox">
-                        <value name="NAME">
-                          <block type="text">
-                            <field name="TEXT">圖片未找到</field>
-                          </block>
+                        <value name="Y">
+                        <block type="math_number">
+                            <field name="NUM">0</field>
+                        </block>
                         </value>
-                      </block>
-                    </statement>
-                  </block>
-                </next>
-              </block>
+                        <value name="W">
+                        <block type="system_info_num">
+                            <field name="NAME">screen_width</field>
+                        </block>
+                        </value>
+                        <value name="H">
+                        <block type="system_info_num">
+                            <field name="NAME">screen_height</field>
+                        </block>
+                        </value>
+                    </block>
+                    </next>
+                </block>
+                </statement>
+                <statement name="DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                    <block type="text_join">
+                        <mutation items="4"></mutation>
+                        <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">圖片座標為: </field>
+                        </block>
+                        </value>
+                        <value name="ADD1">
+                        <block type="variables_get">
+                            <field name="VAR">圖片座標X</field>
+                        </block>
+                        </value>
+                        <value name="ADD2">
+                        <block type="text">
+                            <field name="TEXT">, </field>
+                        </block>
+                        </value>
+                        <value name="ADD3">
+                        <block type="variables_get">
+                            <field name="VAR">圖片座標Y</field>
+                        </block>
+                        </value>
+                    </block>
+                    </value>
+                </block>
+                </statement>
+                <statement name="ELSE_DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                    <block type="text">
+                        <field name="TEXT">圖片未找到</field>
+                    </block>
+                    </value>
+                </block>
+                </statement>
+            </block>
             </statement>
         </block>
         <block type="get_picture_pos_ver200419">
