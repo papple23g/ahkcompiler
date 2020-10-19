@@ -849,6 +849,37 @@ Blockly.Blocks['key_pressing'] = {
     }
 };
 
+Blockly.Blocks['key_down'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("按著");
+        this.appendDummyInput()
+            .appendField("不放");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['key_up'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("釋放");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
 
 Blockly.Blocks['key_wait'] = {
     init: function() {

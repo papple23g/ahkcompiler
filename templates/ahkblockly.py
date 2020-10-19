@@ -3841,6 +3841,21 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #輸出程式碼
             com_str=f'Send {{{value_str} Down}}\n{statement_str}Send {{{value_str} Up}}\n'
 
+        #按著功能鍵
+        elif block_elt.attrs['type'] in ["key_down","key_up"]:
+            # print(1)
+            #獲取功能鍵
+            value_elt=FindCurrent(block_elt,'value',get_one=True)
+            # print(2)
+            value_str,value_comment=AHK_value(value_elt)
+            # print(3)
+            com_str+=value_comment
+            # print(value_str)
+            # print(block_elt.attrs['type'])
+            # print(block_elt.attrs['type'].replace('key_').upper())
+            
+            #輸出程式碼
+            com_str+=f"Send {{{value_str} {block_elt.attrs['type'].replace('key_','').upper()}}}\n"
 
 
 

@@ -405,6 +405,13 @@
     <category name="模擬按鍵" colour="#D75BF0">
         <block type="send_key">
             <value name="NAME">
+            <block type="normal_key">
+                <field name="normal_key">A</field>
+            </block>
+            </value>
+        </block>
+        <block type="send_key">
+            <value name="NAME">
                 <block type="function_key">
                     <field name="function_key">Ctrl</field>
                     <value name="function_key">
@@ -442,6 +449,38 @@
         <block type="special_key">
             <field name="special_key">Enter</field>
         </block>
+        <block type="hotkey_execute">
+            <value name="NAME">
+            <block type="special_key">
+                <field name="special_key">F8</field>
+            </block>
+            </value>
+            <statement name="DO">
+            <block type="key_down">
+                <value name="NAME">
+                <block type="special_key">
+                    <field name="special_key">Shift</field>
+                </block>
+                </value>
+                <next>
+                <block type="send_keys">
+                    <field name="NAME">abc</field>
+                    <next>
+                    <block type="key_up">
+                        <value name="NAME">
+                        <block type="special_key">
+                            <field name="special_key">Shift</field>
+                        </block>
+                        </value>
+                    </block>
+                    </next>
+                </block>
+                </next>
+            </block>
+            </statement>
+        </block>
+        <block type="key_down"></block>
+        <block type="key_up"></block>
         <block type="hotkey_execute" id="?=RLJGLLo*3==U2{,/I=" x="16" y="189">
             <value name="NAME">
                 <block type="function_key" id="ljy`21lCO(t(,FX?^_B)">
@@ -1211,6 +1250,13 @@
     </category>
 
     <category name="時間" colour="#AFEEEE">
+        <block type="sleep">
+            <value name="NAME">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
         <block type="built_in_time">
             <field name="NAME">year</field>
         </block>
