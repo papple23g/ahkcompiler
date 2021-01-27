@@ -4761,7 +4761,9 @@ return
             #獲取執行式
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
+            loop_time_int_var_name=f'loop_time_int_{id(block_elt)}'
+            com_str+=f"{loop_time_int_var_name}:={value_str}\n"
+            com_str+=f"Loop %{loop_time_int_var_name}% {{\n{statement_do_str}}}\n"
 
         #For Loop 循環
         elif block_elt.attrs['type']=="controls_for":
