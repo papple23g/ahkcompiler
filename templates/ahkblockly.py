@@ -4976,182 +4976,42 @@ workspace.addChangeListener(ClearAhkCodeArea)
 #綁定事件:停用落單的blockly
 #workspace.addChangeListener(Blockly.Events.disableOrphans);
 
-#region 插入範例1
-xml_ex_1='''<xml>
-  <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
-    <mutation statements="false"></mutation>
-    <field name="NAME">現在時間</field>
-    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
-    <value name="RETURN">
-      <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
-        <mutation items="11"></mutation>
-        <value name="ADD0">
-          <block type="built_in_time" id="3*b_Ao:WS1JMA~pdCo@1">
-            <field name="NAME">year</field>
-          </block>
-        </value>
-        <value name="ADD1">
-          <block type="text" id="s)pS:L;BF`;kflQBLVNR">
-            <field name="TEXT">/</field>
-          </block>
-        </value>
-        <value name="ADD2">
-          <block type="built_in_time" id="N)U2e8AB{xaJHW!c;h#/">
-            <field name="NAME">month</field>
-          </block>
-        </value>
-        <value name="ADD3">
-          <block type="text" id="Hin^|y$w@)Bz-3fxYJo_">
-            <field name="TEXT">/</field>
-          </block>
-        </value>
-        <value name="ADD4">
-          <block type="built_in_time" id="Tfi4BII%@Ap31W]Fg9%l">
-            <field name="NAME">day</field>
-          </block>
-        </value>
-        <value name="ADD5">
-          <block type="text" id="r_0%Xpw_71L_L[Ao-8oo">
-            <field name="TEXT">-</field>
-          </block>
-        </value>
-        <value name="ADD6">
-          <block type="built_in_time" id="G|$^aoRw?.-nvdlw)h!-">
-            <field name="NAME">hour</field>
-          </block>
-        </value>
-        <value name="ADD7">
-          <block type="text" id="Z!nnU}TwQHz|QeNz_J=|">
-            <field name="TEXT">:</field>
-          </block>
-        </value>
-        <value name="ADD8">
-          <block type="built_in_time" id="14gg/Elks,(H;_T}(=lO">
-            <field name="NAME">min</field>
-          </block>
-        </value>
-        <value name="ADD9">
-          <block type="text" id="]h^=X9AaM^g5^w/CakfK">
-            <field name="TEXT">:</field>
-          </block>
-        </value>
-        <value name="ADD10">
-          <block type="built_in_time" id="mpTd{yebnp:R/%H30rj3">
-            <field name="NAME">sec</field>
-          </block>
-        </value>
-      </block>
-    </value>
-  </block>
-  <block type="procedures_defreturn" id="[ZFzaKc.WVOfgb*~E4X4" x="418" y="59">
-    <mutation statements="false"></mutation>
-    <field name="NAME">現在日期</field>
-    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
-    <value name="RETURN">
-      <block type="text_join" id=".wPxQ{%A/.TkGGUS:/l@">
-        <mutation items="9"></mutation>
-        <value name="ADD0">
-          <block type="text" id="8edf;tX{wP:I5]xI5#J6">
-            <field name="TEXT">中華民國</field>
-          </block>
-        </value>
-        <value name="ADD1">
-          <block type="math_arithmetic" id="krA].qgE(Jj?l-e5{xf=">
-            <field name="OP">MINUS</field>
-            <comment pinned="false" h="36" w="151">將西元年換算成民國年</comment>
-            <value name="A">
-              <block type="built_in_time" id="/S==O~?Y~e7=jb2C51fZ">
-                <field name="NAME">year</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number" id="7=F;I#5W!4l[Eb5E0+(k">
-                <field name="NUM">1911</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <value name="ADD2">
-          <block type="text" id="`v|z$:CWB/sQ+^pdH{5%">
-            <field name="TEXT">年</field>
-          </block>
-        </value>
-        <value name="ADD3">
-          <block type="math_arithmetic" id="nz0W2[Z?Tc-^uebU5ErH">
-            <field name="OP">MULTIPLY</field>
-            <comment pinned="false" h="37" w="155">將「09月」改為「9月」</comment>
-            <value name="A">
-              <block type="built_in_time" id=":a4vRzNmHkUGvM~GOiI/">
-                <field name="NAME">month</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number" id="M=k.jK]pT9IYzBLlYKPe">
-                <field name="NUM">1</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <value name="ADD4">
-          <block type="text" id="3WT_$zY8oDl!1WHN37}~">
-            <field name="TEXT">月</field>
-          </block>
-        </value>
-        <value name="ADD5">
-          <block type="built_in_time" id="Ba=0#KTsgH`Ijdly#0+q">
-            <field name="NAME">day</field>
-          </block>
-        </value>
-        <value name="ADD6">
-          <block type="text" id="Z,A}^E`o/6Cyo)m}AqT%">
-            <field name="TEXT">日</field>
-          </block>
-        </value>
-        <value name="ADD7">
-          <block type="text" id="H78r)U*L}t~7e.@L5dM2">
-            <field name="TEXT">  星期</field>
-          </block>
-        </value>
-        <value name="ADD8">
-          <block type="built_in_wday_zh" id="EkC@I@+HGH5^cu~3G=S="></block>
-        </value>
-      </block>
-    </value>
-  </block>
-  <block type="hotstring" id="TNWAh{Y3xozLNH.7tGxR" x="26" y="369">
-    <value name="ABB">
-      <block type="text" id="8:Q2t+aU.@:TJJ:CLY^b">
-        <field name="TEXT">\\now</field>
-      </block>
-    </value>
-    <value name="TEXT">
-      <block type="procedures_callreturn" id="F[M88Yax:0WU4!*Qdg+1">
-        <mutation name="現在時間"></mutation>
-      </block>
-    </value>
-  </block>
-  <block type="hotstring" id="Lx0J5yJv8G#uLgpx7bO(" x="440" y="370">
-    <value name="ABB">
-      <block type="text" id="R8UjYUXVQlt@`+d/F=pE">
-        <field name="TEXT">\date</field>
-      </block>
-    </value>
-    <value name="TEXT">
-      <block type="procedures_callreturn" id="aq{LXI=8j-YmPl}vs0wX">
-        <mutation name="現在日期"></mutation>
-      </block>
-    </value>
-  </block>
-</xml>'''
 
-#endregion 插入範例1
+#定義匯入積木檔 XML 的動作
+def ImportXmlCode(ev):    
+    #定義匯入XML積木檔案時的解析動作
+    def OnInputXmlFile(ev):
+        #定義文字讀取完後的動作
+        def ReaderOnload(ev):
+            #獲取積木檔 XML 內容
+            xml_code=ev.target.result
+            #覆蓋到積木 XML 文字區域
+            doc['textarea_xml'].value = xml_code
+            #觸發 XML 渲染事件
+            XmlToBlockly(window.Event.new("input"))
+        
+        #獲取 XML 檔案
+        inputFileElt=ev.target
+        inputFile=inputFileElt.files[0]
+        #建立檔案讀取DOM實例，並解析XML積木檔內容文字
+        reader = window.FileReader.new()
+        reader.readAsText(inputFile)
+        reader.bind("load", ReaderOnload)
 
 
-#插入範本
-def ViewEx(ev):
-    doc['textarea_xml'].value=xml_ex_1
-    XmlToBlockly(window.Event.new("input"))
-    #doc['btn_blockToAhk'].click()
+    #創造一個開啟檔案的 input 元素並進行點擊，觸發解析動作函數
+    inputFileElt=INPUT(type='file',accept='text/xml') #限制開啟檔案類型為 XML 檔案
+    inputFileElt.bind('input',OnInputXmlFile)
+    inputFileElt.click()
+
+#定義動作:下載XML積木檔案
+def DownloadXmlCode(ev):
+    #先點擊 [轉換為AHK語法] 按鈕，確保AHK轉譯至XML完畢
+    doc['btn_blockToAhk'].click()
+    #獲取積木 XML 結構並輸出 XML 檔案
+    xml_code=doc['textarea_xml'].value
+    filename="myahkblockly.xml"
+    DownloadTextFile(filename,xml_code)
 
 #設置AHK語法轉換結果畫面元素
 div_showAhkArea_elt=DIV(id="div_show_ahk_area")
@@ -5159,7 +5019,8 @@ div_showAhkArea_elt=DIV(id="div_show_ahk_area")
 #設置橫幅DIV元素，並填充文字和複製、下載按鈕
 div_showAhkAreaHeader_elt=DIV(id="div_show_ahk_btns")
 div_showAhkAreaHeader_elt<=BUTTON("▼轉換為AHK語法",id="btn_blockToAhk").bind("click",BlocklyToXml)
-div_showAhkAreaHeader_elt<=BUTTON("載入範本1").bind("click",ViewEx)
+div_showAhkAreaHeader_elt<=BUTTON("💾另存積木檔").bind("click",DownloadXmlCode)
+div_showAhkAreaHeader_elt<=BUTTON("📥匯入積木檔").bind("click",ImportXmlCode)
 
 #定義動作:複製AHK語法
 def CopyAhkCode(ev):
@@ -5278,7 +5139,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.11.2" ###
+VERSION="1.12.0" ###
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})

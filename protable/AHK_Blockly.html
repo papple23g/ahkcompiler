@@ -14511,10 +14511,162 @@ Blockly.Blocks['while_true'] = {
         this.appendDummyInput()
             .appendField("無限循環");
         this.appendStatementInput("DO")
-            .setCheck(null);
+            .setCheck("action");
         this.setPreviousStatement(true, "action");
         this.setNextStatement(true, "action");
         this.setColour(120);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['image_filepath'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["filepath", "String"])
+            .appendField("圖片來源");
+        this.setInputsInline(false);
+        this.setPreviousStatement(true, "get_picture_pos_setting");
+        this.setNextStatement(true, "get_picture_pos_setting");
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['image_search_area'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("偵測範圍 X1:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y1:");
+        this.appendValueInput("W")
+            .setCheck("Number")
+            .appendField("X2:");
+        this.appendValueInput("H")
+            .setCheck("Number")
+            .appendField("Y2:");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_picture_pos_setting");
+        this.setNextStatement(true, "get_picture_pos_setting");
+        this.setColour("#DB7093");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['pixel_search_area'] = {
+    init: function() {
+        this.appendValueInput("X")
+            .setCheck("Number")
+            .appendField("偵測範圍 X:");
+        this.appendValueInput("Y")
+            .setCheck("Number")
+            .appendField("Y:");
+        this.appendValueInput("W")
+            .setCheck("Number")
+            .appendField("寬:");
+        this.appendValueInput("H")
+            .setCheck("Number")
+            .appendField("高:");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['pixel_color_id'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("色碼 #")
+            .appendField(new Blockly.FieldTextInput("FFFFFF"), "ColorID");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['pixel_rgb_color'] = {
+    init: function() {
+        this.appendValueInput("R")
+            .setCheck("Number")
+            .appendField("R");
+        this.appendValueInput("G")
+            .setCheck("Number")
+            .appendField("G");
+        this.appendValueInput("B")
+            .setCheck("Number")
+            .appendField("B");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "get_pixel_pos_setting");
+        this.setNextStatement(true, "get_pixel_pos_setting");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+
+Blockly.Blocks['get_pixel_pos'] = {
+    init: function() {
+        this.appendStatementInput("get_pixel_pos_setting")
+            .setCheck("get_pixel_pos_setting")
+            .appendField("偵測像素");
+        this.appendDummyInput()
+            .appendField("將獲得的座標紀錄至變數(")
+            .appendField(new Blockly.FieldVariable("圖片像素X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片像素Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到像素時");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour("#E8A0A0");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['get_picture_pos_ver200419'] = {
+    init: function() {
+        this.appendStatementInput("get_picture_pos_setting")
+            .setCheck("get_picture_pos_setting")
+            .appendField("偵測圖片");
+        this.appendDummyInput()
+            .appendField("將獲得的座標紀錄至變數(")
+            .appendField(new Blockly.FieldVariable("圖片座標X"), "pos_x")
+            .appendField(",")
+            .appendField(new Blockly.FieldVariable("圖片座標Y"), "pos_y")
+            .appendField(")");
+        this.appendStatementInput("DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找到圖片時");
+        this.appendStatementInput("ELSE_DO")
+            .setCheck("action")
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField("找不到時");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour("#DB7093");
         this.setTooltip("");
         this.setHelpUrl("");
     }
@@ -14621,6 +14773,7 @@ Blockly.Blocks['search_selected_keyword'] = {
                 ["Google搜尋", "google"],
                 ["Youtube搜尋", "youtube"],
                 ["WIKI搜尋", "wiki"],
+                ["百度搜尋", "baidu"],
                 ["Google地圖搜尋", "google_map"],
                 ["Google搜尋趨勢", "google_trend"],
                 ["Gooogle翻譯", "google_translate"],
@@ -14681,6 +14834,37 @@ Blockly.Blocks['key_pressing'] = {
         this.setHelpUrl("");
     }
 };
+
+Blockly.Blocks['key_down'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("按著");
+        this.appendDummyInput()
+            .appendField("不放");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['key_up'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(["special_key", "normal_key"])
+            .appendField("釋放");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(260);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 
 
 Blockly.Blocks['key_wait'] = {
@@ -14954,6 +15138,8 @@ Blockly.Blocks['user_name'] = {
     }
 };
 
+
+
 Blockly.Blocks['set_clipboard'] = {
     init: function() {
         this.appendValueInput("NAME")
@@ -15027,6 +15213,7 @@ Blockly.Blocks['built_in_webpage'] = {
                 ["Google網頁", "google"],
                 ["Youtube網頁", "youtube"],
                 ["Facebook網頁", "facebook"],
+                ["百度搜尋", "baidu"],
                 ["Wikipedia網頁", "wikipedia"],
                 ["PChome網頁", "pchome"],
                 ["Yahoo網頁", "yahoo"],
@@ -15555,7 +15742,50 @@ Blockly.Blocks['msgbox'] = {
         this.setTooltip("");
         this.setHelpUrl("");
     }
-}</script>
+}
+
+Blockly.Blocks['traytip'] = {
+    init: function() {
+        this.appendValueInput("NAME")
+            .setCheck(null)
+            .appendField("桌面通知");
+        this.setPreviousStatement(true, "action");
+        this.setNextStatement(true, "action");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+}
+
+Blockly.Blocks['system_info_num'] = {
+    init: function() {
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_CENTRE)
+            .appendField(new Blockly.FieldDropdown([
+                ["本螢幕寬度", "screen_width"],
+                ["本螢幕高度", "screen_height"],
+            ]), "NAME");
+        this.setOutput(true, "Number");
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
+Blockly.Blocks['system_info_str'] = {
+    init: function() {
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_CENTRE)
+            .appendField(new Blockly.FieldDropdown([
+                ["本用戶名稱", "user_name"],
+                ["本電腦名稱", "computer_name"],
+            ]), "NAME");
+        this.setOutput(true, "Number");
+        this.setColour(160);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};</script>
 <script>// This file was automatically generated.  Do not modify.
 
 'use strict';
@@ -16050,6 +16280,22 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="基本" colour="#818181">
         <block type="hotkey_execute">
             <value name="NAME">
+                <block type="special_key">
+                    <field name="special_key">F8</field>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="open">
+                    <value name="NAME">
+                        <block type="built_in_program">
+                            <field name="NAME">notepad</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="hotkey_execute">
+            <value name="NAME">
                 <block type="function_key">
                     <field name="function_key">Ctrl</field>
                     <value name="function_key">
@@ -16077,32 +16323,32 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="hotkey_execute" id="wc|zj,Z#qS,ji}XwP.B)" x="81" y="156">
             <comment pinned="false" h="34" w="134">清空資源回收桶</comment>
             <value name="NAME">
-            <block type="function_key" id="L{L$C_UEc@RTzNI+wiG{">
-                <field name="function_key">Ctrl</field>
-                <value name="function_key">
-                <block type="function_key" id="~8FRK/F:X16Ji[;b3V4f">
-                    <field name="function_key">Win</field>
+                <block type="function_key" id="L{L$C_UEc@RTzNI+wiG{">
+                    <field name="function_key">Ctrl</field>
                     <value name="function_key">
-                    <block type="special_key" id="~z2/%i^jA_N!o;d/PakD">
-                        <field name="special_key">Enter</field>
-                    </block>
+                        <block type="function_key" id="~8FRK/F:X16Ji[;b3V4f">
+                            <field name="function_key">Win</field>
+                            <value name="function_key">
+                                <block type="special_key" id="~z2/%i^jA_N!o;d/PakD">
+                                    <field name="special_key">Enter</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="file_recycle_empty" id="l5zK^VW_Jev5LPsq+ae0">
-                <next>
-                <block type="msgbox" id="s==Od5;U;,!o=gBEm*9Q">
-                    <value name="NAME">
-                    <block type="text" id=";||,I=o]WxN%h;J-%Kxp">
-                        <field name="TEXT">垃圾桶清除完畢!</field>
-                    </block>
-                    </value>
+                <block type="file_recycle_empty" id="l5zK^VW_Jev5LPsq+ae0">
+                    <next>
+                        <block type="msgbox" id="s==Od5;U;,!o=gBEm*9Q">
+                            <value name="NAME">
+                                <block type="text" id=";||,I=o]WxN%h;J-%Kxp">
+                                    <field name="TEXT">垃圾桶清除完畢!</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
                 </block>
-                </next>
-            </block>
             </statement>
         </block>
         <block type="open">
@@ -16144,16 +16390,23 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     </category>
 
     <category name="熱鍵" colour="#0000CD">
+        <block type="hotkey_execute">
+            <value name="NAME">
+                <block type="special_key">
+                    <field name="special_key">F8</field>
+                </block>
+            </value>
+        </block>
         <block type="hotkey_execute" id="ijf~}`xQflr[cT,i!IuZ" x="73" y="34">
             <value name="NAME">
-            <block type="function_key" id="]{!*{~gp;ZCY?1fojJE/">
-                <field name="function_key">Ctrl</field>
-                <value name="function_key">
-                <block type="normal_key" id="D3K/AB#m?2%h.,4;_f:b">
-                    <field name="normal_key">Q</field>
+                <block type="function_key" id="]{!*{~gp;ZCY?1fojJE/">
+                    <field name="function_key">Ctrl</field>
+                    <value name="function_key">
+                        <block type="normal_key" id="D3K/AB#m?2%h.,4;_f:b">
+                            <field name="normal_key">Q</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </value>
         </block>
         <block type="function_key">
@@ -16168,46 +16421,46 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="return"></block>
         <block type="hotkey_execute_with_setting" id="^Cq,F^Fh1_]sY2y(Xgjz" x="19" y="227">
             <value name="NAME">
-            <block type="special_key" id="qG{./^UA5Qan=.cfImnu">
-                <field name="special_key">F8</field>
-            </block>
+                <block type="special_key" id="qG{./^UA5Qan=.cfImnu">
+                    <field name="special_key">F8</field>
+                </block>
             </value>
             <statement name="DO">
-            <block type="send_key_times" id="4pVO#,oPXzXS!sr_AYZV">
-                <comment pinned="false" h="46" w="257">將Youtube影片播放速度設為(x2)</comment>
-                <value name="KEY">
-                <block type="function_key" id="Hv,di|635`3]M;JWd_$+">
-                    <field name="function_key">Shift</field>
-                    <value name="function_key">
-                    <block type="special_key" id="Kad+TZ*RDNl+y3@~v}vF">
-                        <field name="special_key">.</field>
-                    </block>
+                <block type="send_key_times" id="4pVO#,oPXzXS!sr_AYZV">
+                    <comment pinned="false" h="46" w="257">將Youtube影片播放速度設為(x2)</comment>
+                    <value name="KEY">
+                        <block type="function_key" id="Hv,di|635`3]M;JWd_$+">
+                            <field name="function_key">Shift</field>
+                            <value name="function_key">
+                                <block type="special_key" id="Kad+TZ*RDNl+y3@~v}vF">
+                                    <field name="special_key">.</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <value name="TIMES">
+                        <block type="math_number" id="A|p?c/NIOXHBf}]IUhTW">
+                            <field name="NUM">7</field>
+                        </block>
                     </value>
                 </block>
-                </value>
-                <value name="TIMES">
-                <block type="math_number" id="A|p?c/NIOXHBf}]IUhTW">
-                    <field name="NUM">7</field>
-                </block>
-                </value>
-            </block>
             </statement>
             <statement name="SETTING">
-            <block type="hotkey_execute_setting_keepkeyfuncdefalut" id="_r]aVjNI$K2RHXy#4Fi%">
-                <next>
-                <block type="hotkey_execute_setting_donottriggeritself" id=").t^W?/1)bnr+v2J/tv%">
+                <block type="hotkey_execute_setting_keepkeyfuncdefalut" id="_r]aVjNI$K2RHXy#4Fi%">
                     <next>
-                    <block type="hotkey_execute_setting_cantriggeronotherhotkey" id="kM$K%(j7TvTf)F[pXo0_">
-                        <next>
-                        <block type="hotkey_execute_setting_ifwinactive" id="kiiZK)i~jiW7HaO5k_.8">
-                            <field name="text">YouTube</field>
+                        <block type="hotkey_execute_setting_donottriggeritself" id=").t^W?/1)bnr+v2J/tv%">
+                            <next>
+                                <block type="hotkey_execute_setting_cantriggeronotherhotkey" id="kM$K%(j7TvTf)F[pXo0_">
+                                    <next>
+                                        <block type="hotkey_execute_setting_ifwinactive" id="kiiZK)i~jiW7HaO5k_.8">
+                                            <field name="text">YouTube</field>
+                                        </block>
+                                    </next>
+                                </block>
+                            </next>
                         </block>
-                        </next>
-                    </block>
                     </next>
                 </block>
-                </next>
-            </block>
             </statement>
         </block>
         <block type="hotkey_execute_with_setting"></block>
@@ -16306,6 +16559,7 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="動作" colour="#4B0082">
         <block type="open"></block>
         <block type="msgbox"></block>
+        <block type="traytip"></block>
         <block type="send_text"></block>
         <block type="send_key"></block>
         <block type="set_clipboard"></block>
@@ -16315,37 +16569,37 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="close_process"></block>
         <block type="open" id="LC}d{N~0pgzHLB/*+L%=" x="97" y="182">
             <value name="NAME">
-            <block type="open_with_main_program" id="v-c7aIXUtju?aVCk)3G0">
-                <value name="main_program">
-                <block type="built_in_program" id="]52i6}l)1RYmrt*2EDKv">
-                    <field name="NAME">notepad</field>
+                <block type="open_with_main_program" id="v-c7aIXUtju?aVCk)3G0">
+                    <value name="main_program">
+                        <block type="built_in_program" id="]52i6}l)1RYmrt*2EDKv">
+                            <field name="NAME">notepad</field>
+                        </block>
+                    </value>
+                    <value name="file">
+                        <block type="built_in_program" id=",xU7gzD~AszYae=5(xmV">
+                            <field name="NAME">ahkfile</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-                <value name="file">
-                <block type="built_in_program" id=",xU7gzD~AszYae=5(xmV">
-                    <field name="NAME">ahkfile</field>
-                </block>
-                </value>
-            </block>
             </value>
         </block>
         <block type="win_activate" id="qTbeo*`67*e/^?)n?ePd" x="92" y="241">
             <value name="title">
                 <block type="text" id="A@?fM8GKg=6]O.7QK:TD">
-                <field name="TEXT"> - Google Chrome</field>
+                    <field name="TEXT"> - Google Chrome</field>
                 </block>
             </value>
         </block>
         <block type="run_or_active" id="2i/DthleMLzrDGP@u-V_" x="176" y="139">
             <value name="run">
-            <block type="built_in_program" id="E?{Ejq$:oV+m)h8C?nRV">
-                <field name="NAME">notepad</field>
-            </block>
+                <block type="built_in_program" id="E?{Ejq$:oV+m)h8C?nRV">
+                    <field name="NAME">notepad</field>
+                </block>
             </value>
             <value name="title">
-            <block type="text" id="LqewT]^;j[kXSRZQ0WEX">
-                <field name="TEXT"> - 記事本</field>
-            </block>
+                <block type="text" id="LqewT]^;j[kXSRZQ0WEX">
+                    <field name="TEXT"> - 記事本</field>
+                </block>
             </value>
         </block>
         <block type="shutdown"></block>
@@ -16377,14 +16631,14 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         </block>
         <block type="path_combined" id=".YephFSjv,#DrG](`uIh">
             <value name="main_path">
-            <block type="built_in_dirpath" id="n~AK1G2^+`mb-P[p41*^">
-                <field name="NAME">desktop</field>
-            </block>
+                <block type="built_in_dirpath" id="n~AK1G2^+`mb-P[p41*^">
+                    <field name="NAME">desktop</field>
+                </block>
             </value>
             <value name="sub_path">
-            <block type="filepath" id="cS9`O2a[#K$LVUKFifAV">
-                <field name="NAME">圖片\01.png</field>
-            </block>
+                <block type="filepath" id="cS9`O2a[#K$LVUKFifAV">
+                    <field name="NAME">圖片\01.png</field>
+                </block>
             </value>
         </block>
         <block type="built_in_time"></block>
@@ -16396,14 +16650,21 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="模擬按鍵" colour="#D75BF0">
         <block type="send_key">
             <value name="NAME">
-            <block type="function_key">
-                <field name="function_key">Ctrl</field>
-                <value name="function_key">
-                <block type="normal_key">
-                    <field name="normal_key">V</field>
-                </block>
-                </value>
+            <block type="normal_key">
+                <field name="normal_key">A</field>
             </block>
+            </value>
+        </block>
+        <block type="send_key">
+            <value name="NAME">
+                <block type="function_key">
+                    <field name="function_key">Ctrl</field>
+                    <value name="function_key">
+                        <block type="normal_key">
+                            <field name="normal_key">V</field>
+                        </block>
+                    </value>
+                </block>
             </value>
         </block>
         <block type="send_keys"></block>
@@ -16433,45 +16694,77 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="special_key">
             <field name="special_key">Enter</field>
         </block>
-        <block type="hotkey_execute" id="?=RLJGLLo*3==U2{,/I=" x="16" y="189">
+        <block type="hotkey_execute">
             <value name="NAME">
-            <block type="function_key" id="ljy`21lCO(t(,FX?^_B)">
-                <field name="function_key">Win</field>
-                <value name="function_key">
-                <block type="normal_key" id="eXg9UF9(_KE]A,^w19PA">
-                    <field name="normal_key">Z</field>
-                </block>
-                </value>
+            <block type="special_key">
+                <field name="special_key">F8</field>
             </block>
             </value>
             <statement name="DO">
-            <block type="key_wait" id="P6z%LXNyAtAY4If$z#F}">
-                <comment pinned="false" h="43" w="337">等待按鍵釋放，可以避免後面的按鍵操作被干擾</comment>
+            <block type="key_down">
                 <value name="NAME">
-                <block type="special_key" id="!*b+B|sj1]?hVBY4s*Iv">
-                    <field name="special_key">Win</field>
+                <block type="special_key">
+                    <field name="special_key">Shift</field>
                 </block>
                 </value>
                 <next>
-                <block type="block_input" id="H=laPU368t7CawQkX4|S">
-                    <comment pinned="false" h="44" w="316">需要使用系統管理員執行AHK腳本才會生效</comment>
-                    <statement name="DO">
-                    <block type="key_pressing" id="_8N,QjnM#b0#(yJX@Ddd">
+                <block type="send_keys">
+                    <field name="NAME">abc</field>
+                    <next>
+                    <block type="key_up">
                         <value name="NAME">
-                        <block type="special_key" id="`=TDh^,_e~$Y%`}]G)w1">
+                        <block type="special_key">
                             <field name="special_key">Shift</field>
                         </block>
                         </value>
-                        <statement name="DO">
-                        <block type="send_keys" id="/t9sK8_:V7z}_t_DlPM0">
-                            <field name="NAME">abcabcabcabcabcabcabcabcabcabc</field>
-                        </block>
-                        </statement>
                     </block>
-                    </statement>
+                    </next>
                 </block>
                 </next>
             </block>
+            </statement>
+        </block>
+        <block type="key_down"></block>
+        <block type="key_up"></block>
+        <block type="hotkey_execute" id="?=RLJGLLo*3==U2{,/I=" x="16" y="189">
+            <value name="NAME">
+                <block type="function_key" id="ljy`21lCO(t(,FX?^_B)">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key" id="eXg9UF9(_KE]A,^w19PA">
+                            <field name="normal_key">Z</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="key_wait" id="P6z%LXNyAtAY4If$z#F}">
+                    <comment pinned="false" h="43" w="337">等待按鍵釋放，可以避免後面的按鍵操作被干擾</comment>
+                    <value name="NAME">
+                        <block type="special_key" id="!*b+B|sj1]?hVBY4s*Iv">
+                            <field name="special_key">Win</field>
+                        </block>
+                    </value>
+                    <next>
+                        <block type="block_input" id="H=laPU368t7CawQkX4|S">
+                            <comment pinned="false" h="44" w="316">需要使用系統管理員執行AHK腳本才會生效</comment>
+                            <statement name="DO">
+                                <block type="key_pressing" id="_8N,QjnM#b0#(yJX@Ddd">
+                                    <value name="NAME">
+                                        <block type="special_key" id="`=TDh^,_e~$Y%`}]G)w1">
+                                            <field name="special_key">Shift</field>
+                                        </block>
+                                    </value>
+                                    <statement name="DO">
+                                        <block type="send_keys" id="/t9sK8_:V7z}_t_DlPM0">
+                                            <field name="NAME">abcabcabcabcabcabcabcabcabcabc</field>
+                                        </block>
+                                    </statement>
+                                </block>
+                            </statement>
+                        </block>
+                    </next>
+                </block>
             </statement>
         </block>
         <block type="key_wait"></block>
@@ -16482,77 +16775,77 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="模擬滑鼠" colour="#D0D03E">
         <block type="send_key">
             <value name="NAME">
-              <block type="special_key">
-                <field name="special_key">LButton</field>
-              </block>
+                <block type="special_key">
+                    <field name="special_key">LButton</field>
+                </block>
             </value>
         </block>
         <block type="coord_mode" id="9L]5EQ~.%tsYlny@SAy%" x="103" y="109">
             <field name="NAME">screen</field>
             <next>
-            <block type="click_x_y" id="q86Y9,NC*I9-Lbd3)ro]">
-                <value name="X">
-                <block type="math_number" id="}O?aD^J9(Rg{;WB.l0lK">
-                    <field name="NUM">100</field>
+                <block type="click_x_y" id="q86Y9,NC*I9-Lbd3)ro]">
+                    <value name="X">
+                        <block type="math_number" id="}O?aD^J9(Rg{;WB.l0lK">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="Y">
+                        <block type="math_number" id="`vEB1I$0xX^h6}_vL3B~">
+                            <field name="NUM">200</field>
+                        </block>
+                    </value>
+                    <value name="TIMES">
+                        <block type="math_number" id="`oY^aUd/3D|DjpaCW)u@">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-                <value name="Y">
-                <block type="math_number" id="`vEB1I$0xX^h6}_vL3B~">
-                    <field name="NUM">200</field>
-                </block>
-                </value>
-                <value name="TIMES">
-                <block type="math_number" id="`oY^aUd/3D|DjpaCW)u@">
-                    <field name="NUM">1</field>
-                </block>
-                </value>
-            </block>
             </next>
         </block>
-        <block type="coord_mode"x="71" y="185">
+        <block type="coord_mode" x="71" y="185">
             <field name="NAME">screen</field>
             <next>
-            <block type="mouse_get_pos">
-                <value name="posX">
-                <block type="variables_get">
-                    <field name="VAR">滑鼠座標X</field>
-                </block>
-                </value>
-                <value name="posY">
-                <block type="variables_get">
-                    <field name="VAR">滑鼠座標Y</field>
-                </block>
-                </value>
-                <next>
-                <block type="msgbox">
-                    <value name="NAME">
-                    <block type="text_join">
-                        <mutation items="4"></mutation>
-                        <value name="ADD0">
-                        <block type="text">
-                            <field name="TEXT">現在滑鼠座標為: </field>
-                        </block>
-                        </value>
-                        <value name="ADD1">
+                <block type="mouse_get_pos">
+                    <value name="posX">
                         <block type="variables_get">
                             <field name="VAR">滑鼠座標X</field>
                         </block>
-                        </value>
-                        <value name="ADD2">
-                        <block type="text">
-                            <field name="TEXT">, </field>
-                        </block>
-                        </value>
-                        <value name="ADD3">
+                    </value>
+                    <value name="posY">
                         <block type="variables_get">
                             <field name="VAR">滑鼠座標Y</field>
                         </block>
-                        </value>
-                    </block>
                     </value>
+                    <next>
+                        <block type="msgbox">
+                            <value name="NAME">
+                                <block type="text_join">
+                                    <mutation items="4"></mutation>
+                                    <value name="ADD0">
+                                        <block type="text">
+                                            <field name="TEXT">現在滑鼠座標為: </field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="variables_get">
+                                            <field name="VAR">滑鼠座標X</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="text">
+                                            <field name="TEXT">, </field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD3">
+                                        <block type="variables_get">
+                                            <field name="VAR">滑鼠座標Y</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
                 </block>
-                </next>
-            </block>
             </next>
         </block>
         <block type="coord_mode"></block>
@@ -16575,14 +16868,14 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         </block>
         <block type="mouse_get_pos">
             <value name="posX">
-            <block type="variables_get">
-                <field name="VAR">滑鼠X</field>
-            </block>
+                <block type="variables_get">
+                    <field name="VAR">滑鼠X</field>
+                </block>
             </value>
             <value name="posY">
-            <block type="variables_get">
-                <field name="VAR">滑鼠Y</field>
-            </block>
+                <block type="variables_get">
+                    <field name="VAR">滑鼠Y</field>
+                </block>
             </value>
         </block>
     </category>
@@ -16591,124 +16884,493 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="hotkey_execute" id="HkwcUnN5parh[{Y/CYLZ" x="5" y="155">
             <comment pinned="false" h="46" w="327">這個積木放這裡，方便大家擷取畫面圖片:)</comment>
             <value name="NAME">
-            <block type="function_key" id=":AbP,Snml,n?7?%O5sB3">
-                <field name="function_key">Win</field>
+                <block type="function_key" id=":AbP,Snml,n?7?%O5sB3">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key" id="u{E/kO2Cg((hz6wPJaiZ">
+                            <field name="normal_key">Q</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="open" id="B2+cH1~uhj}6H?PK7SDq">
+                    <value name="NAME">
+                        <block type="built_in_program" id="Aqh/(_Tz4r(/J[4.9JJZ">
+                            <field name="NAME">SnippingTool</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="hotkey_execute">
+            <value name="NAME">
+            <block type="function_key">
+                <field name="function_key">Ctrl</field>
                 <value name="function_key">
-                <block type="normal_key" id="u{E/kO2Cg((hz6wPJaiZ">
-                    <field name="normal_key">Q</field>
+                <block type="function_key">
+                    <field name="function_key">Shift</field>
+                    <value name="function_key">
+                    <block type="normal_key">
+                        <field name="normal_key">A</field>
+                    </block>
+                    </value>
                 </block>
                 </value>
             </block>
             </value>
             <statement name="DO">
-            <block type="open" id="B2+cH1~uhj}6H?PK7SDq">
-                <value name="NAME">
-                <block type="built_in_program" id="Aqh/(_Tz4r(/J[4.9JJZ">
-                    <field name="NAME">SnippingTool</field>
+            <block type="get_picture_pos_ver200419">
+                <field name="pos_x">圖片座標X</field>
+                <field name="pos_y">圖片座標Y</field>
+                <statement name="get_picture_pos_setting">
+                <block type="image_filepath">
+                    <value name="NAME">
+                    <block type="filepath">
+                        <field name="NAME">C:\*.png</field>
+                    </block>
+                    </value>
+                    <next>
+                    <block type="image_search_area">
+                        <comment pinned="false" h="147" w="386">設定偵測範圍的方法 :
+對著執行中的AHK圖示按右鍵＞選擇Window Spy
+可以看到Screen那行顯示滑鼠的座標
+偵測區域的左上角座標即為 (X1,Y1)
+偵測區域的右下角座標即為 (X2,Y2)</comment>
+                        <value name="X">
+                        <block type="math_number">
+                            <field name="NUM">0</field>
+                        </block>
+                        </value>
+                        <value name="Y">
+                        <block type="math_number">
+                            <field name="NUM">0</field>
+                        </block>
+                        </value>
+                        <value name="W">
+                        <block type="system_info_num">
+                            <field name="NAME">screen_width</field>
+                        </block>
+                        </value>
+                        <value name="H">
+                        <block type="system_info_num">
+                            <field name="NAME">screen_height</field>
+                        </block>
+                        </value>
+                    </block>
+                    </next>
                 </block>
-                </value>
+                </statement>
+                <statement name="DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                    <block type="text_join">
+                        <mutation items="4"></mutation>
+                        <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">圖片座標為: </field>
+                        </block>
+                        </value>
+                        <value name="ADD1">
+                        <block type="variables_get">
+                            <field name="VAR">圖片座標X</field>
+                        </block>
+                        </value>
+                        <value name="ADD2">
+                        <block type="text">
+                            <field name="TEXT">, </field>
+                        </block>
+                        </value>
+                        <value name="ADD3">
+                        <block type="variables_get">
+                            <field name="VAR">圖片座標Y</field>
+                        </block>
+                        </value>
+                    </block>
+                    </value>
+                </block>
+                </statement>
+                <statement name="ELSE_DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                    <block type="text">
+                        <field name="TEXT">圖片未找到</field>
+                    </block>
+                    </value>
+                </block>
+                </statement>
             </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406">
+        <block type="get_picture_pos_ver200419">
             <field name="pos_x">圖片座標X</field>
             <field name="pos_y">圖片座標Y</field>
-            <value name="image_filepath">
-            <block type="filepath">
-                <field name="NAME">C:\*.png</field>
-            </block>
-            </value>
-            <statement name="DO">
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="text_join">
-                    <mutation items="4"></mutation>
-                    <value name="ADD0">
-                    <block type="text">
-                        <field name="TEXT">圖片座標為: </field>
-                    </block>
+            <statement name="get_picture_pos_setting">
+                <block type="image_filepath">
+                    <value name="NAME">
+                        <block type="path_combined">
+                            <value name="main_path">
+                                <block type="built_in_dirpath">
+                                    <field name="NAME">desktop</field>
+                                </block>
+                            </value>
+                            <value name="sub_path">
+                                <block type="filepath">
+                                    <field name="NAME">*.png</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
-                    <value name="ADD1">
-                    <block type="variables_get">
-                        <field name="VAR">圖片座標X</field>
-                    </block>
-                    </value>
-                    <value name="ADD2">
-                    <block type="text">
-                        <field name="TEXT">, </field>
-                    </block>
-                    </value>
-                    <value name="ADD3">
-                    <block type="variables_get">
-                        <field name="VAR">圖片座標Y</field>
-                    </block>
-                    </value>
+                    <next>
+                        <block type="image_search_area">
+                            <value name="X">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="W">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_width</field>
+                                </block>
+                            </value>
+                            <value name="H">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_height</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
                 </block>
-                </value>
-            </block>
+            </statement>
+            <statement name="DO">
+                <block type="coord_mode">
+                    <field name="NAME">screen</field>
+                    <next>
+                        <block type="click_x_y">
+                            <value name="X">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片座標X</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片座標Y</field>
+                                </block>
+                            </value>
+                            <value name="TIMES">
+                                <block type="math_number">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
+                </block>
             </statement>
             <statement name="ELSE_DO">
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="text">
-                    <field name="TEXT">圖片未找到</field>
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="text">
+                            <field name="TEXT">圖片未找到</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406">
+        <block type="get_picture_pos_ver200419">
             <field name="pos_x">圖片座標X</field>
             <field name="pos_y">圖片座標Y</field>
-            <value name="image_filepath">
-            <block type="path_combined">
-                <value name="main_path">
-                <block type="built_in_dirpath">
-                    <field name="NAME">desktop</field>
-                </block>
-                </value>
-                <value name="sub_path">
-                <block type="filepath">
-                    <field name="NAME">*.png</field>
-                </block>
-                </value>
-            </block>
-            </value>
-            <statement name="DO">
-            <block type="coord_mode">
-                <field name="NAME">screen</field>
-                <next>
-                <block type="click_x_y">
-                    <value name="X">
-                    <block type="variables_get">
-                        <field name="VAR">圖片座標X</field>
-                    </block>
+            <statement name="get_picture_pos_setting">
+                <block type="image_filepath">
+                    <value name="NAME">
+                        <block type="filepath">
+                            <field name="NAME">C:\*.png</field>
+                        </block>
                     </value>
-                    <value name="Y">
-                    <block type="variables_get">
-                        <field name="VAR">圖片座標Y</field>
-                    </block>
-                    </value>
-                    <value name="TIMES">
-                    <block type="math_number">
-                        <field name="NUM">1</field>
-                    </block>
-                    </value>
+                    <next>
+                        <block type="image_search_area">
+                            <value name="X">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="W">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_width</field>
+                                </block>
+                            </value>
+                            <value name="H">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_height</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
                 </block>
-                </next>
-            </block>
-            </statement>
-            <statement name="ELSE_DO">
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="text">
-                    <field name="TEXT">圖片未找到</field>
-                </block>
-                </value>
-            </block>
             </statement>
         </block>
-        <block type="get_picture_pos_ver200406"></block>
+        <block type="procedures_defnoreturn">
+            <mutation>
+                <arg name="圖片路徑" varid="eFt;pR*Y6h6c%#w%48iP"></arg>
+            </mutation>
+            <field name="NAME">等待圖片出現</field>
+            <comment pinned="false" h="80" w="160">請按右鍵＞創造函式積木 來使用此函式積木
+            </comment>
+            <statement name="STACK">
+                <block type="while_true">
+                    <statement name="DO">
+                        <block type="get_picture_pos_ver200419">
+                            <field name="pos_x">圖片座標X</field>
+                            <field name="pos_y">圖片座標Y</field>
+                            <statement name="get_picture_pos_setting">
+                                <block type="image_filepath">
+                                    <value name="NAME">
+                                        <block type="variables_get">
+                                            <field name="VAR">圖片路徑</field>
+                                        </block>
+                                    </value>
+                                    <next>
+                                        <block type="image_search_area">
+                                            <value name="X">
+                                                <block type="math_number">
+                                                    <field name="NUM">0</field>
+                                                </block>
+                                            </value>
+                                            <value name="Y">
+                                                <block type="math_number">
+                                                    <field name="NUM">0</field>
+                                                </block>
+                                            </value>
+                                            <value name="W">
+                                                <block type="system_info_num">
+                                                    <field name="NAME">screen_width</field>
+                                                </block>
+                                            </value>
+                                            <value name="H">
+                                                <block type="system_info_num">
+                                                    <field name="NAME">screen_height</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </next>
+                                </block>
+                            </statement>
+                            <statement name="DO">
+                                <block type="controls_flow_statements">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                            <statement name="ELSE_DO">
+                                <block type="controls_flow_statements">
+                                    <field name="FLOW">CONTINUE</field>
+                                </block>
+                            </statement>
+                        </block>
+                    </statement>
+                </block>
+            </statement>
+        </block>
+        <block type="get_pixel_pos">
+            <field name="pos_x">圖片像素X</field>
+            <field name="pos_y">圖片像素Y</field>
+            <statement name="get_pixel_pos_setting">
+                <block type="pixel_color_id">
+                    <field name="ColorID">FFFFFF</field>
+                    <next>
+                        <block type="pixel_search_area">
+                            <value name="X">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="W">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_width</field>
+                                </block>
+                            </value>
+                            <value name="H">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_height</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
+                </block>
+            </statement>
+            <statement name="DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="text_join">
+                            <mutation items="4"></mutation>
+                            <value name="ADD0">
+                                <block type="text">
+                                    <field name="TEXT">圖片座標為: </field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片像素X</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="text">
+                                    <field name="TEXT">, </field>
+                                </block>
+                            </value>
+                            <value name="ADD3">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片像素Y</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+            <statement name="ELSE_DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="text">
+                            <field name="TEXT">像素未找到</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="get_pixel_pos">
+            <field name="pos_x">圖片像素X</field>
+            <field name="pos_y">圖片像素Y</field>
+            <statement name="get_pixel_pos_setting">
+                <block type="pixel_rgb_color">
+                    <value name="R">
+                        <block type="math_number">
+                            <field name="NUM">255</field>
+                        </block>
+                    </value>
+                    <value name="G">
+                        <block type="math_number">
+                            <field name="NUM">255</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number">
+                            <field name="NUM">255</field>
+                        </block>
+                    </value>
+                    <next>
+                        <block type="pixel_search_area">
+                            <value name="X">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="math_number">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="W">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_width</field>
+                                </block>
+                            </value>
+                            <value name="H">
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_height</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
+                </block>
+            </statement>
+            <statement name="DO">
+                <block type="coord_mode">
+                    <field name="NAME">screen</field>
+                    <next>
+                        <block type="click_x_y">
+                            <value name="X">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片像素X</field>
+                                </block>
+                            </value>
+                            <value name="Y">
+                                <block type="variables_get">
+                                    <field name="VAR">圖片像素Y</field>
+                                </block>
+                            </value>
+                            <value name="TIMES">
+                                <block type="math_number">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
+                </block>
+            </statement>
+            <statement name="ELSE_DO">
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="text">
+                            <field name="TEXT">像素未找到</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="pixel_rgb_color">
+            <value name="R">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+            <value name="G">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_number">
+                    <field name="NUM">255</field>
+                </block>
+            </value>
+        </block>
+        <block type="pixel_color_id">
+        </block>
+        <block type="pixel_search_area">
+            <value name="X">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="Y">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="W">
+                <block type="system_info_num">
+                    <field name="NAME">screen_width</field>
+                </block>
+            </value>
+            <value name="H">
+                <block type="system_info_num">
+                    <field name="NAME">screen_height</field>
+                </block>
+            </value>
+        </block>
     </category>
 
     <category name="文字" colour="#5BA58C">
@@ -16717,23 +17379,30 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         </block>
         <block type="msgbox" id="R1WMDFH+Qu_Ih(MfG1Qp" x="51" y="163">
             <value name="NAME">
-            <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
-                <field name="TEXT">OK!</field>
-            </block>
+                <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
+                    <field name="TEXT">OK!</field>
+                </block>
             </value>
         </block>
         <block type="send_text" id="^prMARg}%1]-k}fwMC3z" x="49" y="230">
             <value name="NAME">
-            <block type="text" id="N$Hh{c1~s)%D~8X]]/?4">
-                <field name="TEXT">123</field>
-            </block>
+                <block type="text" id="N$Hh{c1~s)%D~8X]]/?4">
+                    <field name="TEXT">123</field>
+                </block>
             </value>
         </block>
         <block type="paste_text" id="1m%*5%Ax8-Qqn+#6_EJj" x="53" y="295">
             <value name="NAME">
-            <block type="text" id="qz8!|o+jx,Z+:`qJa^+H">
-                <field name="TEXT">沒問題👍</field>
-            </block>
+                <block type="text" id="qz8!|o+jx,Z+:`qJa^+H">
+                    <field name="TEXT">沒問題👍</field>
+                </block>
+            </value>
+        </block>
+        <block type="traytip">
+            <value name="NAME">
+                <block type="text">
+                    <field name="TEXT">運行成功🎉</field>
+                </block>
             </value>
         </block>
         <block type="break_line_chr"></block>
@@ -16754,78 +17423,85 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="text_join" inline="false">
             <mutation items="3"></mutation>
             <value name="ADD0">
-            <block type="text_join" inline="true">
-                <mutation items="2"></mutation>
-                <value name="ADD0">
-                <block type="text">
-                    <field name="TEXT">第一行文字</field>
+                <block type="text_join" inline="true">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">第一行文字</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="break_line_chr"></block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="break_line_chr"></block>
-                </value>
-            </block>
             </value>
             <value name="ADD1">
-            <block type="text_join" inline="true">
-                <mutation items="2"></mutation>
-                <value name="ADD0">
-                <block type="text">
-                    <field name="TEXT">第二行文字</field>
+                <block type="text_join" inline="true">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">第二行文字</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="break_line_chr"></block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="break_line_chr"></block>
-                </value>
-            </block>
             </value>
             <value name="ADD2">
-            <block type="text_join" inline="true">
-                <mutation items="2"></mutation>
-                <value name="ADD0">
-                <block type="text">
-                    <field name="TEXT">第三行文字</field>
+                <block type="text_join" inline="true">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                        <block type="text">
+                            <field name="TEXT">第三行文字</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="break_line_chr"></block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="break_line_chr"></block>
-                </value>
-            </block>
             </value>
         </block>
         <block type="str_replace">
-        <value name="text">
-            <block type="text" id=",y`*|xS!1Z.x[6oTZbPh">
-                <field name="TEXT">I like apple !</field>
-            </block>
+            <value name="text">
+                <block type="text" id=",y`*|xS!1Z.x[6oTZbPh">
+                    <field name="TEXT">I like apple !</field>
+                </block>
             </value>
             <value name="subs">
-            <block type="text" id="@cCA{R91X6=_,-^LA|5G">
-                <field name="TEXT">apple</field>
-            </block>
+                <block type="text" id="@cCA{R91X6=_,-^LA|5G">
+                    <field name="TEXT">apple</field>
+                </block>
             </value>
             <value name="to">
-            <block type="text" id="LsW-?QML]SX5I#Cq!ebD">
-                <field name="TEXT">banana</field>
-            </block>
+                <block type="text" id="LsW-?QML]SX5I#Cq!ebD">
+                    <field name="TEXT">banana</field>
+                </block>
             </value>
         </block>
         <block type="in_str">
             <field name="NAME">contain</field>
             <value name="text">
-            <block type="text">
-                <field name="TEXT">Apple</field>
-            </block>
+                <block type="text">
+                    <field name="TEXT">Apple</field>
+                </block>
             </value>
             <value name="sub_text">
-            <block type="text">
-                <field name="TEXT">App</field>
-            </block>
+                <block type="text">
+                    <field name="TEXT">App</field>
+                </block>
             </value>
-        </block>       
+        </block>
     </category>
 
     <category name="時間" colour="#AFEEEE">
+        <block type="sleep">
+            <value name="NAME">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
         <block type="built_in_time">
             <field name="NAME">year</field>
         </block>
@@ -16851,77 +17527,77 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="variables_set" x="125" y="95">
             <field name="VAR">現在時間</field>
             <value name="VALUE">
-            <block type="text_join" id="NE`lp;|d#vk!I9XY/cm0">
-                <mutation items="11"></mutation>
-                <value name="ADD0">
-                <block type="built_in_time" id="{Lg6W|tj+O{)T(s/?;(?">
-                    <field name="NAME">year</field>
+                <block type="text_join" id="NE`lp;|d#vk!I9XY/cm0">
+                    <mutation items="11"></mutation>
+                    <value name="ADD0">
+                        <block type="built_in_time" id="{Lg6W|tj+O{)T(s/?;(?">
+                            <field name="NAME">year</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="text" id="%UkxyDArz@~p5z|Goq8e">
+                            <field name="TEXT">/</field>
+                        </block>
+                    </value>
+                    <value name="ADD2">
+                        <block type="built_in_time" id="dz5JxlX#/ai@t4FsXi%Q">
+                            <field name="NAME">month</field>
+                        </block>
+                    </value>
+                    <value name="ADD3">
+                        <block type="text" id="D.lwwbld!s~mpGBssT;n">
+                            <field name="TEXT">/</field>
+                        </block>
+                    </value>
+                    <value name="ADD4">
+                        <block type="built_in_time" id="v!6nOp({lNx)}[.8q96$">
+                            <field name="NAME">day</field>
+                        </block>
+                    </value>
+                    <value name="ADD5">
+                        <block type="text" id="xYirTfNGRl]zLK]C$tES">
+                            <field name="TEXT">-</field>
+                        </block>
+                    </value>
+                    <value name="ADD6">
+                        <block type="built_in_time" id="V0(m_UU0)3a5qW#NPhoc">
+                            <field name="NAME">hour</field>
+                        </block>
+                    </value>
+                    <value name="ADD7">
+                        <block type="text" id="6cI8wm0_Vl8M,W#+^h-/">
+                            <field name="TEXT">:</field>
+                        </block>
+                    </value>
+                    <value name="ADD8">
+                        <block type="built_in_time" id="qAalO8p-6t9P!U$Vqq,G">
+                            <field name="NAME">min</field>
+                        </block>
+                    </value>
+                    <value name="ADD9">
+                        <block type="text" id="9T!}boIqYku@y/iZ?%oL">
+                            <field name="TEXT">:</field>
+                        </block>
+                    </value>
+                    <value name="ADD10">
+                        <block type="built_in_time" id="B9@Ag9WbyY$=6?`L!Ho;">
+                            <field name="NAME">sec</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="text" id="%UkxyDArz@~p5z|Goq8e">
-                    <field name="TEXT">/</field>
-                </block>
-                </value>
-                <value name="ADD2">
-                <block type="built_in_time" id="dz5JxlX#/ai@t4FsXi%Q">
-                    <field name="NAME">month</field>
-                </block>
-                </value>
-                <value name="ADD3">
-                <block type="text" id="D.lwwbld!s~mpGBssT;n">
-                    <field name="TEXT">/</field>
-                </block>
-                </value>
-                <value name="ADD4">
-                <block type="built_in_time" id="v!6nOp({lNx)}[.8q96$">
-                    <field name="NAME">day</field>
-                </block>
-                </value>
-                <value name="ADD5">
-                <block type="text" id="xYirTfNGRl]zLK]C$tES">
-                    <field name="TEXT">-</field>
-                </block>
-                </value>
-                <value name="ADD6">
-                <block type="built_in_time" id="V0(m_UU0)3a5qW#NPhoc">
-                    <field name="NAME">hour</field>
-                </block>
-                </value>
-                <value name="ADD7">
-                <block type="text" id="6cI8wm0_Vl8M,W#+^h-/">
-                    <field name="TEXT">:</field>
-                </block>
-                </value>
-                <value name="ADD8">
-                <block type="built_in_time" id="qAalO8p-6t9P!U$Vqq,G">
-                    <field name="NAME">min</field>
-                </block>
-                </value>
-                <value name="ADD9">
-                <block type="text" id="9T!}boIqYku@y/iZ?%oL">
-                    <field name="TEXT">:</field>
-                </block>
-                </value>
-                <value name="ADD10">
-                <block type="built_in_time" id="B9@Ag9WbyY$=6?`L!Ho;">
-                    <field name="NAME">sec</field>
-                </block>
-                </value>
-            </block>
             </value>
             <next>
-            <block type="msgbox" id="nP%S,,up2?i@%,BLtsRJ">
-                <value name="NAME">
-                <block type="variables_get">
-                    <field name="VAR" id="3Dk+V}!R{Ow,#mH@oT!C">現在時間</field>
+                <block type="msgbox" id="nP%S,,up2?i@%,BLtsRJ">
+                    <value name="NAME">
+                        <block type="variables_get">
+                            <field name="VAR" id="3Dk+V}!R{Ow,#mH@oT!C">現在時間</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </next>
         </block>
     </category>
-    
+
 
     <category name="數字運算" colour="#7B68EE">
         <block type="math_number">
@@ -16944,65 +17620,65 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="math_function" id="{Me#8qr[9bQXXu-b;[Z7" x="206" y="77">
             <field name="NAME">sin</field>
             <value name="NAME">
-            <block type="math_constant2" id="rSj$cS`NUv{(+L)fT=;]">
-                <field name="NAME">pi</field>
-            </block>
+                <block type="math_constant2" id="rSj$cS`NUv{(+L)fT=;]">
+                    <field name="NAME">pi</field>
+                </block>
             </value>
         </block>
         <block type="math_function2" id="$HG?09ZA[b*7MteZCBN6" x="201" y="138">
             <field name="NAME">abs</field>
             <value name="NAME">
-            <block type="math_number" id="m,XY+b4nAU[%~#4zotE8">
-                <field name="NUM">-2.5</field>
-            </block>
+                <block type="math_number" id="m,XY+b4nAU[%~#4zotE8">
+                    <field name="NUM">-2.5</field>
+                </block>
             </value>
         </block>
         <block type="math_round" id="oNvO}}Mc;0?34hP=x=*F" x="193" y="222">
             <value name="NAME">
-            <block type="math_constant2" id=")r{=nl,4lH`=QM4xj87:">
-                <field name="NAME">pi</field>
-            </block>
+                <block type="math_constant2" id=")r{=nl,4lH`=QM4xj87:">
+                    <field name="NAME">pi</field>
+                </block>
             </value>
             <value name="digit">
-            <block type="math_number" id="wp$wGo1,PH-2kr+S=|6e">
-                <field name="NUM">2</field>
-            </block>
+                <block type="math_number" id="wp$wGo1,PH-2kr+S=|6e">
+                    <field name="NUM">2</field>
+                </block>
             </value>
         </block>
         <block type="math_mod" id="!$v?!Iurn##$X{_C9mR1" x="194" y="317">
             <field name="NAME">餘數</field>
             <value name="a">
-            <block type="math_number" id="E]~cAAl0o$rRgj$g0@[O">
-                <field name="NUM">5</field>
-            </block>
+                <block type="math_number" id="E]~cAAl0o$rRgj$g0@[O">
+                    <field name="NUM">5</field>
+                </block>
             </value>
             <value name="b">
-            <block type="math_number" id="n}:IF]}aS`KYURL})m1k">
-                <field name="NUM">2</field>
-            </block>
+                <block type="math_number" id="n}:IF]}aS`KYURL})m1k">
+                    <field name="NUM">2</field>
+                </block>
             </value>
         </block>
         <block type="math_random" id="?ROe98T.gX_Bl,`X`iEy" x="13" y="232">
             <field name="NAME">X</field>
             <field name="type">int</field>
             <value name="min">
-            <block type="math_number">
-                <field name="NUM">1</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
             </value>
             <value name="max">
-            <block type="math_number">
-                <field name="NUM">10</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
             </value>
             <next>
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="variables_get">
-                    <field name="VAR">X</field>
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="variables_get">
+                            <field name="VAR">X</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </next>
         </block>
     </category>
@@ -17010,108 +17686,108 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="右鍵清單" colour="#00CED1">
         <block type="hotkey_execute" id="W[bq`zQ(;Ln!!2VoANHZ" x="67" y="126">
             <value name="NAME">
-            <block type="function_key" id="-{XjF0@#mpJ*O8f]flTe">
-                <field name="function_key">Win</field>
-                <value name="function_key">
-                <block type="normal_key" id="U:+l@VS~ey)!$AKkn4H6">
-                    <field name="normal_key">Z</field>
+                <block type="function_key" id="-{XjF0@#mpJ*O8f]flTe">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key" id="U:+l@VS~ey)!$AKkn4H6">
+                            <field name="normal_key">Z</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="right_click_menu" id="Z,VFz*rj8(rhwMNLjR1w">
-                <statement name="NAME">
-                <block type="right_click_menu_item" id="TSjJYV8,eC{dFw?jLNMY">
-                    <field name="item_name">開啟 Google</field>
-                    <statement name="DO">
-                    <block type="open" id=";VnDBJS=Bru*.zmN`k/@">
-                        <value name="NAME">
-                        <block type="built_in_webpage" id="k~tjUZYFUqgcRRzJ/xA`">
-                            <field name="NAME">google</field>
+                <block type="right_click_menu" id="Z,VFz*rj8(rhwMNLjR1w">
+                    <statement name="NAME">
+                        <block type="right_click_menu_item" id="TSjJYV8,eC{dFw?jLNMY">
+                            <field name="item_name">開啟 Google</field>
+                            <statement name="DO">
+                                <block type="open" id=";VnDBJS=Bru*.zmN`k/@">
+                                    <value name="NAME">
+                                        <block type="built_in_webpage" id="k~tjUZYFUqgcRRzJ/xA`">
+                                            <field name="NAME">google</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                            <next>
+                                <block type="right_click_menu_item" id="yp!vUG^4}4M.,7gD9px/">
+                                    <field name="item_name">開啟 Youtube</field>
+                                    <statement name="DO">
+                                        <block type="open" id="z^Tfs+![h;8M?3?xUjdI">
+                                            <value name="NAME">
+                                                <block type="built_in_webpage" id="5w~#|4=tInjem5)@HH17">
+                                                    <field name="NAME">youtube</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </statement>
+                                </block>
+                            </next>
                         </block>
-                        </value>
-                    </block>
                     </statement>
-                    <next>
-                    <block type="right_click_menu_item" id="yp!vUG^4}4M.,7gD9px/">
-                        <field name="item_name">開啟 Youtube</field>
-                        <statement name="DO">
-                        <block type="open" id="z^Tfs+![h;8M?3?xUjdI">
-                            <value name="NAME">
-                            <block type="built_in_webpage" id="5w~#|4=tInjem5)@HH17">
-                                <field name="NAME">youtube</field>
-                            </block>
-                            </value>
-                        </block>
-                        </statement>
-                    </block>
-                    </next>
                 </block>
-                </statement>
-            </block>
             </statement>
         </block>
         <block type="hotkey_execute" id="+dm/z.]/po+;s5I`NW,5" x="65" y="105">
             <value name="NAME">
-            <block type="function_key" id="sa46!MfGf)7b6Sl8PfXB">
-                <field name="function_key">Win</field>
-                <value name="function_key">
-                <block type="normal_key" id="#9FCV/h6NC~p%/U`a)Pi">
-                    <field name="normal_key">A</field>
+                <block type="function_key" id="sa46!MfGf)7b6Sl8PfXB">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key" id="#9FCV/h6NC~p%/U`a)Pi">
+                            <field name="normal_key">A</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="right_click_menu" id="W;~b1TyLB3I0)[].G~sf">
-                <statement name="NAME">
-                <block type="right_click_menu_item" id="Xpsdc+H?14[pXrLb37HX">
-                    <field name="item_name">開啟AHK官網</field>
-                    <statement name="DO">
-                    <block type="open" id="1Ntc44`BQHI!;$M!i+Dt">
-                        <value name="NAME">
-                        <block type="built_in_webpage" id="P:JXM]q;;{LTRoBfOJ;A">
-                            <field name="NAME">ahk</field>
-                        </block>
-                        </value>
-                    </block>
-                    </statement>
-                    <next>
-                    <block type="right_click_menu_item_hr" id=",?GSS9y54Y~@Frm=9k{M">
-                        <next>
-                        <block type="right_click_menu_item" id="ww-fXW=HiFA{IM_)YzD.">
-                            <field name="item_name">開啟記事本</field>
+                <block type="right_click_menu" id="W;~b1TyLB3I0)[].G~sf">
+                    <statement name="NAME">
+                        <block type="right_click_menu_item" id="Xpsdc+H?14[pXrLb37HX">
+                            <field name="item_name">開啟AHK官網</field>
                             <statement name="DO">
-                            <block type="open" id="0mu2o8dZ!ue~bm=|dWPp">
-                                <value name="NAME">
-                                <block type="built_in_program" id="29EiNv)sE_}9^*^2eL2#">
-                                    <field name="NAME">notepad</field>
-                                </block>
-                                </value>
-                            </block>
-                            </statement>
-                            <next>
-                            <block type="right_click_menu_item" id="%|gSHyK??7?An$O/TmME">
-                                <field name="item_name">開啟小畫家</field>
-                                <statement name="DO">
-                                <block type="open" id="cccD3=`#LN%Ha|~6y1K(">
+                                <block type="open" id="1Ntc44`BQHI!;$M!i+Dt">
                                     <value name="NAME">
-                                    <block type="built_in_program" id="vW.~(?#c|l2j`D2z9D1V">
-                                        <field name="NAME">mspaint</field>
-                                    </block>
+                                        <block type="built_in_webpage" id="P:JXM]q;;{LTRoBfOJ;A">
+                                            <field name="NAME">ahk</field>
+                                        </block>
                                     </value>
                                 </block>
-                                </statement>
-                            </block>
+                            </statement>
+                            <next>
+                                <block type="right_click_menu_item_hr" id=",?GSS9y54Y~@Frm=9k{M">
+                                    <next>
+                                        <block type="right_click_menu_item" id="ww-fXW=HiFA{IM_)YzD.">
+                                            <field name="item_name">開啟記事本</field>
+                                            <statement name="DO">
+                                                <block type="open" id="0mu2o8dZ!ue~bm=|dWPp">
+                                                    <value name="NAME">
+                                                        <block type="built_in_program" id="29EiNv)sE_}9^*^2eL2#">
+                                                            <field name="NAME">notepad</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </statement>
+                                            <next>
+                                                <block type="right_click_menu_item" id="%|gSHyK??7?An$O/TmME">
+                                                    <field name="item_name">開啟小畫家</field>
+                                                    <statement name="DO">
+                                                        <block type="open" id="cccD3=`#LN%Ha|~6y1K(">
+                                                            <value name="NAME">
+                                                                <block type="built_in_program" id="vW.~(?#c|l2j`D2z9D1V">
+                                                                    <field name="NAME">mspaint</field>
+                                                                </block>
+                                                            </value>
+                                                        </block>
+                                                    </statement>
+                                                </block>
+                                            </next>
+                                        </block>
+                                    </next>
+                                </block>
                             </next>
                         </block>
-                        </next>
-                    </block>
-                    </next>
+                    </statement>
                 </block>
-                </statement>
-            </block>
             </statement>
         </block>
         <block type="right_click_menu"></block>
@@ -17123,39 +17799,46 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <category name="跳出視窗" colour="#F5F5DC">
         <block type="msgbox" id="R1WMDFH+Qu_Ih(MfG1Qp" x="51" y="163">
             <value name="NAME">
-            <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
-                <field name="TEXT">OK!</field>
-            </block>
+                <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
+                    <field name="TEXT">OK!</field>
+                </block>
+            </value>
+        </block>
+        <block type="traytip">
+            <value name="NAME">
+                <block type="text">
+                    <field name="TEXT">運行成功🎉</field>
+                </block>
             </value>
         </block>
         <block type="msgbox_yesorno" id="Fr4M,{.}{*|Eh?.__51)" x="139" y="204">
             <value name="title">
-            <block type="text" id="7l+sAAWB)9/;?]owS]tj">
-                <field name="TEXT">標題文字</field>
-            </block>
+                <block type="text" id="7l+sAAWB)9/;?]owS]tj">
+                    <field name="TEXT">標題文字</field>
+                </block>
             </value>
             <value name="text">
-            <block type="text" id="Dz`uGLyhV7M-7X$6MTS_">
-                <field name="TEXT">請按下 [是] 或 [否] </field>
-            </block>
+                <block type="text" id="Dz`uGLyhV7M-7X$6MTS_">
+                    <field name="TEXT">請按下 [是] 或 [否] </field>
+                </block>
             </value>
             <statement name="yes">
-            <block type="msgbox" id="mv%Xk:j?iBU7K*pJIX4h">
-                <value name="NAME">
-                <block type="text" id="(?/,LcjxT#]HcjKMnqH^">
-                    <field name="TEXT">您剛剛按了 [是]</field>
+                <block type="msgbox" id="mv%Xk:j?iBU7K*pJIX4h">
+                    <value name="NAME">
+                        <block type="text" id="(?/,LcjxT#]HcjKMnqH^">
+                            <field name="TEXT">您剛剛按了 [是]</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </statement>
             <statement name="no">
-            <block type="msgbox" id="%G~%K9x4U^#];Zch/*TY">
-                <value name="NAME">
-                <block type="text" id="?@g;R@qUP#c88,Rj^l03">
-                    <field name="TEXT">您剛剛按了 [否]</field>
+                <block type="msgbox" id="%G~%K9x4U^#];Zch/*TY">
+                    <value name="NAME">
+                        <block type="text" id="?@g;R@qUP#c88,Rj^l03">
+                            <field name="TEXT">您剛剛按了 [否]</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </statement>
         </block>
         <block type="inputbox" id="McY+Rsw)#S6:HY8zogQR" inline="false" x="102" y="220">
@@ -17163,33 +17846,33 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
             <field name="w">400</field>
             <field name="h">150</field>
             <value name="title">
-            <block type="text" id="tyM~O.#Y_C60|tdd?u!|">
-                <field name="TEXT">標題文字</field>
-            </block>
+                <block type="text" id="tyM~O.#Y_C60|tdd?u!|">
+                    <field name="TEXT">標題文字</field>
+                </block>
             </value>
             <value name="text">
-            <block type="text" id="{0UGM3+M^.e@$]0K3#uj">
-                <field name="TEXT">請輸入任意文字：</field>
-            </block>
+                <block type="text" id="{0UGM3+M^.e@$]0K3#uj">
+                    <field name="TEXT">請輸入任意文字：</field>
+                </block>
             </value>
             <next>
-            <block type="msgbox" id="VKSd9,OG+EpB,A_rGnwt">
-                <value name="NAME">
-                <block type="text_join" id="Gjhe`t:W2Hrq*3!ZwTvl">
-                    <mutation items="2"></mutation>
-                    <value name="ADD0">
-                    <block type="text" id="c:]LO|8XM@mhhC9iV5AO">
-                        <field name="TEXT">您剛剛輸入了：</field>
-                    </block>
-                    </value>
-                    <value name="ADD1">
-                    <block type="variables_get">
-                        <field name="VAR">輸入的文字</field>
-                    </block>
+                <block type="msgbox" id="VKSd9,OG+EpB,A_rGnwt">
+                    <value name="NAME">
+                        <block type="text_join" id="Gjhe`t:W2Hrq*3!ZwTvl">
+                            <mutation items="2"></mutation>
+                            <value name="ADD0">
+                                <block type="text" id="c:]LO|8XM@mhhC9iV5AO">
+                                    <field name="TEXT">您剛剛輸入了：</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="variables_get">
+                                    <field name="VAR">輸入的文字</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
                 </block>
-                </value>
-            </block>
             </next>
         </block>
         <block type="inputbox" id="`X7T.G5UI:I?#Vcu#W.n" inline="false" x="85" y="101">
@@ -17197,14 +17880,14 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
             <field name="w">400</field>
             <field name="h">150</field>
             <value name="title">
-            <block type="text" id="a1lUwVWzLkA4WVh1XB$5">
-                <field name="TEXT">標題文字</field>
-            </block>
+                <block type="text" id="a1lUwVWzLkA4WVh1XB$5">
+                    <field name="TEXT">標題文字</field>
+                </block>
             </value>
             <value name="text">
-            <block type="text" id="4hHa[On9VrVbU`FVS@xG">
-                <field name="TEXT">請輸入數字 A</field>
-            </block>
+                <block type="text" id="4hHa[On9VrVbU`FVS@xG">
+                    <field name="TEXT">請輸入數字 A</field>
+                </block>
             </value>
             <next>
                 <block type="inputbox" id="TSSuX(W5PTQ0H]5f#aKl" inline="false">
@@ -17212,57 +17895,57 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
                     <field name="w">400</field>
                     <field name="h">150</field>
                     <value name="title">
-                    <block type="text" id=".:b~!s|HOD[rE$t),~{r">
-                        <field name="TEXT">標題文字</field>
-                    </block>
+                        <block type="text" id=".:b~!s|HOD[rE$t),~{r">
+                            <field name="TEXT">標題文字</field>
+                        </block>
                     </value>
                     <value name="text">
-                    <block type="text" id="xSA;}F6=hzmnogCY9Hg8">
-                        <field name="TEXT">請輸入數字 B</field>
-                    </block>
+                        <block type="text" id="xSA;}F6=hzmnogCY9Hg8">
+                            <field name="TEXT">請輸入數字 B</field>
+                        </block>
                     </value>
                     <next>
-                    <block type="msgbox" id=",zvTfSMdVwBF?d$]%Kxu">
-                        <value name="NAME">
-                        <block type="text_join" id="z}H`VDm)6NWo~bH_I)mi">
-                            <mutation items="2"></mutation>
-                            <value name="ADD0">
-                            <block type="text" id="_])#}952:,u,=qPJ-yaj">
-                                <field name="TEXT">A + B = </field>
-                            </block>
-                            </value>
-                            <value name="ADD1">
-                            <block type="math_arithmetic" id=":7`5X*=l(Ev2dS:tioC~">
-                                <field name="OP">ADD</field>
-                                <value name="A">
-                                <block type="variables_get" id="SUF!AQ1}[6WKTUO4_!Rp">
-                                    <field name="VAR" id="BpbSa*dscl~6d4@PT:rd">A</field>
+                        <block type="msgbox" id=",zvTfSMdVwBF?d$]%Kxu">
+                            <value name="NAME">
+                                <block type="text_join" id="z}H`VDm)6NWo~bH_I)mi">
+                                    <mutation items="2"></mutation>
+                                    <value name="ADD0">
+                                        <block type="text" id="_])#}952:,u,=qPJ-yaj">
+                                            <field name="TEXT">A + B = </field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="math_arithmetic" id=":7`5X*=l(Ev2dS:tioC~">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                                <block type="variables_get" id="SUF!AQ1}[6WKTUO4_!Rp">
+                                                    <field name="VAR" id="BpbSa*dscl~6d4@PT:rd">A</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="variables_get" id="i)aM^XxKvaM(o[%(b;`v">
+                                                    <field name="VAR" id=")hOyk`6p=sC/lP^Yru/5">B</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
                                 </block>
-                                </value>
-                                <value name="B">
-                                <block type="variables_get" id="i)aM^XxKvaM(o[%(b;`v">
-                                    <field name="VAR" id=")hOyk`6p=sC/lP^Yru/5">B</field>
-                                </block>
-                                </value>
-                            </block>
                             </value>
                         </block>
-                        </value>
-                    </block>
                     </next>
                 </block>
             </next>
         </block>
-        
+
     </category>
 
     <category name="音量/螢幕" colour="#C95E00">
         <block type="volume_adjust">
             <field name="action">add</field>
             <value name="NAME">
-            <block type="math_number">
-                <field name="NUM">2</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">2</field>
+                </block>
             </value>
         </block>
         <block type="volume_mute"></block>
@@ -17270,105 +17953,105 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
             <field name="action">sub</field>
             <comment pinned="true" h="53" w="188">預設當前亮度為100%</comment>
             <value name="NAME">
-            <block type="math_number">
-                <field name="NUM">5</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
             </value>
         </block>
         <block type="close_monitor"></block>
         <block type="screenshot">
             <field name="subfilename">.png</field>
             <value name="path">
-            <block type="built_in_dirpath">
-                <field name="NAME">desktop</field>
-            </block>
+                <block type="built_in_dirpath">
+                    <field name="NAME">desktop</field>
+                </block>
             </value>
             <value name="filename">
-            <block type="text">
-                <field name="TEXT">螢幕截圖</field>
-            </block>
+                <block type="text">
+                    <field name="TEXT">螢幕截圖</field>
+                </block>
             </value>
         </block>
         <block type="hotkey_execute">
             <value name="NAME">
-            <block type="function_key">
-                <field name="function_key">Win</field>
-                <value name="function_key">
-                <block type="normal_key">
-                    <field name="normal_key">Z</field>
+                <block type="function_key">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key">
+                            <field name="normal_key">Z</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="variables_set">
-                <field name="VAR">現在時間</field>
-                <value name="VALUE">
-                <block type="text_join">
-                    <mutation items="9"></mutation>
-                    <value name="ADD0">
-                    <block type="built_in_time">
-                        <field name="NAME">year</field>
-                    </block>
+                <block type="variables_set">
+                    <field name="VAR">現在時間</field>
+                    <value name="VALUE">
+                        <block type="text_join">
+                            <mutation items="9"></mutation>
+                            <value name="ADD0">
+                                <block type="built_in_time">
+                                    <field name="NAME">year</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="built_in_time">
+                                    <field name="NAME">month</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="built_in_time">
+                                    <field name="NAME">day</field>
+                                </block>
+                            </value>
+                            <value name="ADD3">
+                                <block type="text">
+                                    <field name="TEXT">-</field>
+                                </block>
+                            </value>
+                            <value name="ADD4">
+                                <block type="built_in_time">
+                                    <field name="NAME">hour</field>
+                                </block>
+                            </value>
+                            <value name="ADD5">
+                                <block type="text">
+                                    <field name="TEXT">-</field>
+                                </block>
+                            </value>
+                            <value name="ADD6">
+                                <block type="built_in_time">
+                                    <field name="NAME">min</field>
+                                </block>
+                            </value>
+                            <value name="ADD7">
+                                <block type="text">
+                                    <field name="TEXT">-</field>
+                                </block>
+                            </value>
+                            <value name="ADD8">
+                                <block type="built_in_time">
+                                    <field name="NAME">sec</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
-                    <value name="ADD1">
-                    <block type="built_in_time">
-                        <field name="NAME">month</field>
-                    </block>
-                    </value>
-                    <value name="ADD2">
-                    <block type="built_in_time">
-                        <field name="NAME">day</field>
-                    </block>
-                    </value>
-                    <value name="ADD3">
-                    <block type="text">
-                        <field name="TEXT">-</field>
-                    </block>
-                    </value>
-                    <value name="ADD4">
-                    <block type="built_in_time">
-                        <field name="NAME">hour</field>
-                    </block>
-                    </value>
-                    <value name="ADD5">
-                    <block type="text">
-                        <field name="TEXT">-</field>
-                    </block>
-                    </value>
-                    <value name="ADD6">
-                    <block type="built_in_time">
-                        <field name="NAME">min</field>
-                    </block>
-                    </value>
-                    <value name="ADD7">
-                    <block type="text">
-                        <field name="TEXT">-</field>
-                    </block>
-                    </value>
-                    <value name="ADD8">
-                    <block type="built_in_time">
-                        <field name="NAME">sec</field>
-                    </block>
-                    </value>
+                    <next>
+                        <block type="screenshot">
+                            <field name="subfilename">.png</field>
+                            <value name="path">
+                                <block type="built_in_dirpath">
+                                    <field name="NAME">desktop</field>
+                                </block>
+                            </value>
+                            <value name="filename">
+                                <block type="variables_get">
+                                    <field name="VAR">現在時間</field>
+                                </block>
+                            </value>
+                        </block>
+                    </next>
                 </block>
-                </value>
-                <next>
-                <block type="screenshot">
-                    <field name="subfilename">.png</field>
-                    <value name="path">
-                    <block type="built_in_dirpath">
-                        <field name="NAME">desktop</field>
-                    </block>
-                    </value>
-                    <value name="filename">
-                    <block type="variables_get">
-                        <field name="VAR">現在時間</field>
-                    </block>
-                    </value>
-                </block>
-                </next>
-            </block>
             </statement>
         </block>
     </category>
@@ -17377,176 +18060,174 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="web_element" id="A4}DC-W}T(bX2YolMZ83" x="-96" y="145">
             <field name="elt_address">js_path</field>
             <field name="NAME">&lt;在此輸入元素路徑&gt;</field>
-            <comment pinned="false" h="92" w="259">對網頁物件按右鍵＞檢查
-將反白的HTML區塊按右鍵＞Copy
-選擇複製JS path或CSS選擇器</comment>
+            <comment pinned="false" h="92" w="259">對網頁物件按右鍵＞檢查 將反白的HTML區塊按右鍵＞Copy 選擇複製JS path或CSS選擇器</comment>
         </block>
         <block type="web_element_click" id="R^Z#RgOC6tyDf3ygke6O" x="-116" y="68">
             <value name="NAME">
-            <block type="web_element" id="A4}DC-W}T(bX2YolMZ83">
-                <field name="elt_address">js_path</field>
-                <field name="NAME">document.querySelector("#更新日誌")</field>
-                <comment pinned="false" h="43" w="249">該元素為本網頁的更新日誌子分頁</comment>
-            </block>
+                <block type="web_element" id="A4}DC-W}T(bX2YolMZ83">
+                    <field name="elt_address">js_path</field>
+                    <field name="NAME">document.querySelector("#更新日誌")</field>
+                    <comment pinned="false" h="43" w="249">該元素為本網頁的更新日誌子分頁</comment>
+                </block>
             </value>
         </block>
         <block type="web_element_focus" id="Wu~aQ{A(e0Mpy_{iq=1G" x="-110" y="146">
             <value name="NAME">
-            <block type="web_element" id="$zX9Lgd1.E%WF^A4iZOk">
-                <field name="elt_address">js_path</field>
-                <field name="NAME">document.querySelector("#SELECT_function")</field>
-                <comment pinned="false" h="45" w="349">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
-            </block>
+                <block type="web_element" id="$zX9Lgd1.E%WF^A4iZOk">
+                    <field name="elt_address">js_path</field>
+                    <field name="NAME">document.querySelector("#SELECT_function")</field>
+                    <comment pinned="false" h="45" w="349">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
+                </block>
             </value>
         </block>
         <block type="web_element_setValue" id="!aK^`sw,lB6*#YDIzr04" x="-111" y="215">
             <value name="NAME">
-            <block type="web_element" id="V2;uy6:^Kgfowq7R]e4@">
-                <field name="elt_address">js_path</field>
-                <field name="NAME">document.querySelector("#DIV_func_conent &gt; input[type=text]")</field>
-                <comment pinned="false" h="46" w="308">該元素為本網頁的首頁&gt;設定功能的文字框</comment>
-            </block>
+                <block type="web_element" id="V2;uy6:^Kgfowq7R]e4@">
+                    <field name="elt_address">js_path</field>
+                    <field name="NAME">document.querySelector("#DIV_func_conent &gt; input[type=text]")</field>
+                    <comment pinned="false" h="46" w="308">該元素為本網頁的首頁&gt;設定功能的文字框</comment>
+                </block>
             </value>
             <value name="to_value">
-            <block type="text" id="7*,Np)3o8,vcL@vP60KU">
-                <field name="TEXT">123</field>
-            </block>
+                <block type="text" id="7*,Np)3o8,vcL@vP60KU">
+                    <field name="TEXT">123</field>
+                </block>
             </value>
         </block>
         <block type="web_element_selectedindex" id="Qj^!JAddbJ`PaPm`:U_=" x="-110" y="324">
             <value name="NAME">
-            <block type="web_element" id="_qHG+!j.6.V|nelURl=x">
-                <field name="elt_address">js_path</field>
-                <field name="NAME">document.querySelector("#SELECT_function")</field>
-                <comment pinned="false" h="43" w="330">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
-            </block>
+                <block type="web_element" id="_qHG+!j.6.V|nelURl=x">
+                    <field name="elt_address">js_path</field>
+                    <field name="NAME">document.querySelector("#SELECT_function")</field>
+                    <comment pinned="false" h="43" w="330">該元素為本網頁的首頁&gt;設定功能的下拉式選單</comment>
+                </block>
             </value>
             <value name="to_value">
-            <block type="math_number" id="P}f~~!Vahc?9dLCM*l4=">
-                <field name="NUM">2</field>
-            </block>
+                <block type="math_number" id="P}f~~!Vahc?9dLCM*l4=">
+                    <field name="NUM">2</field>
+                </block>
             </value>
         </block>
         <block type="web_element_alert" id=",}Hyiy{yl+6C58bqamhY" x="90" y="396">
             <value name="NAME">
-            <block type="text" id="g2L}jr,=(F=%TNyUy-pB">
-                <field name="TEXT">OK！</field>
-            </block>
+                <block type="text" id="g2L}jr,=(F=%TNyUy-pB">
+                    <field name="TEXT">OK！</field>
+                </block>
             </value>
         </block>
         <block type="procedures_defnoreturn" id="4ldh1WBM~F`t0J?*x+^U" x="92" y="45">
             <mutation>
-            <arg name="JS程式碼" varid="(Y3G~q,sBzY0NeXr_C0g"></arg>
+                <arg name="JS程式碼" varid="(Y3G~q,sBzY0NeXr_C0g"></arg>
             </mutation>
             <field name="NAME">執行Javascript</field>
             <comment pinned="false" h="69" w="189">請按右鍵＞創造函式積木，來使用此函式積木</comment>
             <statement name="STACK">
-            <block type="win_get_active_title" id="_X$G8nF~Hi,WxbKdj6V@">
-                <value name="NAME">
-                <block type="variables_get">
-                    <field name="VAR">視窗標題</field>
-                </block>
-                </value>
-                <next>
-                <block type="controls_if" id="THQPV}jiH}78Dzj[^i22">
-                    <mutation else="1"></mutation>
-                    <value name="IF0">
-                    <block type="in_str" id="extK?,jPJKj^m9VTZMpB">
-                        <field name="NAME">contain</field>
-                        <value name="text">
+                <block type="win_get_active_title" id="_X$G8nF~Hi,WxbKdj6V@">
+                    <value name="NAME">
                         <block type="variables_get">
                             <field name="VAR">視窗標題</field>
                         </block>
-                        </value>
-                        <value name="sub_text">
-                        <block type="text" id="b_*CEb|VmtrG%3f*X1J1">
-                            <field name="TEXT"> - Google Chrome</field>
-                        </block>
-                        </value>
-                    </block>
                     </value>
-                    <statement name="DO0">
-                    <block type="block_input" id="165$[{QCmm3gcW%S,{r.">
-                        <statement name="DO">
-                        <block type="send_key" id="a1/4HGKEW=Z.?nn~-E(|">
-                            <comment pinned="false" h="47" w="118">聚焦在網址列</comment>
-                            <value name="NAME">
-                            <block type="function_key" id="0/|SFkGfS2;X)ke:$`8U">
-                                <field name="function_key">Ctrl</field>
-                                <value name="function_key">
-                                <block type="normal_key" id="(WtGZt@jQyP4_:@qmN$p">
-                                    <field name="normal_key">L</field>
+                    <next>
+                        <block type="controls_if" id="THQPV}jiH}78Dzj[^i22">
+                            <mutation else="1"></mutation>
+                            <value name="IF0">
+                                <block type="in_str" id="extK?,jPJKj^m9VTZMpB">
+                                    <field name="NAME">contain</field>
+                                    <value name="text">
+                                        <block type="variables_get">
+                                            <field name="VAR">視窗標題</field>
+                                        </block>
+                                    </value>
+                                    <value name="sub_text">
+                                        <block type="text" id="b_*CEb|VmtrG%3f*X1J1">
+                                            <field name="TEXT"> - Google Chrome</field>
+                                        </block>
+                                    </value>
                                 </block>
-                                </value>
-                            </block>
                             </value>
-                            <next>
-                            <block type="paste_text" id="#]9k!1}QNE`~{P#22^2j">
-                                <value name="NAME">
-                                <block type="text_join" id="wlEEX{X-Z.39JD8!.oap">
-                                    <mutation items="3"></mutation>
-                                    <value name="ADD0">
-                                    <block type="text" id="YIqCQ)9:f^oUGkUVTKPh">
-                                        <field name="TEXT">_Javascript:</field>
-                                    </block>
-                                    </value>
-                                    <value name="ADD1">
-                                    <block type="variables_get" id="KM^=j!K4)q07(714b:@K">
-                                        <field name="VAR" id="(Y3G~q,sBzY0NeXr_C0g">JS程式碼</field>
-                                    </block>
-                                    </value>
-                                    <value name="ADD2">
-                                    <block type="text" id=";!Q)#Slc]g67p1YG-r)t">
-                                        <field name="TEXT">;void(0);</field>
-                                    </block>
-                                    </value>
-                                </block>
-                                </value>
-                                <next>
-                                <block type="send_key" id="#*0fu66G5i~16MQ/wT2*">
-                                    <value name="NAME">
-                                    <block type="special_key" id="3]2i;4r_u4m)+*GdNLiz">
-                                        <field name="special_key">Home</field>
-                                    </block>
-                                    </value>
-                                    <next>
-                                    <block type="send_key" id="`|4x%`h890DGg7j/?~}0">
-                                        <value name="NAME">
-                                        <block type="special_key" id="@CNEb)F=/q-Q+=eR.^3M">
-                                            <field name="special_key">Delete</field>
-                                        </block>
-                                        </value>
-                                        <next>
-                                        <block type="send_key" id="Y*csfnmE|aR~8PJQP`R/">
+                            <statement name="DO0">
+                                <block type="block_input" id="165$[{QCmm3gcW%S,{r.">
+                                    <statement name="DO">
+                                        <block type="send_key" id="a1/4HGKEW=Z.?nn~-E(|">
+                                            <comment pinned="false" h="47" w="118">聚焦在網址列</comment>
                                             <value name="NAME">
-                                            <block type="special_key" id="WbXW3I,-ojh1zH06)F9p">
-                                                <field name="special_key">Enter</field>
-                                            </block>
+                                                <block type="function_key" id="0/|SFkGfS2;X)ke:$`8U">
+                                                    <field name="function_key">Ctrl</field>
+                                                    <value name="function_key">
+                                                        <block type="normal_key" id="(WtGZt@jQyP4_:@qmN$p">
+                                                            <field name="normal_key">L</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
                                             </value>
+                                            <next>
+                                                <block type="paste_text" id="#]9k!1}QNE`~{P#22^2j">
+                                                    <value name="NAME">
+                                                        <block type="text_join" id="wlEEX{X-Z.39JD8!.oap">
+                                                            <mutation items="3"></mutation>
+                                                            <value name="ADD0">
+                                                                <block type="text" id="YIqCQ)9:f^oUGkUVTKPh">
+                                                                    <field name="TEXT">_Javascript:</field>
+                                                                </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                                <block type="variables_get" id="KM^=j!K4)q07(714b:@K">
+                                                                    <field name="VAR" id="(Y3G~q,sBzY0NeXr_C0g">JS程式碼</field>
+                                                                </block>
+                                                            </value>
+                                                            <value name="ADD2">
+                                                                <block type="text" id=";!Q)#Slc]g67p1YG-r)t">
+                                                                    <field name="TEXT">;void(0);</field>
+                                                                </block>
+                                                            </value>
+                                                        </block>
+                                                    </value>
+                                                    <next>
+                                                        <block type="send_key" id="#*0fu66G5i~16MQ/wT2*">
+                                                            <value name="NAME">
+                                                                <block type="special_key" id="3]2i;4r_u4m)+*GdNLiz">
+                                                                    <field name="special_key">Home</field>
+                                                                </block>
+                                                            </value>
+                                                            <next>
+                                                                <block type="send_key" id="`|4x%`h890DGg7j/?~}0">
+                                                                    <value name="NAME">
+                                                                        <block type="special_key" id="@CNEb)F=/q-Q+=eR.^3M">
+                                                                            <field name="special_key">Delete</field>
+                                                                        </block>
+                                                                    </value>
+                                                                    <next>
+                                                                        <block type="send_key" id="Y*csfnmE|aR~8PJQP`R/">
+                                                                            <value name="NAME">
+                                                                                <block type="special_key" id="WbXW3I,-ojh1zH06)F9p">
+                                                                                    <field name="special_key">Enter</field>
+                                                                                </block>
+                                                                            </value>
+                                                                        </block>
+                                                                    </next>
+                                                                </block>
+                                                            </next>
+                                                        </block>
+                                                    </next>
+                                                </block>
+                                            </next>
                                         </block>
-                                        </next>
-                                    </block>
-                                    </next>
+                                    </statement>
                                 </block>
-                                </next>
-                            </block>
-                            </next>
+                            </statement>
+                            <statement name="ELSE">
+                                <block type="msgbox" id="(.0t7Lt#Td8Y6t_J.i4A">
+                                    <value name="NAME">
+                                        <block type="text" id="hpr~*Nyxzu4-IM.fZKz6">
+                                            <field name="TEXT">只有Google瀏覽器才可以執行該函式</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
                         </block>
-                        </statement>
-                    </block>
-                    </statement>
-                    <statement name="ELSE">
-                    <block type="msgbox" id="(.0t7Lt#Td8Y6t_J.i4A">
-                        <value name="NAME">
-                        <block type="text" id="hpr~*Nyxzu4-IM.fZKz6">
-                            <field name="TEXT">只有Google瀏覽器才可以執行該函式</field>
-                        </block>
-                        </value>
-                    </block>
-                    </statement>
+                    </next>
                 </block>
-                </next>
-            </block>
             </statement>
         </block>
     </category>
@@ -17560,58 +18241,58 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
     <sep></sep>
 
     <category name="系統資訊" colour="#956D49">
-        <block type="user_name"></block>
-        <block type="computer_name"></block>
+        <block type="system_info_str"></block>
+        <block type="system_info_num"></block>
         <block type="win_get_active_title" id="R.^alvnwVH62{ocVJB*2" x="50" y="119">
             <value name="NAME">
-            <block type="variables_get" id="Ntu}npMscT9(NC%1vI^]">
-                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
-            </block>
+                <block type="variables_get" id="Ntu}npMscT9(NC%1vI^]">
+                    <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
+                </block>
             </value>
         </block>
         <block type="win_get_active_title" id="L.}LiI^$/@uv#dN:-en;" x="63" y="158">
             <value name="NAME">
-            <block type="variables_get" id="Yhln+Uagm;I=qq!d(M?#">
-                <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
-            </block>
+                <block type="variables_get" id="Yhln+Uagm;I=qq!d(M?#">
+                    <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
+                </block>
             </value>
             <next>
-            <block type="controls_if" id="KV8}fV1mC-TCy{5,wReK">
-                <mutation else="1"></mutation>
-                <value name="IF0">
-                <block type="in_str" id="]V{p[##dRw7nZ.rOquKe">
-                    <field name="NAME">contain</field>
-                    <value name="text">
-                    <block type="variables_get" id="Qf_[:Q{iI*esiE~Nl^K*">
-                        <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
-                    </block>
+                <block type="controls_if" id="KV8}fV1mC-TCy{5,wReK">
+                    <mutation else="1"></mutation>
+                    <value name="IF0">
+                        <block type="in_str" id="]V{p[##dRw7nZ.rOquKe">
+                            <field name="NAME">contain</field>
+                            <value name="text">
+                                <block type="variables_get" id="Qf_[:Q{iI*esiE~Nl^K*">
+                                    <field name="VAR" id="K8,SUbJ4;4p:go!BbSge">視窗標題</field>
+                                </block>
+                            </value>
+                            <value name="sub_text">
+                                <block type="text" id="X?`-CG8@Sk}x=pRa1*]@">
+                                    <field name="TEXT">記事本</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
-                    <value name="sub_text">
-                    <block type="text" id="X?`-CG8@Sk}x=pRa1*]@">
-                        <field name="TEXT">記事本</field>
-                    </block>
-                    </value>
+                    <statement name="DO0">
+                        <block type="msgbox" id="MB0CkCX}e/AdfaI{]U6h">
+                            <value name="NAME">
+                                <block type="text" id="b3+3pX4o2i`EDcE)UdE!">
+                                    <field name="TEXT">目前的視窗是記事本</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                    <statement name="ELSE">
+                        <block type="msgbox" id="@?{_T!1yA{6Qh:Z#RH=$">
+                            <value name="NAME">
+                                <block type="text" id="r7Ng*P{Zj0M{hzQv=vS?">
+                                    <field name="TEXT">目前的視窗不是記事本</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
                 </block>
-                </value>
-                <statement name="DO0">
-                <block type="msgbox" id="MB0CkCX}e/AdfaI{]U6h">
-                    <value name="NAME">
-                    <block type="text" id="b3+3pX4o2i`EDcE)UdE!">
-                        <field name="TEXT">目前的視窗是記事本</field>
-                    </block>
-                    </value>
-                </block>
-                </statement>
-                <statement name="ELSE">
-                <block type="msgbox" id="@?{_T!1yA{6Qh:Z#RH=$">
-                    <value name="NAME">
-                    <block type="text" id="r7Ng*P{Zj0M{hzQv=vS?">
-                        <field name="TEXT">目前的視窗不是記事本</field>
-                    </block>
-                    </value>
-                </block>
-                </statement>
-            </block>
             </next>
         </block>
     </category>
@@ -17633,24 +18314,24 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="in_str">
             <field name="NAME">contain</field>
             <value name="text">
-            <block type="text">
-                <field name="TEXT">Apple</field>
-            </block>
+                <block type="text">
+                    <field name="TEXT">Apple</field>
+                </block>
             </value>
             <value name="sub_text">
-            <block type="text">
-                <field name="TEXT">App</field>
-            </block>
+                <block type="text">
+                    <field name="TEXT">App</field>
+                </block>
             </value>
         </block>
         <block type="get_key_state" id="YO!{H(G43CM2:YSIa(o#" x="130" y="223">
             <value name="NAME">
-            <block type="special_key" id="a`*^O%1zVMePqI$Q}!Gp">
-                <field name="special_key">Ctrl</field>
-            </block>
+                <block type="special_key" id="a`*^O%1zVMePqI$Q}!Gp">
+                    <field name="special_key">Ctrl</field>
+                </block>
             </value>
         </block>
-        
+
     </category>
 
     <category name="循環" colour="#006400">
@@ -17664,66 +18345,66 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="controls_for">
             <field name="VAR">i</field>
             <value name="FROM">
-            <block type="math_number">
-                <field name="NUM">1</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
             </value>
             <value name="TO">
-            <block type="math_number">
-                <field name="NUM">5</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
             </value>
             <value name="BY">
-            <block type="math_number">
-                <field name="NUM">1</field>
-            </block>
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
             </value>
             <statement name="DO">
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="variables_get">
-                    <field name="VAR">i</field>
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="variables_get">
+                            <field name="VAR">i</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </statement>
         </block>
         <block type="controls_forEach">
             <field name="VAR">i</field>
             <comment pinned="true" h="42" w="206" x="0" y="0">模擬跨年倒數(使用範例)</comment>
             <value name="LIST">
-            <block type="lists_create_with">
-                <mutation items="4"></mutation>
-                <value name="ADD0">
-                <block type="math_number">
-                    <field name="NUM">3</field>
+                <block type="lists_create_with">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                        <block type="math_number">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="math_number">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                    <value name="ADD2">
+                        <block type="math_number">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <value name="ADD3">
+                        <block type="text">
+                            <field name="TEXT">Happy New Year!</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="math_number">
-                    <field name="NUM">2</field>
-                </block>
-                </value>
-                <value name="ADD2">
-                <block type="math_number">
-                    <field name="NUM">1</field>
-                </block>
-                </value>
-                <value name="ADD3">
-                <block type="text">
-                    <field name="TEXT">Happy New Year!</field>
-                </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="msgbox">
-                <value name="NAME">
-                <block type="variables_get">
-                    <field name="VAR">i</field>
+                <block type="msgbox">
+                    <value name="NAME">
+                        <block type="variables_get">
+                            <field name="VAR">i</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </statement>
         </block>
         <block type="controls_whileUntil">
@@ -17736,202 +18417,201 @@ Blockly.Msg["VARIABLES_DYNAMIC_HUE"] = "310";</script>
         <block type="variables_set" id="C4EKGy^N]=!/m=,7Fy)q" x="38" y="72">
             <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
             <value name="VALUE">
-            <block type="math_number" id="u4]mMZOW%3k//_RlmP9I">
-                <field name="NUM">0</field>
-            </block>
+                <block type="math_number" id="u4]mMZOW%3k//_RlmP9I">
+                    <field name="NUM">0</field>
+                </block>
             </value>
             <next>
-            <block type="while_true" id="%=h%*6b]R%GI#v~[.Xg@">
-                <statement name="DO">
-                <block type="math_change" id="0]YzcL/filPo)9(tq`+@">
-                    <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
-                    <value name="DELTA">
-                    <shadow type="math_number" id="^ymSFd/+)rK:2{]Dg#us">
-                        <field name="NUM">1</field>
-                    </shadow>
-                    </value>
-                    <next>
-                    <block type="msgbox" id="0L;^(xJ{2xi0f,W_A?IJ">
-                        <value name="NAME">
-                        <block type="text_join" id="H@p4=rtBIr5s2d$%fc_N">
-                            <mutation items="2"></mutation>
-                            <value name="ADD0">
-                            <block type="text" id="r;q9f=1M#gUA^~G%+%;.">
-                                <field name="TEXT">現在 x =</field>
-                            </block>
+                <block type="while_true" id="%=h%*6b]R%GI#v~[.Xg@">
+                    <statement name="DO">
+                        <block type="math_change" id="0]YzcL/filPo)9(tq`+@">
+                            <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                            <value name="DELTA">
+                                <shadow type="math_number" id="^ymSFd/+)rK:2{]Dg#us">
+                                    <field name="NUM">1</field>
+                                </shadow>
                             </value>
-                            <value name="ADD1">
-                            <block type="variables_get" id="e.gj}Z+:H}ZqmSl30h+z">
-                                <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
-                            </block>
-                            </value>
-                        </block>
-                        </value>
-                        <next>
-                        <block type="controls_if" id="9+=q/p*BCOu}4L{$R;2L">
-                            <value name="IF0">
-                            <block type="logic_compare" id="A1z!Qe:Kdvg$sBKlmXf`">
-                                <field name="OP">EQ</field>
-                                <value name="A">
-                                <block type="variables_get" id="fnew8Wgo:bLD,6[*;c)q">
-                                    <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                            <next>
+                                <block type="msgbox" id="0L;^(xJ{2xi0f,W_A?IJ">
+                                    <value name="NAME">
+                                        <block type="text_join" id="H@p4=rtBIr5s2d$%fc_N">
+                                            <mutation items="2"></mutation>
+                                            <value name="ADD0">
+                                                <block type="text" id="r;q9f=1M#gUA^~G%+%;.">
+                                                    <field name="TEXT">現在 x =</field>
+                                                </block>
+                                            </value>
+                                            <value name="ADD1">
+                                                <block type="variables_get" id="e.gj}Z+:H}ZqmSl30h+z">
+                                                    <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <next>
+                                        <block type="controls_if" id="9+=q/p*BCOu}4L{$R;2L">
+                                            <value name="IF0">
+                                                <block type="logic_compare" id="A1z!Qe:Kdvg$sBKlmXf`">
+                                                    <field name="OP">EQ</field>
+                                                    <value name="A">
+                                                        <block type="variables_get" id="fnew8Wgo:bLD,6[*;c)q">
+                                                            <field name="VAR" id="S}+*eTdu#STGjR;?W,P!">x</field>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="math_number" id="PDOdg0QH-~IUQW*h/*e/">
+                                                            <field name="NUM">5</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                            <statement name="DO0">
+                                                <block type="controls_flow_statements" id="52!WAO*X)E![VO8W2ysy">
+                                                    <field name="FLOW">BREAK</field>
+                                                </block>
+                                            </statement>
+                                        </block>
+                                    </next>
                                 </block>
-                                </value>
-                                <value name="B">
-                                <block type="math_number" id="PDOdg0QH-~IUQW*h/*e/">
-                                    <field name="NUM">5</field>
-                                </block>
-                                </value>
-                            </block>
-                            </value>
-                            <statement name="DO0">
-                            <block type="controls_flow_statements" id="52!WAO*X)E![VO8W2ysy">
-                                <field name="FLOW">BREAK</field>
-                            </block>
-                            </statement>
+                            </next>
                         </block>
-                        </next>
-                    </block>
-                    </next>
+                    </statement>
                 </block>
-                </statement>
-            </block>
             </next>
         </block>
         <block type="hotkey_execute">
             <comment pinned="true" h="46" w="187">範例: 3x3 乘法表</comment>
             <value name="NAME">
-            <block type="function_key">
-                <field name="function_key">Win</field>
-                <value name="function_key">
-                <block type="normal_key">
-                    <field name="normal_key">Z</field>
+                <block type="function_key">
+                    <field name="function_key">Win</field>
+                    <value name="function_key">
+                        <block type="normal_key">
+                            <field name="normal_key">Z</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="controls_for">
-                <field name="VAR">i</field>
-                <value name="FROM">
-                <block type="math_number">
-                    <field name="NUM">1</field>
-                </block>
-                </value>
-                <value name="TO">
-                <block type="math_number">
-                    <field name="NUM">3</field>
-                </block>
-                </value>
-                <value name="BY">
-                <block type="math_number">
-                    <field name="NUM">1</field>
-                </block>
-                </value>
-                <statement name="DO">
                 <block type="controls_for">
-                    <field name="VAR">j</field>
+                    <field name="VAR">i</field>
                     <value name="FROM">
-                    <block type="math_number">
-                        <field name="NUM">1</field>
-                    </block>
+                        <block type="math_number">
+                            <field name="NUM">1</field>
+                        </block>
                     </value>
                     <value name="TO">
-                    <block type="math_number">
-                        <field name="NUM">3</field>
-                    </block>
+                        <block type="math_number">
+                            <field name="NUM">3</field>
+                        </block>
                     </value>
                     <value name="BY">
-                    <block type="math_number">
-                        <field name="NUM">1</field>
-                    </block>
+                        <block type="math_number">
+                            <field name="NUM">1</field>
+                        </block>
                     </value>
                     <statement name="DO">
-                    <block type="msgbox">
-                        <value name="NAME">
-                        <block type="text_join">
-                            <mutation items="5"></mutation>
-                            <value name="ADD0">
-                            <block type="variables_get">
-                                <field name="VAR">i</field>
-                            </block>
-                            </value>
-                            <value name="ADD1">
-                            <block type="text">
-                                <field name="TEXT">x</field>
-                            </block>
-                            </value>
-                            <value name="ADD2">
-                            <block type="variables_get">
-                                <field name="VAR">j</field>
-                            </block>
-                            </value>
-                            <value name="ADD3">
-                            <block type="text">
-                                <field name="TEXT">=</field>
-                            </block>
-                            </value>
-                            <value name="ADD4">
-                            <block type="math_arithmetic">
-                                <field name="OP">MULTIPLY</field>
-                                <value name="A">
-                                <block type="variables_get">
-                                    <field name="VAR">i</field>
+                        <block type="controls_for">
+                            <field name="VAR">j</field>
+                            <value name="FROM">
+                                <block type="math_number">
+                                    <field name="NUM">1</field>
                                 </block>
-                                </value>
-                                <value name="B">
-                                <block type="variables_get">
-                                    <field name="VAR">j</field>
-                                </block>
-                                </value>
-                            </block>
                             </value>
+                            <value name="TO">
+                                <block type="math_number">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                            <value name="BY">
+                                <block type="math_number">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <statement name="DO">
+                                <block type="msgbox">
+                                    <value name="NAME">
+                                        <block type="text_join">
+                                            <mutation items="5"></mutation>
+                                            <value name="ADD0">
+                                                <block type="variables_get">
+                                                    <field name="VAR">i</field>
+                                                </block>
+                                            </value>
+                                            <value name="ADD1">
+                                                <block type="text">
+                                                    <field name="TEXT">x</field>
+                                                </block>
+                                            </value>
+                                            <value name="ADD2">
+                                                <block type="variables_get">
+                                                    <field name="VAR">j</field>
+                                                </block>
+                                            </value>
+                                            <value name="ADD3">
+                                                <block type="text">
+                                                    <field name="TEXT">=</field>
+                                                </block>
+                                            </value>
+                                            <value name="ADD4">
+                                                <block type="math_arithmetic">
+                                                    <field name="OP">MULTIPLY</field>
+                                                    <value name="A">
+                                                        <block type="variables_get">
+                                                            <field name="VAR">i</field>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="variables_get">
+                                                            <field name="VAR">j</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
                         </block>
-                        </value>
-                    </block>
                     </statement>
                 </block>
-                </statement>
-            </block>
             </statement>
         </block>
     </category>
 
     <category name="串列" colour="#7B68EE">
         <block type="lists_create_with">
-        <mutation items="3"></mutation>
+            <mutation items="3"></mutation>
         </block>
         <block type="lists_create_with">
-        <mutation items="0"></mutation>
+            <mutation items="0"></mutation>
         </block>
         <block type="msgbox">
             <value name="NAME">
-            <block type="list_str">
-                    <comment pinned="false" h="72" w="382">必須透過此積木才能將串列以文字方式顯示出來
-因為AHK語法: Msgbox % Array(1,2,3) 並不會顯示串列</comment>
+                <block type="list_str">
+                    <comment pinned="false" h="72" w="382">必須透過此積木才能將串列以文字方式顯示出來 因為AHK語法: Msgbox % Array(1,2,3) 並不會顯示串列</comment>
                     <value name="NAME">
-                    <block type="lists_create_with">
-                        <mutation items="3"></mutation>
-                        <value name="ADD0">
-                        <block type="math_number">
-                            <field name="NUM">1</field>
+                        <block type="lists_create_with">
+                            <mutation items="3"></mutation>
+                            <value name="ADD0">
+                                <block type="math_number">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="math_number">
+                                    <field name="NUM">2</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="math_number">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
                         </block>
-                        </value>
-                        <value name="ADD1">
-                        <block type="math_number">
-                            <field name="NUM">2</field>
-                        </block>
-                        </value>
-                        <value name="ADD2">
-                        <block type="math_number">
-                            <field name="NUM">3</field>
-                        </block>
-                        </value>
-                    </block>
                     </value>
                 </block>
-                </value>
-            </block>
+            </value>
+        </block>
         <block type="list_str"></block>
     </category>
 
@@ -18124,6 +18804,13 @@ TAB_SPACE="    "  #縮排
 
 #region 腳本函數字典
 FUNC_DICT={
+    #螢幕寬高
+    'screen_width':{
+        'pre':'SysGet, VirtualWidth, 78\n'
+    },
+    'screen_height':{
+        'pre':'SysGet, VirtualHeight, 79\n'
+    },
     #region ArrayStr
     'ArrayStr':{
         'end':
@@ -18160,7 +18847,7 @@ ArrayStr(arr) {
 }
 '''
     },
-    #region ArrayStr
+    #endregion ArrayStr
     'SetBrightness':{
         'pre':"__vBright := 100\n",
         'end':"\n".join([
@@ -20966,6 +21653,8 @@ def FormatXML(xml_str):
 
 #定義動作:尋找該層下的選擇器
 def FindCurrent(elt,css_selector,get_one=True):
+    if not elt:
+        return None
     com_elt_list=[elt_child for elt_child in elt.select(css_selector) if elt_child.parent==elt]
     if get_one:
         if com_elt_list:
@@ -21055,6 +21744,8 @@ def XmlToAHK(ev):
             'math_mod',
             'lists_create_with',
             'list_str',
+            'system_info_str',
+            'system_info_num',
         ]
         #print('xml>ahk')
         # print('XmlToAHK',"ev.type:",ev.type)
@@ -21108,7 +21799,9 @@ def XmlToAHK(ev):
 #region 基本函數
 
 #定義函數: 將半形符號轉換成全形符號
-def ToFullWidthString(text):
+def ToFullWidthString(text,excluded_str_list=None):
+    if not excluded_str_list:
+        excluded_str_list=[]
     full_width_string_dict={
         r'~':'～',
         r'!':'！',
@@ -21147,8 +21840,10 @@ def ToFullWidthString(text):
     }
     chr_set=set(text)
     com_text=str(text)
+    #遍歷每一個字母
     for c in chr_set:
-        if c in full_width_string_dict.keys():
+        #替換成全行字體 (排除提供的例外串列)
+        if c in full_width_string_dict.keys() and c not in excluded_str_list:
             com_text=com_text.replace(c,full_width_string_dict[c])
     return com_text
 
@@ -21454,6 +22149,14 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
             com_str+=f"Msgbox % {value_str}\n"
 
+        elif block_elt.attrs['type']=="traytip":
+            value_elt=FindCurrent(block_elt,'value')
+            value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
+
+            com_str+=value_comment
+
+            com_str+=f"TrayTip,,% {value_str}\n"
+
         elif block_elt.attrs['type']=="send_text":
             value_elt=FindCurrent(block_elt,'value')
             value_str,value_comment=AHK_value(value_elt,get_all_comment=True)
@@ -21588,17 +22291,17 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #目錄、檔案、網頁
         elif block_elt.attrs['type'] in ["filepath","dirpath","webpage"]:
-            filed_elt=FindCurrent(block_elt,'field[name="NAME"]')
-            filed_str=filed_elt.text
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            field_str=field_elt.text
             #若為網頁，則需要替換特殊字元
             if block_elt.attrs['type']=="webpage":
-                filed_str=filed_str.replace("%","`%").replace(",","`,")
+                field_str=field_str.replace("%","`%").replace(",","`,")
             #若路徑有空白，就使用三個引號夾起
-            if " " in filed_str:
-                com_str+=f'"""{filed_str}"""'
+            if " " in field_str:
+                com_str+=f'"""{field_str}"""'
             #若路徑沒有空白，就使用一個引號夾起
             else:
-                com_str+=f'"{filed_str}"'
+                com_str+=f'"{field_str}"'
         
         #文字
         elif block_elt.attrs['type']=="text":
@@ -21644,7 +22347,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             if field_elt:
                 built_in_program_dict={
                     "notepad":'"Notepad.exe"',
-                    "mspaint":' windir . "\system32\mspaint.exe"',
+                    "mspaint":'"mspaint.exe"',
                     "calc":' windir . "\system32\calc.exe"',
                     "SnippingTool":' windir . "\system32\SnippingTool.exe"',
                     "cmd":' windir . "\system32\cmd.exe"',
@@ -21676,6 +22379,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     "google":'https://www.google.com',
                     "youtube":'https://www.youtube.com',
                     "facebook":'https://www.facebook.com',
+                    "baidu":'https://www.baidu.com/',
                     "wikipedia":'https://zh.wikipedia.org',
                     "pchome":"https://www.pchome.com.tw",
                     "yahoo":"https://yahoo.com",
@@ -21874,9 +22578,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             if next_sendKey_elt:
                 next_sendKey_elt.remove()
             #獲取一般連續鍵
-            filed_elt=FindCurrent(block_elt,'field')
+            field_elt=FindCurrent(block_elt,'field')
             
-            com_str+=f'Send, {filed_elt.text}\n'
+            com_str+=f'Send, {field_elt.text}\n'
 
         elif block_elt.attrs['type']=="send_key_times":
             #移除next元素(使用虛擬DIV容器)
@@ -21932,6 +22636,21 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #輸出程式碼
             com_str=f'Send {{{value_str} Down}}\n{statement_str}Send {{{value_str} Up}}\n'
 
+        #按著功能鍵
+        elif block_elt.attrs['type'] in ["key_down","key_up"]:
+            # print(1)
+            #獲取功能鍵
+            value_elt=FindCurrent(block_elt,'value',get_one=True)
+            # print(2)
+            value_str,value_comment=AHK_value(value_elt)
+            # print(3)
+            com_str+=value_comment
+            # print(value_str)
+            # print(block_elt.attrs['type'])
+            # print(block_elt.attrs['type'].replace('key_').upper())
+            
+            #輸出程式碼
+            com_str+=f"Send {{{value_str} {block_elt.attrs['type'].replace('key_','').upper()}}}\n"
 
 
 
@@ -21981,6 +22700,149 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #region 偵測圖片Blockly
 
+        #偵測像素
+        elif block_elt.attrs['type']=="get_pixel_pos":
+            #獲取偵測圖片設定區塊
+            statement_setting_elt=FindCurrent(block_elt,'statement[name="get_pixel_pos_setting"]')
+            statement_setting_elt_comment=Comment(statement_setting_elt,get_all_comment=True)
+            com_str+=statement_setting_elt_comment
+
+            #獲取像素顏色(RGB)
+            block_pixelRGBColor_elt=statement_setting_elt.select_one('block[type="pixel_rgb_color"]')
+            #獲取像素顏色(R)
+            value_R_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_R_elt_str,value_R_elt_comment=AHK_value(value_R_elt) if value_R_elt else ('0','')
+            value_R_elt_int=int(value_R_elt_str)
+            value_R_elt_int=max(0,min(value_R_elt_int,255))
+            #獲取像素顏色(G)
+            value_G_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_G_elt_str,value_G_elt_comment=AHK_value(value_G_elt) if value_G_elt else ('0','')
+            value_G_elt_int=int(value_G_elt_str)
+            value_G_elt_int=max(0,min(value_G_elt_int,255))
+            #獲取像素顏色(B)
+            value_B_elt=FindCurrent(block_pixelRGBColor_elt,'value[name="R"]') if block_pixelRGBColor_elt else None
+            value_B_elt_str,value_B_elt_comment=AHK_value(value_B_elt) if value_B_elt else ('0','')
+            value_B_elt_int=int(value_B_elt_str)
+            value_B_elt_int=max(0,min(value_B_elt_int,255))
+            #根據RGB像素顏色產生 ColorID
+            value_RGB_elt_str=f'{value_R_elt_int:02x}{value_G_elt_int:02x}{value_B_elt_int:02x}'
+
+            #獲取像素顏色(ColorID)
+            block_pixelColorId_elt=statement_setting_elt.select_one('block[type="pixel_color_id"]')
+            field_colorId_elt=FindCurrent(block_pixelColorId_elt,'field[name="ColorID"]')
+            field_colorId_str=field_colorId_elt.text if field_colorId_elt else value_RGB_elt_str if block_pixelRGBColor_elt else "FFFFFF"
+
+            #檢查偵測像素積木內是否有指定像素顏色，沒有的話就跳出警示訊息，並預設使用白色(FFFFFF)進行偵測
+            if (not block_pixelColorId_elt) and (not block_pixelRGBColor_elt):
+                alert("偵測像素積木內沒有指定像素顏色\n請填入RGB積木或色碼積木")
+
+            #獲取搜尋範圍
+            block_image_search_area_elt=statement_setting_elt.select_one('block[type="pixel_search_area"]')
+            #獲取搜尋範圍X
+            value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
+            value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            #獲取搜尋範圍Y
+            value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
+            value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            #獲取搜尋範圍W
+            value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
+            value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
+            if not value_w_elt:func_dict_key_set.update(['screen_width'])
+            #獲取搜尋範圍H
+            value_h_elt=FindCurrent(block_image_search_area_elt,'value[name="H"]') if block_image_search_area_elt else None
+            value_h_elt_str,value_h_elt_comment=AHK_value(value_h_elt) if value_h_elt else ("0","")
+            if not value_h_elt:func_dict_key_set.update(['screen_height'])
+            
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            # statement_elseDo_str=statement_elseDo_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            com_str+='\n'.join([
+                'CoordMode Pixel',
+                ';搜尋像素點',
+                f'PixelSearch, __FoundX, __FoundY, {value_x_elt_str}, {value_y_elt_str}, {value_w_elt_str}, {value_h_elt_str}, 0x{field_colorId_str},,Fast RGB',
+                'CoordMode Mouse',
+                ';獲取像素點座標',
+                f'{posXVar_str}:=__FoundX',
+                f'{posYVar_str}:=__FoundY',
+                'if (ErrorLevel=0) {',
+                f'{statement_do_str}'+''+'} else {',
+                f'{statement_elseDo_str}'+'}\n',
+            ])
+
+        #偵測圖片
+        elif block_elt.attrs['type']=="get_picture_pos_ver200419":
+            #獲取偵測圖片設定區塊
+            statement_setting_elt=FindCurrent(block_elt,'statement[name="get_picture_pos_setting"]')
+            statement_setting_elt_comment=Comment(statement_setting_elt,get_all_comment=True)
+            com_str+=statement_setting_elt_comment
+
+            #獲取圖片路徑
+            block_imgFilepath_elt=statement_setting_elt.select_one('block[type="image_filepath"]')
+            value_imgFilepath_elt=FindCurrent(block_imgFilepath_elt,'value[name="NAME"]') if block_imgFilepath_elt else None
+            value_imgFilepath_str,value_imgFilepath_comment=AHK_value(value_imgFilepath_elt) if value_imgFilepath_elt else ("","")
+
+            #獲取搜尋範圍
+            block_image_search_area_elt=statement_setting_elt.select_one('block[type="image_search_area"]')
+            #獲取搜尋範圍X
+            value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
+            value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            #獲取搜尋範圍Y
+            value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
+            value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            #獲取搜尋範圍X
+            value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
+            value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
+            if not value_w_elt:func_dict_key_set.update(['screen_width'])
+            #獲取搜尋範圍X
+            value_h_elt=FindCurrent(block_image_search_area_elt,'value[name="H"]') if block_image_search_area_elt else None
+            value_h_elt_str,value_h_elt_comment=AHK_value(value_h_elt) if value_h_elt else ("0","")
+            if not value_h_elt:func_dict_key_set.update(['screen_height'])
+            
+            #獲取posX變量名稱
+            field_posXVar_elt=FindCurrent(block_elt,'field[name="pos_x"]')
+            posXVar_str=field_posXVar_elt.text
+            #獲取posY變量名稱
+            field_posYVar_elt=FindCurrent(block_elt,'field[name="pos_y"]')
+            posYVar_str=field_posYVar_elt.text
+            #獲取找到圖片後執行動作
+            statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
+            statement_do_str=AHK_statement(statement_do_elt)
+            statement_do_str=statement_do_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            #獲取找不到圖片後執行動作
+            statement_elseDo_elt=FindCurrent(block_elt,'statement[name="ELSE_DO"]')
+            statement_elseDo_str=AHK_statement(statement_elseDo_elt)
+            statement_elseDo_str=statement_elseDo_str.replace("\n","\n"+TAB_SPACE) #二次縮排
+            com_str+='\n'.join([
+                f'__ImageFilePath:={value_imgFilepath_str}',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                'if FileExist(__ImageFilePath){',
+                TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
+                TAB_SPACE+'CoordMode Pixel',
+                TAB_SPACE+';搜尋圖片',
+                TAB_SPACE+f'ImageSearch, __FoundX, __FoundY, {value_x_elt_str}, {value_y_elt_str}, {value_w_elt_str}, {value_h_elt_str},%__ImageFilePath%',
+                TAB_SPACE+'CoordMode Mouse',
+                TAB_SPACE+';獲取圖片中心座標',
+                TAB_SPACE+f'{posXVar_str}:=__FoundX + __img_w/2',
+                TAB_SPACE+f'{posYVar_str}:=__FoundY + __img_h/2',
+                TAB_SPACE+'if (ErrorLevel=0) {',
+                TAB_SPACE+f'{statement_do_str}'+''+'} else {',
+                TAB_SPACE+f'{statement_elseDo_str}'+''+'}',
+                '} else {',
+                TAB_SPACE+'Msgbox % "圖片路徑不存在"',
+                '}\n',
+            ])
+
+
         elif block_elt.attrs['type']=="get_picture_pos_ver200406":
             #獲取設值blockly
             value_imgFilepath_elt=FindCurrent(block_elt,'value[name="image_filepath"]')
@@ -21999,8 +22861,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
             com_str+='\n'.join([
                 f'__ImageFilePath:={value_imgFilepath_str}',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
-                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
                 TAB_SPACE+'SysGet, VirtualWidth, 78',
@@ -22040,8 +22902,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             statement_elseDo_str=AHK_statement(statement_elseDo_elt)
             com_str+='\n'.join([
                 f'__ImageFilePath:="{img_filepath_str}"',
+                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
-                TAB_SPACE+'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
                 TAB_SPACE+'SysGet, VirtualWidth, 78',
@@ -22183,6 +23045,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取執行內容
             statement_elt=FindCurrent(block_elt,'statement[name="STACK"]')
             statement_str=AHK_statement(statement_elt)
+            #若函式裡有使用螢幕寬高的機木，就補充螢幕寬高的全域宣告
+            if block_elt.select_one('block[type="system_info_num"]'):
+                statement_str=f'{TAB_SPACE}global VirtualHeight,VirtualWidth\n'+statement_str
             #輸出程式碼
             com_str+=f'{function_name_str}({arg_str}){{\n{statement_str}}}\n'
 
@@ -22205,6 +23070,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             value_return_str,value_return_comment=AHK_value(value_return_elt)
             value_return_str=TAB_SPACE + f'Return {value_return_str}\n'
             com_str+=value_return_comment
+            #若函式裡有使用螢幕寬高的機木，就補充螢幕寬高的全域宣告
+            if block_elt.select_one('block[type="system_info_num"]'):
+                statement_str=f'{TAB_SPACE}global VirtualHeight,VirtualWidth\n'+statement_str
             #輸出程式碼
             com_str+=f'{function_name_str}({arg_str}){{\n{statement_str}{value_return_str}}}\n'
         
@@ -22421,7 +23289,6 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
 
         #endregion 邏輯Blockly
 
-        #region 右鍵清單Blockly
 
         #region 文字Blockly (其他)
         elif block_elt.attrs['type']=="break_line_chr":
@@ -22430,7 +23297,11 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
         #endregion 文字Blockly (其他)
 
 
+        #region 右鍵清單Blockly
         elif block_elt.attrs['type']=="right_click_menu":
+            #預設選單名稱紀錄串列
+            item_name_with_sapce_str_list=[]
+
             MyMenu_str=f'MyMenu_{id(block_elt)}'
             menu_myMenu_add_str=""
             label_str=""
@@ -22449,17 +23320,26 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             
             for block_item_elt in block_item_elt_list:
 
+
                 if block_item_elt.attrs['type']=="right_click_menu_item":
                     #獲取項目名稱
                     field_itemName_elt=FindCurrent(block_item_elt,'field[name="item_name"]')
                     item_name_raw_str=field_itemName_elt.text
-                    #轉換變數名稱為全形
-                    item_name_str=ToFullWidthString(item_name_raw_str)
-                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_str},{item_name_str}_{i_item}_{id(block_elt)}\n"
+                    #製作選單項目名稱:轉換變數名稱為全形(排除空白)
+                    item_name_with_sapce_str=ToFullWidthString(item_name_raw_str,excluded_str_list=[' '])
+                    item_name_without_sapce_str=ToFullWidthString(item_name_raw_str)
+                    #若單項目名稱重複，就增加一個點(再重複就累加) #註:重複的選單名稱會使AHK失效
+                    while item_name_with_sapce_str in item_name_with_sapce_str_list:
+                        item_name_with_sapce_str=item_name_with_sapce_str + '.'
+                    #紀錄選單名稱
+                    item_name_with_sapce_str_list.append(item_name_with_sapce_str)
+                    print(item_name_with_sapce_str_list)
+
+                    menu_myMenu_add_str+=f"Menu,{MyMenu_str},Add,{item_name_with_sapce_str},{item_name_without_sapce_str}_{i_item}_{id(block_elt)}\n"
                     #獲取執行式
                     statement_do_elt=FindCurrent(block_item_elt,'statement[name="DO"]')
                     statement_do_str=AHK_statement(statement_do_elt)
-                    label_str+=f"{item_name_str}_{i_item}_{id(block_elt)}:\n{statement_do_str}return\n"
+                    label_str+=f"{item_name_without_sapce_str}_{i_item}_{id(block_elt)}:\n{statement_do_str}return\n"
                     #增加項目計數
                     i_item+=1
                 elif block_item_elt.attrs['type']=="right_click_menu_item_hr":
@@ -22475,6 +23355,7 @@ CoordMode, Mouse, Screen
 '''+ menu_myMenu_add_str +'''
 MouseGetPos,MX,MY
 Menu,'''+MyMenu_str+''',Show,% MX,% MY
+Menu,'''+MyMenu_str+''',DeleteAll
 return
 
 '''+ label_str +'''}\n'''
@@ -22524,6 +23405,7 @@ return
             search_selected_keyword_url_tuple_dict={
                 'google':("https://www.google.com.tw/search?q=","","Google搜尋"),
                 'youtube':("https://www.youtube.com/results?search_query=","","Youtube搜尋"),
+                'baidu':("https://www.baidu.com/s?wd=","","百度搜尋"),
                 'wiki':("http://zh.wikipedia.org/w/index.php?title=Special:Search&search=","","WIKI搜尋"),
                 'google_map':("https://www.google.com.tw/maps/search/","","Google地圖搜尋"),
                 'google_trend':("https://www.google.com/trends/explore?q=","","Google搜尋趨勢"),
@@ -22622,7 +23504,31 @@ return
 
         #endregion 選取文字後
 
+
+
         #region 系統資訊Blockly
+
+        elif block_elt.attrs['type']=="system_info_str":
+            #獲取選取名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #若選擇本用戶名稱
+            if field_elt.text=="user_name":
+                com_str+="A_UserName"
+            elif field_elt.text=="computer_name":
+                com_str+="A_ComputerName"
+
+        elif block_elt.attrs['type']=="system_info_num":
+            #獲取選取名稱
+            field_elt=FindCurrent(block_elt,'field[name="NAME"]')
+            #若選擇本用戶名稱
+            if field_elt.text=="screen_width":
+                com_str+="VirtualWidth"
+                func_dict_key_set.update(['screen_width'])
+            elif field_elt.text=="screen_height":
+                com_str+="VirtualHeight"
+                func_dict_key_set.update(['screen_height'])
+
+
         elif block_elt.attrs['type']=="computer_name":
             com_str+="A_ComputerName"
 
@@ -22650,7 +23556,9 @@ return
             #獲取執行式
             statement_do_elt=FindCurrent(block_elt,'statement[name="DO"]')
             statement_do_str=AHK_statement(statement_do_elt)
-            com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
+            loop_time_int_var_name=f'loop_time_int_{id(block_elt)}'
+            com_str+=f"{loop_time_int_var_name}:={value_str}\n"
+            com_str+=f"Loop %{loop_time_int_var_name}% {{\n{statement_do_str}}}\n"
 
         #For Loop 循環
         elif block_elt.attrs['type']=="controls_for":
@@ -22863,182 +23771,42 @@ workspace.addChangeListener(ClearAhkCodeArea)
 #綁定事件:停用落單的blockly
 #workspace.addChangeListener(Blockly.Events.disableOrphans);
 
-#region 插入範例1
-xml_ex_1='''<xml>
-  <block type="procedures_defreturn" id="qlK:U]~IEWC+1@gAN:lK" x="24" y="23">
-    <mutation statements="false"></mutation>
-    <field name="NAME">現在時間</field>
-    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
-    <value name="RETURN">
-      <block type="text_join" id="8X0.OxgdRV2Q2QE8mMFT">
-        <mutation items="11"></mutation>
-        <value name="ADD0">
-          <block type="built_in_time" id="3*b_Ao:WS1JMA~pdCo@1">
-            <field name="NAME">year</field>
-          </block>
-        </value>
-        <value name="ADD1">
-          <block type="text" id="s)pS:L;BF`;kflQBLVNR">
-            <field name="TEXT">/</field>
-          </block>
-        </value>
-        <value name="ADD2">
-          <block type="built_in_time" id="N)U2e8AB{xaJHW!c;h#/">
-            <field name="NAME">month</field>
-          </block>
-        </value>
-        <value name="ADD3">
-          <block type="text" id="Hin^|y$w@)Bz-3fxYJo_">
-            <field name="TEXT">/</field>
-          </block>
-        </value>
-        <value name="ADD4">
-          <block type="built_in_time" id="Tfi4BII%@Ap31W]Fg9%l">
-            <field name="NAME">day</field>
-          </block>
-        </value>
-        <value name="ADD5">
-          <block type="text" id="r_0%Xpw_71L_L[Ao-8oo">
-            <field name="TEXT">-</field>
-          </block>
-        </value>
-        <value name="ADD6">
-          <block type="built_in_time" id="G|$^aoRw?.-nvdlw)h!-">
-            <field name="NAME">hour</field>
-          </block>
-        </value>
-        <value name="ADD7">
-          <block type="text" id="Z!nnU}TwQHz|QeNz_J=|">
-            <field name="TEXT">:</field>
-          </block>
-        </value>
-        <value name="ADD8">
-          <block type="built_in_time" id="14gg/Elks,(H;_T}(=lO">
-            <field name="NAME">min</field>
-          </block>
-        </value>
-        <value name="ADD9">
-          <block type="text" id="]h^=X9AaM^g5^w/CakfK">
-            <field name="TEXT">:</field>
-          </block>
-        </value>
-        <value name="ADD10">
-          <block type="built_in_time" id="mpTd{yebnp:R/%H30rj3">
-            <field name="NAME">sec</field>
-          </block>
-        </value>
-      </block>
-    </value>
-  </block>
-  <block type="procedures_defreturn" id="[ZFzaKc.WVOfgb*~E4X4" x="418" y="59">
-    <mutation statements="false"></mutation>
-    <field name="NAME">現在日期</field>
-    <comment pinned="false" h="44" w="325">請按右鍵＞創造函式積木，來使用此函式積木</comment>
-    <value name="RETURN">
-      <block type="text_join" id=".wPxQ{%A/.TkGGUS:/l@">
-        <mutation items="9"></mutation>
-        <value name="ADD0">
-          <block type="text" id="8edf;tX{wP:I5]xI5#J6">
-            <field name="TEXT">中華民國</field>
-          </block>
-        </value>
-        <value name="ADD1">
-          <block type="math_arithmetic" id="krA].qgE(Jj?l-e5{xf=">
-            <field name="OP">MINUS</field>
-            <comment pinned="false" h="36" w="151">將西元年換算成民國年</comment>
-            <value name="A">
-              <block type="built_in_time" id="/S==O~?Y~e7=jb2C51fZ">
-                <field name="NAME">year</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number" id="7=F;I#5W!4l[Eb5E0+(k">
-                <field name="NUM">1911</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <value name="ADD2">
-          <block type="text" id="`v|z$:CWB/sQ+^pdH{5%">
-            <field name="TEXT">年</field>
-          </block>
-        </value>
-        <value name="ADD3">
-          <block type="math_arithmetic" id="nz0W2[Z?Tc-^uebU5ErH">
-            <field name="OP">MULTIPLY</field>
-            <comment pinned="false" h="37" w="155">將「09月」改為「9月」</comment>
-            <value name="A">
-              <block type="built_in_time" id=":a4vRzNmHkUGvM~GOiI/">
-                <field name="NAME">month</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number" id="M=k.jK]pT9IYzBLlYKPe">
-                <field name="NUM">1</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <value name="ADD4">
-          <block type="text" id="3WT_$zY8oDl!1WHN37}~">
-            <field name="TEXT">月</field>
-          </block>
-        </value>
-        <value name="ADD5">
-          <block type="built_in_time" id="Ba=0#KTsgH`Ijdly#0+q">
-            <field name="NAME">day</field>
-          </block>
-        </value>
-        <value name="ADD6">
-          <block type="text" id="Z,A}^E`o/6Cyo)m}AqT%">
-            <field name="TEXT">日</field>
-          </block>
-        </value>
-        <value name="ADD7">
-          <block type="text" id="H78r)U*L}t~7e.@L5dM2">
-            <field name="TEXT">  星期</field>
-          </block>
-        </value>
-        <value name="ADD8">
-          <block type="built_in_wday_zh" id="EkC@I@+HGH5^cu~3G=S="></block>
-        </value>
-      </block>
-    </value>
-  </block>
-  <block type="hotstring" id="TNWAh{Y3xozLNH.7tGxR" x="26" y="369">
-    <value name="ABB">
-      <block type="text" id="8:Q2t+aU.@:TJJ:CLY^b">
-        <field name="TEXT">\\now</field>
-      </block>
-    </value>
-    <value name="TEXT">
-      <block type="procedures_callreturn" id="F[M88Yax:0WU4!*Qdg+1">
-        <mutation name="現在時間"></mutation>
-      </block>
-    </value>
-  </block>
-  <block type="hotstring" id="Lx0J5yJv8G#uLgpx7bO(" x="440" y="370">
-    <value name="ABB">
-      <block type="text" id="R8UjYUXVQlt@`+d/F=pE">
-        <field name="TEXT">\date</field>
-      </block>
-    </value>
-    <value name="TEXT">
-      <block type="procedures_callreturn" id="aq{LXI=8j-YmPl}vs0wX">
-        <mutation name="現在日期"></mutation>
-      </block>
-    </value>
-  </block>
-</xml>'''
 
-#endregion 插入範例1
+#定義匯入積木檔 XML 的動作
+def ImportXmlCode(ev):    
+    #定義匯入XML積木檔案時的解析動作
+    def OnInputXmlFile(ev):
+        #定義文字讀取完後的動作
+        def ReaderOnload(ev):
+            #獲取積木檔 XML 內容
+            xml_code=ev.target.result
+            #覆蓋到積木 XML 文字區域
+            doc['textarea_xml'].value = xml_code
+            #觸發 XML 渲染事件
+            XmlToBlockly(window.Event.new("input"))
+        
+        #獲取 XML 檔案
+        inputFileElt=ev.target
+        inputFile=inputFileElt.files[0]
+        #建立檔案讀取DOM實例，並解析XML積木檔內容文字
+        reader = window.FileReader.new()
+        reader.readAsText(inputFile)
+        reader.bind("load", ReaderOnload)
 
 
-#插入範本
-def ViewEx(ev):
-    doc['textarea_xml'].value=xml_ex_1
-    XmlToBlockly(window.Event.new("input"))
-    #doc['btn_blockToAhk'].click()
+    #創造一個開啟檔案的 input 元素並進行點擊，觸發解析動作函數
+    inputFileElt=INPUT(type='file',accept='text/xml') #限制開啟檔案類型為 XML 檔案
+    inputFileElt.bind('input',OnInputXmlFile)
+    inputFileElt.click()
+
+#定義動作:下載XML積木檔案
+def DownloadXmlCode(ev):
+    #先點擊 [轉換為AHK語法] 按鈕，確保AHK轉譯至XML完畢
+    doc['btn_blockToAhk'].click()
+    #獲取積木 XML 結構並輸出 XML 檔案
+    xml_code=doc['textarea_xml'].value
+    filename="myahkblockly.xml"
+    DownloadTextFile(filename,xml_code)
 
 #設置AHK語法轉換結果畫面元素
 div_showAhkArea_elt=DIV(id="div_show_ahk_area")
@@ -23046,7 +23814,8 @@ div_showAhkArea_elt=DIV(id="div_show_ahk_area")
 #設置橫幅DIV元素，並填充文字和複製、下載按鈕
 div_showAhkAreaHeader_elt=DIV(id="div_show_ahk_btns")
 div_showAhkAreaHeader_elt<=BUTTON("▼轉換為AHK語法",id="btn_blockToAhk").bind("click",BlocklyToXml)
-div_showAhkAreaHeader_elt<=BUTTON("載入範本1").bind("click",ViewEx)
+div_showAhkAreaHeader_elt<=BUTTON("💾另存積木檔").bind("click",DownloadXmlCode)
+div_showAhkAreaHeader_elt<=BUTTON("📥匯入積木檔").bind("click",ImportXmlCode)
 
 #定義動作:複製AHK語法
 def CopyAhkCode(ev):
@@ -23066,8 +23835,8 @@ sec_int=None
 def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
-    ##
-    host="https://ahkcompiler.serverless.social"
+    ##!!
+    host="https://4b91723634d8.ngrok.io"
     btn_elt=ev.currentTarget
 
     #停用按鍵
@@ -23165,7 +23934,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.10.1" ##
+VERSION="1.12.0" ###
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})
