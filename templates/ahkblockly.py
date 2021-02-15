@@ -5178,7 +5178,7 @@ def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
     ##!!
-    host="https://4b91723634d8.ngrok.io"
+    host="https://8ad0ed474e2b.ngrok.io"
     btn_elt=ev.currentTarget
 
     #停用按鍵
