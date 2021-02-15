@@ -1,5 +1,6 @@
 import requests
-url=u"https://papple23g-ahkcompiler.herokuapp.com/ahkblockly"
+# url=u"https://papple23g-ahkcompiler.herokuapp.com/ahkblockly"
+url=u"http://127.0.0.1:8000/ahkblockly"
 res=requests.get(url)
 
 
