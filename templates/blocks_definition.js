@@ -1778,6 +1778,8 @@ Blockly.Blocks['system_info_num'] = {
             .appendField(new Blockly.FieldDropdown([
                 ["本螢幕寬度", "screen_width"],
                 ["本螢幕高度", "screen_height"],
+                ["本螢幕位置X", "screen_x"],
+                ["本螢幕位置Y", "screen_y"],
             ]), "NAME");
         this.setOutput(true, "Number");
         this.setColour(230);

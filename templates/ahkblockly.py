@@ -9,6 +9,13 @@ TAB_SPACE="    "  #縮排
 
 #region 腳本函數字典
 FUNC_DICT={
+    #螢幕位置
+    'screen_x':{
+        'pre':'SysGet, VirtualX, 76\n'
+    },
+    'screen_y':{
+        'pre':'SysGet, VirtualY, 77\n'
+    },
     #螢幕寬高
     'screen_width':{
         'pre':'SysGet, VirtualWidth, 78\n'
@@ -99,6 +106,7 @@ ArrayStr(arr) {
     'SetTitleMatchMode':{
         'pre':"SetTitleMatchMode, 2\n"
     },
+    #region FullwidthSymbol
     'FullwidthSymbol':{
         'end':
 ''';轉換符號為全行字，避免檔案名稱出錯
@@ -114,6 +122,7 @@ FullwidthSymbol(input_text){
     return input_text
 }
 '''},
+    #endregion FullwidthSymbol
     #region Screenshot
     'Screenshot':{
         'end':
@@ -3968,9 +3977,11 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取搜尋範圍X
             value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
             value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            if not value_x_elt:func_dict_key_set.update(['screen_x'])
             #獲取搜尋範圍Y
             value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
             value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            if not value_y_elt:func_dict_key_set.update(['screen_y'])
             #獲取搜尋範圍W
             value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
             value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
@@ -4023,9 +4034,11 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #獲取搜尋範圍X
             value_x_elt=FindCurrent(block_image_search_area_elt,'value[name="X"]') if block_image_search_area_elt else None
             value_x_elt_str,value_x_elt_comment=AHK_value(value_x_elt) if value_x_elt else ("0","")
+            if not value_x_elt:func_dict_key_set.update(['screen_x'])
             #獲取搜尋範圍Y
             value_y_elt=FindCurrent(block_image_search_area_elt,'value[name="Y"]') if block_image_search_area_elt else None
             value_y_elt_str,value_y_elt_comment=AHK_value(value_y_elt) if value_y_elt else ("0","")
+            if not value_y_elt:func_dict_key_set.update(['screen_y'])
             #獲取搜尋範圍X
             value_w_elt=FindCurrent(block_image_search_area_elt,'value[name="W"]') if block_image_search_area_elt else None
             value_w_elt_str,value_w_elt_comment=AHK_value(value_w_elt) if value_w_elt else ("0","")
@@ -4751,6 +4764,12 @@ return
             elif field_elt.text=="screen_height":
                 com_str+="VirtualHeight"
                 func_dict_key_set.update(['screen_height'])
+            elif field_elt.text=="screen_x":
+                com_str+="VirtualX"
+                func_dict_key_set.update(['screen_x'])
+            elif field_elt.text=="screen_y":
+                com_str+="VirtualY"
+                func_dict_key_set.update(['screen_y'])
 
 
         elif block_elt.attrs['type']=="computer_name":
