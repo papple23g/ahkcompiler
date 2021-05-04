@@ -3532,12 +3532,11 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #若為網頁，則需要替換特殊字元
             if block_elt.attrs['type']=="webpage":
                 field_str=field_str.replace("%","`%").replace(",","`,")
-            #若路徑有空白，就使用三個引號夾起
-            if " " in field_str:
-                com_str+=f'"""{field_str}"""'
-            #若路徑沒有空白，就使用一個引號夾起
+            #若為路徑，則需要消除雙引號
             else:
-                com_str+=f'"{field_str}"'
+                field_str=field_str.replace('"','')
+
+            com_str+=f'"{field_str}"'
         
         #文字
         elif block_elt.attrs['type']=="text":
@@ -5177,7 +5176,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.12.0" ###
+VERSION="1.12.1" ###
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})
