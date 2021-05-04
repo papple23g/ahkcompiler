@@ -3192,6 +3192,28 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                         hotkey_str=f'#IfWinActive, {field_text_elt.text}\n'+hotkey_str
                         ending_with_if_bool=True
 
+
+            #解決 Shift + Numpad 問題: 先建立映射列表字典
+            shiftNumpad_map_dict={
+                'Numpad0':'NumpadIns',
+                'Numpad1':'NumpadEnd',
+                'Numpad2':'NumpadDown',
+                'Numpad3':'NumpadPgDn',
+                'Numpad4':'NumpadLeft',
+                'Numpad5':'NumpadClear',
+                'Numpad6':'NumpadRight',
+                'Numpad7':'NumpadHome',
+                'Numpad8':'NumpadUp',
+                'Numpad9':'NumpadPgUp',
+                'NumpadDot ':'NumpadDel',
+            }
+            #若熱鍵包含 Shift 以及 Numpad 數字鍵
+            if '+' in hotkey_str and any(numpadKey_str in hotkey_str for numpadKey_str in shiftNumpad_map_dict.keys()):
+                #就拿掉「+」符號並替換成正確的 Numpad 熱鍵
+                hotkey_str=hotkey_str.replace('+','')
+                for numpadKey_str,shiftNumpadKey_str in shiftNumpad_map_dict.items():
+                    hotkey_str=hotkey_str.replace(numpadKey_str,shiftNumpadKey_str)
+
             com_str+=hotkey_str+f"::{statement_str}"+"#If"*ending_with_if_bool+"\n"
                 
         elif block_elt.attrs['type']=="function_key":
