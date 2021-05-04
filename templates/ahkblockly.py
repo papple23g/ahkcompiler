@@ -4217,13 +4217,10 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                     #獲取設值blockly
                     value_text_elt=FindCurrent(block_webAction_elt,'value[name="NAME"]')
                     value_text_str,value_text_comment=AHK_value(value_text_elt)
+                    #alert 文字預處理 (將反斜線正常化)
+                    value_text_str=value_text_str.replace('\\','\\\\')
                     com_str+=value_text_comment
                     com_js_code_str+=f'alert({value_text_str});\n'
-
-
-            
-            #JS程式碼預處理 (將反斜線正常化)
-            com_js_code_str=com_js_code_str.replace('\\','\\\\')
 
             #JS程式碼不為空
             if com_js_code_str:
