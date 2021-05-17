@@ -1,21 +1,20 @@
-
-
-
-
 <!DOCTYPE html>
+
+
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initia-scale=1.0">
     <title>AHK 語法產生器</title>
-    <link rel="shortcut icon" type="image/png" href="lib/favicon200218-2.ico"/>
+    <link rel="shortcut icon" type="image/png" href="lib/favicon200218-2.ico" />
     <!--CSS庫-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <!--BRYTHON庫 online-->
     <script src="lib\brython_3.7.5.js"></script>
-<script src="lib\brython_stdlib_3.7.5.js"></script>
+    <script src="lib\brython_stdlib_3.7.5.js"></script>
 
     <!--圖示圖庫-->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
@@ -27,20 +26,27 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135785524-3"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
 
-    gtag('config', 'UA-135785524-3');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-135785524-3');
     </script>
 
     <style>
         body {
             overflow: hidden;
         }
-        body > .ui-infobar, body > .ui-toc, body > .ui-affix-toc {
+        
+        body>.ui-infobar,
+        body>.ui-toc,
+        body>.ui-affix-toc {
             display: none !important;
         }
+        
         textarea {
             overflow-x: scroll;
             white-space: nowrap;
@@ -95,52 +101,54 @@
         }
     </style>
 
-    
-<script src="lib\brython_3.7.5.js"></script>
-<script src="lib\brython_stdlib_3.7.5.js"></script>
-<script>//https://stackoverflow.com/questions/26360414/javascript-how-to-correct-indentation-in-html-string
-function FormatHTML(str) {
 
-    var div = document.createElement('div');
-    div.innerHTML = str.trim();
+    <script src="lib\brython_3.7.5.js"></script>
+    <script src="lib\brython_stdlib_3.7.5.js"></script>
+    <script>
+        //https://stackoverflow.com/questions/26360414/javascript-how-to-correct-indentation-in-html-string
+        function FormatHTML(str) {
 
-    return FormatNode(div, 0).innerHTML;
-}
+            var div = document.createElement('div');
+            div.innerHTML = str.trim();
 
-function FormatNode(node, level) {
-
-    var indentBefore = new Array(level++ + 1).join('  '),
-        indentAfter = new Array(level - 1).join('  '),
-        textNode;
-
-    for (var i = 0; i < node.children.length; i++) {
-
-        textNode = document.createTextNode('\n' + indentBefore);
-        node.insertBefore(textNode, node.children[i]);
-
-        FormatNode(node.children[i], level);
-
-        if (node.lastElementChild == node.children[i]) {
-            textNode = document.createTextNode('\n' + indentAfter);
-            node.appendChild(textNode);
+            return FormatNode(div, 0).innerHTML;
         }
-    }
 
-    return node;
-}
+        function FormatNode(node, level) {
 
-//https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server#answer-18197341
-function DownloadTextFile(filename, text) {
-    var element = document.createElement('a');
-    text = text.replace(/\n/g, "\r\n"); //LT to CRLF https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server#answer-18197341
-    var universalBOM = "\uFEFF"; //utf-8 with bom https://stackoverflow.com/questions/42462764/javascript-export-csv-encoding-utf-8-issue
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(universalBOM + text));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}</script>
+            var indentBefore = new Array(level++ + 1).join('  '),
+                indentAfter = new Array(level - 1).join('  '),
+                textNode;
+
+            for (var i = 0; i < node.children.length; i++) {
+
+                textNode = document.createTextNode('\n' + indentBefore);
+                node.insertBefore(textNode, node.children[i]);
+
+                FormatNode(node.children[i], level);
+
+                if (node.lastElementChild == node.children[i]) {
+                    textNode = document.createTextNode('\n' + indentAfter);
+                    node.appendChild(textNode);
+                }
+            }
+
+            return node;
+        }
+
+        //https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server#answer-18197341
+        function DownloadTextFile(filename, text) {
+            var element = document.createElement('a');
+            text = text.replace(/\n/g, "\r\n"); //LT to CRLF https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server#answer-18197341
+            var universalBOM = "\uFEFF"; //utf-8 with bom https://stackoverflow.com/questions/42462764/javascript-export-csv-encoding-utf-8-issue
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(universalBOM + text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
 
 
 
@@ -152,9 +160,9 @@ function DownloadTextFile(filename, text) {
 
 <body onload="brython(1)">
 
-<div id="div_headerAndBars"></div>
+    <div id="div_headerAndBars"></div>
 
-<!--FB按讚--!>
+    <!--FB按讚--!>
 
 
 <div id="div_subMainPage">
@@ -697,10 +705,10 @@ def render_ahk_script():
                     ahk_exec_script="Shutdown, {}".format(0+4*system_action_force)
                 elif system_action=="sleep":
                     DisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
-                    ahk_exec_script='DllCall("PowerProf\SetSuspendState", "int", 0, "int", 0, "int", 0,)'
+                    ahk_exec_script='DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)'
                 elif system_action=="hibernate":
                     DisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
-                    ahk_exec_script='DllCall("PowerProf\SetSuspendState", "int", 1, "int", 0, "int", 0,)'
+                    ahk_exec_script='DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0)'
                 elif system_action=="shutdown":
                     UndisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
                     ahk_exec_script="Shutdown, {}".format(1+4*system_action_force)

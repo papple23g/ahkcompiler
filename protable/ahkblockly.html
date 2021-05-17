@@ -32117,7 +32117,7 @@ Screenshot(outfile)
             #若為DllCall語法 (睡眠/休眠)
             elif field_action_str in ["sleep ","deepsleep "]:
                 var_int=0 if field_action_str=="sleep " else 1
-                com_str+=f'DllCall("PowerProf\\SetSuspendState ", "int ", {var_int}, "int ", 0, "int ", 0,)\n'
+                com_str+=f'DllCall("PowrProf\\SetSuspendState ", "int ", {var_int}, "int ", 0, "int ", 0)\n'
             else:
                 com_str+='Run rundll32.exe user32.dll`,LockWorkStation\n'
 

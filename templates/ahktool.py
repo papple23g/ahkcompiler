@@ -378,10 +378,10 @@ def render_ahk_script():
                     ahk_exec_script="Shutdown, {}".format(0+4*system_action_force)
                 elif system_action=="sleep":
                     DisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
-                    ahk_exec_script='DllCall("PowerProf\SetSuspendState", "int", 0, "int", 0, "int", 0,)'
+                    ahk_exec_script='DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)'
                 elif system_action=="hibernate":
                     DisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
-                    ahk_exec_script='DllCall("PowerProf\SetSuspendState", "int", 1, "int", 0, "int", 0,)'
+                    ahk_exec_script='DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0)'
                 elif system_action=="shutdown":
                     UndisableInputElt(doc["DIV_func_conent"].select("input[type='checkbox']")[0])
                     ahk_exec_script="Shutdown, {}".format(1+4*system_action_force)

@@ -3432,7 +3432,7 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
             #若為DllCall語法 (睡眠/休眠)
             elif field_action_str in ["sleep","deepsleep"]:
                 var_int=0 if field_action_str=="sleep" else 1
-                com_str+=f'DllCall("PowerProf\\SetSuspendState", "int", {var_int}, "int", 0, "int", 0,)\n'
+                com_str+=f'DllCall("PowrProf\\SetSuspendState", "int", {var_int}, "int", 0, "int", 0)\n'
             else:
                 com_str+='Run rundll32.exe user32.dll`,LockWorkStation\n'
 
@@ -5176,7 +5176,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.12.1" ###
+VERSION="1.12.2" ###
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})
