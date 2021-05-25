@@ -4078,7 +4078,8 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 TAB_SPACE+f'{statement_elseDo_str}'+''+'}',
                 '} else {',
                 TAB_SPACE+'Msgbox % "圖片路徑不存在"',
-                '}\n',
+                '}',
+                'gui,destroy\n',
             ])
 
 
@@ -5078,7 +5079,7 @@ def DownloadAhkExe(ev):
     global countdown_timer,sec_int
     #host="http://127.0.0.1:8001"
     ##!!
-    host="https://e60809097704.ngrok.io"
+    host="https://8ecdc77160b0.ngrok.io"
     btn_elt=ev.currentTarget
 
     #停用按鍵
@@ -5176,7 +5177,7 @@ div_iframe_elt=DIV(iframe_elt)
 #設置子頁面標頭DIV元素
 div_title_elt=DIV()
 #設置標頭H1元素
-VERSION="1.12.2" ###
+VERSION="1.12.3" ###
 h1_title_elt=H1(f"AutoHotKey 積木語法產生器 v{VERSION}",style={"color":"rgb(220, 107, 57)","font-size":"18px","font-weight":"600",'float':'left'})
 #設置FB DIV元素
 div_fb_elt=DIV(id='div_fb',style={'float':'right'})
