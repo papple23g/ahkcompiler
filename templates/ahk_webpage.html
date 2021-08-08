@@ -4,9 +4,9 @@
 
 <body onload="brython(1)">
 
-<div id="div_headerAndBars"></div>
+    <div id="div_headerAndBars"></div>
 
-<!--FB按讚--!>
+    <!--FB按讚--!>
 
 
 <div id="div_subMainPage">
@@ -46,6 +46,10 @@ doc['div_headerAndBars']<=DIV_bars(2)
 {% elif subpage == "about" %}
 doc['div_headerAndBars']<=DIV_bars(3)
 {% include 'about.py' %}
+
+{% elif subpage == "faq" %}
+doc['div_headerAndBars']<=DIV_bars(4)
+{% include 'faq.py' %}
 
 {% endif %}
 
