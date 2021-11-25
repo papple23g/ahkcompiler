@@ -1681,6 +1681,8 @@ Blockly.Blocks['special_key'] = {
                 ["滑鼠左鍵", "LButton"],
                 ["滑鼠右鍵", "RButton"],
                 ["滑鼠中鍵", "MButton"],
+                ["滑鼠鍵 X1", "Xbutton1"],
+                ["滑鼠鍵 X2", "Xbutton2"],
                 ["滑鼠上滾", "WheelUp"],
                 ["滑鼠下滾", "WheelDown"],
                 ["↑", "Up"],
