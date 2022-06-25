@@ -19,3 +19,6 @@ ptyprocess==0.5
 static3==0.6.1
 psycopg2==2.7.5
 django-cors-headers==3.1.0
+
+# dev
+mockbrython
