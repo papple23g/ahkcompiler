@@ -1394,15 +1394,15 @@ def DIV_function():
                 elif select_elt.value=="記事本":
                         input_elt=INPUT(value="Notepad.exe",disabled=True,type="text",size="30")
                 elif select_elt.value=="小算盤":
-                        input_elt=INPUT(value="%windir%\system32\calc.exe",disabled=True,type="text",size="30")
+                        input_elt=INPUT(value="%A_WinDir%\system32\calc.exe",disabled=True,type="text",size="30")
                 elif select_elt.value=="小畫家":
-                        input_elt=INPUT(value="%windir%\system32\mspaint.exe",disabled=True,type="text",size="30")
+                        input_elt=INPUT(value="%A_WinDir%\system32\mspaint.exe",disabled=True,type="text",size="30")
                 elif select_elt.value=="自黏便箋":
                         input_elt=INPUT(value="StikyNot.exe",disabled=True,type="text",size="30")
                 elif select_elt.value=="剪取工具":
-                        input_elt=INPUT(value="%windir%\system32\SnippingTool.exe",disabled=True,type="text",size="30")
+                        input_elt=INPUT(value="%A_WinDir%\system32\SnippingTool.exe",disabled=True,type="text",size="30")
                 elif select_elt.value=="命令提示字元":
-                        input_elt=INPUT(value="%windir%\system32\cmd.exe",disabled=True,type="text",size="30")
+                        input_elt=INPUT(value="%A_WinDir%\system32\cmd.exe",disabled=True,type="text",size="30")
                 div_elt<=input_elt
             div_elt<=select_elt.bind("change",change_input)
             div_elt<=INPUT(type="text",size="30")

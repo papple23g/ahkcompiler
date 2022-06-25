@@ -3583,9 +3583,9 @@ def AHK_block(block_elt,get_all_comment=False,separate_comment=False):
                 built_in_program_dict={
                     "notepad":'"Notepad.exe"',
                     "mspaint":'"mspaint.exe"',
-                    "calc":' windir . "\system32\calc.exe"',
-                    "SnippingTool":' windir . "\system32\SnippingTool.exe"',
-                    "cmd":' windir . "\system32\cmd.exe"',
+                    "calc":' A_WinDir . "\system32\calc.exe"',
+                    "SnippingTool":' A_WinDir . "\system32\SnippingTool.exe"',
+                    "cmd":' A_WinDir . "\system32\cmd.exe"',
                     "ahkfile":'A_ScriptFullPath',
                     "ahkexe":'A_AhkPath',
                 }
