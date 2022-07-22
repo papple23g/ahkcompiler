@@ -1121,7 +1121,7 @@ Blockly.Blocks['ahk_code'] = {
     init: function() {
         this.appendDummyInput()
             .appendField("AHK碼")
-            .appendField(new Blockly.FieldTextInput("Msgbox % \"Hellow World !\""), "NAME");
+            .appendField(new Blockly.FieldTextInput("Msgbox % \"hello World !\""), "NAME");
         this.setPreviousStatement(true, "action");
         this.setNextStatement(true, "action");
         this.setColour("#818181");
