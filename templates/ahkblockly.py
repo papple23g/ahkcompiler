@@ -4027,14 +4027,14 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             value_R_elt_int = max(0, min(value_R_elt_int, 255))
             # 獲取像素顏色(G)
             value_G_elt = FindCurrent(
-                block_pixelRGBColor_elt, 'value[name="R"]') if block_pixelRGBColor_elt else None
+                block_pixelRGBColor_elt, 'value[name="G"]') if block_pixelRGBColor_elt else None
             value_G_elt_str, value_G_elt_comment = AHK_value(
                 value_G_elt) if value_G_elt else ('0', '')
             value_G_elt_int = int(value_G_elt_str)
             value_G_elt_int = max(0, min(value_G_elt_int, 255))
             # 獲取像素顏色(B)
             value_B_elt = FindCurrent(
-                block_pixelRGBColor_elt, 'value[name="R"]') if block_pixelRGBColor_elt else None
+                block_pixelRGBColor_elt, 'value[name="B"]') if block_pixelRGBColor_elt else None
             value_B_elt_str, value_B_elt_comment = AHK_value(
                 value_B_elt) if value_B_elt else ('0', '')
             value_B_elt_int = int(value_B_elt_str)
