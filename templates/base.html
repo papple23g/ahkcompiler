@@ -1,13 +1,13 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initia-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>AHK 語法產生器</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon200218-2.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon200218-2.ico' %}" />
     <!--CSS庫-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
@@ -16,7 +16,8 @@
 
     <!--圖示圖庫-->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
-    <link async rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link async rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <!--FB按讚--!>
     <script crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v3.3"></script>
@@ -24,27 +25,31 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135785524-3"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'UA-135785524-3');
+        gtag('config', 'UA-135785524-3');
     </script>
 
     <style>
         body {
             overflow: hidden;
         }
-        body > .ui-infobar, body > .ui-toc, body > .ui-affix-toc {
+
+        body>.ui-infobar,
+        body>.ui-toc,
+        body>.ui-affix-toc {
             display: none !important;
         }
+
         textarea {
             overflow-x: scroll;
             white-space: nowrap;
             height: 200px;
             width: 100%;
         }
-        
+
         pre#textarea_ahk {
             background-color: #eee;
             border-radius: 10px;
@@ -54,7 +59,7 @@
             margin: 0;
             font-size: 15px;
         }
-        
+
         button {
             height: 30px;
             border-radius: 6px;
@@ -67,43 +72,41 @@
             text-shadow: #fff 1px 1px 1px;
             outline: none;
         }
-        
+
         #div_show_ahk_btns {
             margin-bottom: 8px;
         }
-        
+
         #div_show_ahk_area {
             margin: 10px 0;
         }
-        
+
         .float_right {
             float: right;
         }
-        
+
         input#input_var {
             height: 20px;
             margin-top: 10px;
             width: 80px;
             margin-right: 8px;
         }
-        
+
         button.disabled_button {
             color: gray !important;
         }
     </style>
 
-    
-<script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>
-<script>{% include 'basic_functions.js' %}</script>
 
-{% if subpage == 'ahkblockly' %}
-<script>{% include 'blockly_compressed.js' %}</script>
-<script>{% include 'blocks_compressed.js' %}</script>
-<script>{% include 'blocks_definition.js' %}</script>
-<script>{% include 'zh_tw.js' %}</script>
-{% endif %}
+    <script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>
+    <script>{% include 'basic_functions.js' %}</script>
+
+    {% if subpage == 'ahkblockly' %}
+    <script>{% include 'blockly_compressed.js' %}</script>
+    <script>{% include 'blocks_compressed.js' %}</script>
+    <script>{% include 'blocks_definition.js' %}</script>
+    <script>{% include 'zh_tw.js' %}</script>
+    {% endif %}
 
 
 </head>
-
-
