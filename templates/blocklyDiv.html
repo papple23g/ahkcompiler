@@ -32,7 +32,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <!--工具欄-->
 
-    <category name="基本" colour="#818181">
+    <category name="🚩 基本" colour="#818181">
         <block type="hotkey_execute">
             <value name="NAME">
                 <block type="special_key">
@@ -144,7 +144,7 @@
         </block>
     </category>
 
-    <category name="熱鍵" colour="#0000CD">
+    <category name="⚡ 熱鍵" colour="#0000CD">
         <block type="hotkey_execute">
             <value name="NAME">
                 <block type="special_key">
@@ -225,7 +225,7 @@
         <block type="hotkey_execute_setting_ifwinactive"></block>
     </category>
 
-    <category name="熱字串" colour="#CD5C5C">
+    <category name="🔥 熱字串" colour="#CD5C5C">
         <block type="hotstring">
             <value name="ABB">
                 <block type="text">
@@ -311,7 +311,7 @@
         <block type="hotstringSetting_rawText"></block>
     </category>
 
-    <category name="動作" colour="#4B0082">
+    <category name="🚀 動作" colour="#4B0082">
         <block type="open"></block>
         <block type="msgbox"></block>
         <block type="traytip"></block>
@@ -368,7 +368,7 @@
 
     </category>
 
-    <category name="物件" colour="#9370DB">
+    <category name="🧱 物件" colour="#9370DB">
         <block type="filepath">
             <field name="NAME">C:\*.exe</field>
         </block>
@@ -402,12 +402,12 @@
         </block>
     </category>
 
-    <category name="模擬按鍵" colour="#D75BF0">
+    <category name="⌨ 模擬按鍵" colour="#D75BF0">
         <block type="send_key">
             <value name="NAME">
-            <block type="normal_key">
-                <field name="normal_key">A</field>
-            </block>
+                <block type="normal_key">
+                    <field name="normal_key">A</field>
+                </block>
             </value>
         </block>
         <block type="send_key">
@@ -451,32 +451,32 @@
         </block>
         <block type="hotkey_execute">
             <value name="NAME">
-            <block type="special_key">
-                <field name="special_key">F8</field>
-            </block>
+                <block type="special_key">
+                    <field name="special_key">F8</field>
+                </block>
             </value>
             <statement name="DO">
-            <block type="key_down">
-                <value name="NAME">
-                <block type="special_key">
-                    <field name="special_key">Shift</field>
-                </block>
-                </value>
-                <next>
-                <block type="send_keys">
-                    <field name="NAME">abc</field>
-                    <next>
-                    <block type="key_up">
-                        <value name="NAME">
+                <block type="key_down">
+                    <value name="NAME">
                         <block type="special_key">
                             <field name="special_key">Shift</field>
                         </block>
-                        </value>
-                    </block>
+                    </value>
+                    <next>
+                        <block type="send_keys">
+                            <field name="NAME">abc</field>
+                            <next>
+                                <block type="key_up">
+                                    <value name="NAME">
+                                        <block type="special_key">
+                                            <field name="special_key">Shift</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </next>
+                        </block>
                     </next>
                 </block>
-                </next>
-            </block>
             </statement>
         </block>
         <block type="key_down"></block>
@@ -527,7 +527,7 @@
         <block type="block_input"></block>
     </category>
 
-    <category name="模擬滑鼠" colour="#D0D03E">
+    <category name="🖱 模擬滑鼠" colour="#D0D03E">
         <block type="send_key">
             <value name="NAME">
                 <block type="special_key">
@@ -635,7 +635,7 @@
         </block>
     </category>
 
-    <category name="偵測圖片" colour="#DB7093">
+    <category name="🖼️ 偵測圖片" colour="#DB7093">
         <block type="hotkey_execute" id="HkwcUnN5parh[{Y/CYLZ" x="5" y="155">
             <comment pinned="false" h="46" w="327">這個積木放這裡，方便大家擷取畫面圖片:)</comment>
             <value name="NAME">
@@ -660,101 +660,101 @@
         </block>
         <block type="hotkey_execute">
             <value name="NAME">
-            <block type="function_key">
-                <field name="function_key">Ctrl</field>
-                <value name="function_key">
                 <block type="function_key">
-                    <field name="function_key">Shift</field>
+                    <field name="function_key">Ctrl</field>
                     <value name="function_key">
-                    <block type="normal_key">
-                        <field name="normal_key">A</field>
-                    </block>
+                        <block type="function_key">
+                            <field name="function_key">Shift</field>
+                            <value name="function_key">
+                                <block type="normal_key">
+                                    <field name="normal_key">A</field>
+                                </block>
+                            </value>
+                        </block>
                     </value>
                 </block>
-                </value>
-            </block>
             </value>
             <statement name="DO">
-            <block type="get_picture_pos_ver200419">
-                <field name="pos_x">圖片座標X</field>
-                <field name="pos_y">圖片座標Y</field>
-                <statement name="get_picture_pos_setting">
-                <block type="image_filepath">
-                    <value name="NAME">
-                    <block type="filepath">
-                        <field name="NAME">C:\*.png</field>
-                    </block>
-                    </value>
-                    <next>
-                    <block type="image_search_area">
-                        <comment pinned="false" h="147" w="386">設定偵測範圍的方法 :
-對著執行中的AHK圖示按右鍵＞選擇Window Spy
-可以看到Screen那行顯示滑鼠的座標
-偵測區域的左上角座標即為 (X1,Y1)
-偵測區域的右下角座標即為 (X2,Y2)</comment>
-                        <value name="X">
-                        <block type="system_info_num">
-                            <field name="NAME">screen_x</field>
+                <block type="get_picture_pos_ver200419">
+                    <field name="pos_x">圖片座標X</field>
+                    <field name="pos_y">圖片座標Y</field>
+                    <statement name="get_picture_pos_setting">
+                        <block type="image_filepath">
+                            <value name="NAME">
+                                <block type="filepath">
+                                    <field name="NAME">C:\*.png</field>
+                                </block>
+                            </value>
+                            <next>
+                                <block type="image_search_area">
+                                    <comment pinned="false" h="147" w="386">設定偵測範圍的方法 :
+                                        對著執行中的AHK圖示按右鍵＞選擇Window Spy
+                                        可以看到Screen那行顯示滑鼠的座標
+                                        偵測區域的左上角座標即為 (X1,Y1)
+                                        偵測區域的右下角座標即為 (X2,Y2)</comment>
+                                    <value name="X">
+                                        <block type="system_info_num">
+                                            <field name="NAME">screen_x</field>
+                                        </block>
+                                    </value>
+                                    <value name="Y">
+                                        <block type="system_info_num">
+                                            <field name="NAME">screen_y</field>
+                                        </block>
+                                    </value>
+                                    <value name="W">
+                                        <block type="system_info_num">
+                                            <field name="NAME">screen_width</field>
+                                        </block>
+                                    </value>
+                                    <value name="H">
+                                        <block type="system_info_num">
+                                            <field name="NAME">screen_height</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </next>
                         </block>
-                        </value>
-                        <value name="Y">
-                        <block type="system_info_num">
-                            <field name="NAME">screen_y</field>
+                    </statement>
+                    <statement name="DO">
+                        <block type="msgbox">
+                            <value name="NAME">
+                                <block type="text_join">
+                                    <mutation items="4"></mutation>
+                                    <value name="ADD0">
+                                        <block type="text">
+                                            <field name="TEXT">圖片座標為: </field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="variables_get">
+                                            <field name="VAR">圖片座標X</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD2">
+                                        <block type="text">
+                                            <field name="TEXT">, </field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD3">
+                                        <block type="variables_get">
+                                            <field name="VAR">圖片座標Y</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
                         </block>
-                        </value>
-                        <value name="W">
-                        <block type="system_info_num">
-                            <field name="NAME">screen_width</field>
+                    </statement>
+                    <statement name="ELSE_DO">
+                        <block type="msgbox">
+                            <value name="NAME">
+                                <block type="text">
+                                    <field name="TEXT">圖片未找到</field>
+                                </block>
+                            </value>
                         </block>
-                        </value>
-                        <value name="H">
-                        <block type="system_info_num">
-                            <field name="NAME">screen_height</field>
-                        </block>
-                        </value>
-                    </block>
-                    </next>
+                    </statement>
                 </block>
-                </statement>
-                <statement name="DO">
-                <block type="msgbox">
-                    <value name="NAME">
-                    <block type="text_join">
-                        <mutation items="4"></mutation>
-                        <value name="ADD0">
-                        <block type="text">
-                            <field name="TEXT">圖片座標為: </field>
-                        </block>
-                        </value>
-                        <value name="ADD1">
-                        <block type="variables_get">
-                            <field name="VAR">圖片座標X</field>
-                        </block>
-                        </value>
-                        <value name="ADD2">
-                        <block type="text">
-                            <field name="TEXT">, </field>
-                        </block>
-                        </value>
-                        <value name="ADD3">
-                        <block type="variables_get">
-                            <field name="VAR">圖片座標Y</field>
-                        </block>
-                        </value>
-                    </block>
-                    </value>
-                </block>
-                </statement>
-                <statement name="ELSE_DO">
-                <block type="msgbox">
-                    <value name="NAME">
-                    <block type="text">
-                        <field name="TEXT">圖片未找到</field>
-                    </block>
-                    </value>
-                </block>
-                </statement>
-            </block>
             </statement>
         </block>
         <block type="get_picture_pos_ver200419">
@@ -849,14 +849,14 @@
                     <next>
                         <block type="image_search_area">
                             <value name="X">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_x</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_x</field>
+                                </block>
                             </value>
                             <value name="Y">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_y</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_y</field>
+                                </block>
                             </value>
                             <value name="W">
                                 <block type="system_info_num">
@@ -896,14 +896,14 @@
                                     <next>
                                         <block type="image_search_area">
                                             <value name="X">
-                                            <block type="system_info_num">
-                                                <field name="NAME">screen_x</field>
-                                            </block>
+                                                <block type="system_info_num">
+                                                    <field name="NAME">screen_x</field>
+                                                </block>
                                             </value>
                                             <value name="Y">
-                                            <block type="system_info_num">
-                                                <field name="NAME">screen_y</field>
-                                            </block>
+                                                <block type="system_info_num">
+                                                    <field name="NAME">screen_y</field>
+                                                </block>
                                             </value>
                                             <value name="W">
                                                 <block type="system_info_num">
@@ -943,14 +943,14 @@
                     <next>
                         <block type="pixel_search_area">
                             <value name="X">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_x</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_x</field>
+                                </block>
                             </value>
                             <value name="Y">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_y</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_y</field>
+                                </block>
                             </value>
                             <value name="W">
                                 <block type="system_info_num">
@@ -1028,14 +1028,14 @@
                     <next>
                         <block type="pixel_search_area">
                             <value name="X">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_x</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_x</field>
+                                </block>
                             </value>
                             <value name="Y">
-                            <block type="system_info_num">
-                                <field name="NAME">screen_y</field>
-                            </block>
+                                <block type="system_info_num">
+                                    <field name="NAME">screen_y</field>
+                                </block>
                             </value>
                             <value name="W">
                                 <block type="system_info_num">
@@ -1106,14 +1106,14 @@
         </block>
         <block type="pixel_search_area">
             <value name="X">
-            <block type="system_info_num">
-                <field name="NAME">screen_x</field>
-            </block>
+                <block type="system_info_num">
+                    <field name="NAME">screen_x</field>
+                </block>
             </value>
             <value name="Y">
-            <block type="system_info_num">
-                <field name="NAME">screen_y</field>
-            </block>
+                <block type="system_info_num">
+                    <field name="NAME">screen_y</field>
+                </block>
             </value>
             <value name="W">
                 <block type="system_info_num">
@@ -1128,7 +1128,7 @@
         </block>
     </category>
 
-    <category name="文字" colour="#5BA58C">
+    <category name="🅰 文字" colour="#5BA58C">
         <block type="text">
             <field name="TEXT">文字</field>
         </block>
@@ -1249,7 +1249,7 @@
         </block>
     </category>
 
-    <category name="時間" colour="#AFEEEE">
+    <category name="🕓 時間" colour="#AFEEEE">
         <block type="sleep">
             <value name="NAME">
                 <block type="math_number">
@@ -1354,7 +1354,7 @@
     </category>
 
 
-    <category name="數字運算" colour="#7B68EE">
+    <category name="🔢 數字運算" colour="#7B68EE">
         <block type="math_number">
             <field name="NUM">0</field>
         </block>
@@ -1438,7 +1438,7 @@
         </block>
     </category>
 
-    <category name="右鍵清單" colour="#00CED1">
+    <category name="📑 右鍵清單" colour="#00CED1">
         <block type="hotkey_execute" id="W[bq`zQ(;Ln!!2VoANHZ" x="67" y="126">
             <value name="NAME">
                 <block type="function_key" id="-{XjF0@#mpJ*O8f]flTe">
@@ -1528,7 +1528,8 @@
                                                     <statement name="DO">
                                                         <block type="open" id="cccD3=`#LN%Ha|~6y1K(">
                                                             <value name="NAME">
-                                                                <block type="built_in_program" id="vW.~(?#c|l2j`D2z9D1V">
+                                                                <block type="built_in_program"
+                                                                    id="vW.~(?#c|l2j`D2z9D1V">
                                                                     <field name="NAME">mspaint</field>
                                                                 </block>
                                                             </value>
@@ -1551,7 +1552,7 @@
     </category>
 
 
-    <category name="跳出視窗" colour="#F5F5DC">
+    <category name="💬 跳出視窗" colour="#F5F5DC">
         <block type="msgbox" id="R1WMDFH+Qu_Ih(MfG1Qp" x="51" y="163">
             <value name="NAME">
                 <block type="text" id="V5O1d]0J*+8o)+JgR,m`">
@@ -1694,7 +1695,7 @@
 
     </category>
 
-    <category name="音量/螢幕" colour="#C95E00">
+    <category name="🔊 音量/螢幕" colour="#C95E00">
         <block type="volume_adjust">
             <field name="action">add</field>
             <value name="NAME">
@@ -1811,7 +1812,7 @@
         </block>
     </category>
 
-    <category name="網頁操作" colour="#C79304">
+    <category name="🌐 網頁操作" colour="#C79304">
         <block type="web_element" id="A4}DC-W}T(bX2YolMZ83" x="-96" y="145">
             <field name="elt_address">js_path</field>
             <field name="NAME">&lt;在此輸入元素路徑&gt;</field>
@@ -1928,7 +1929,8 @@
                                                             </value>
                                                             <value name="ADD1">
                                                                 <block type="variables_get" id="KM^=j!K4)q07(714b:@K">
-                                                                    <field name="VAR" id="(Y3G~q,sBzY0NeXr_C0g">JS程式碼</field>
+                                                                    <field name="VAR" id="(Y3G~q,sBzY0NeXr_C0g">JS程式碼
+                                                                    </field>
                                                                 </block>
                                                             </value>
                                                             <value name="ADD2">
@@ -1948,15 +1950,19 @@
                                                             <next>
                                                                 <block type="send_key" id="`|4x%`h890DGg7j/?~}0">
                                                                     <value name="NAME">
-                                                                        <block type="special_key" id="@CNEb)F=/q-Q+=eR.^3M">
+                                                                        <block type="special_key"
+                                                                            id="@CNEb)F=/q-Q+=eR.^3M">
                                                                             <field name="special_key">Delete</field>
                                                                         </block>
                                                                     </value>
                                                                     <next>
-                                                                        <block type="send_key" id="Y*csfnmE|aR~8PJQP`R/">
+                                                                        <block type="send_key"
+                                                                            id="Y*csfnmE|aR~8PJQP`R/">
                                                                             <value name="NAME">
-                                                                                <block type="special_key" id="WbXW3I,-ojh1zH06)F9p">
-                                                                                    <field name="special_key">Enter</field>
+                                                                                <block type="special_key"
+                                                                                    id="WbXW3I,-ojh1zH06)F9p">
+                                                                                    <field name="special_key">Enter
+                                                                                    </field>
                                                                                 </block>
                                                                             </value>
                                                                         </block>
@@ -1987,7 +1993,7 @@
         </block>
     </category>
 
-    <category name="選取文字後" colour="#8FBC8F">
+    <category name="🔎 選字搜尋" colour="#8FBC8F">
         <block type="open_select_url"></block>
         <block type="search_selected_keyword"></block>
         <block type="search_selected_keyword_custom"></block>
@@ -1995,7 +2001,7 @@
 
     <sep></sep>
 
-    <category name="系統資訊" colour="#956D49">
+    <category name="💻 系統資訊" colour="#956D49">
         <block type="system_info_str"></block>
         <block type="system_info_num"></block>
         <block type="win_get_active_title" id="R.^alvnwVH62{ocVJB*2" x="50" y="119">
@@ -2053,7 +2059,7 @@
     </category>
 
 
-    <category name="邏輯" colour="#5b80a5">
+    <category name="🔀 邏輯" colour="#5b80a5">
         <block type="controls_if"></block>
         <block type="logic_compare">
             <field name="OP">EQ</field>
@@ -2089,7 +2095,7 @@
 
     </category>
 
-    <category name="循環" colour="#006400">
+    <category name="🔄 循環" colour="#006400">
         <block type="controls_repeat_ext">
             <value name="TIMES">
                 <block type="math_number">
@@ -2333,7 +2339,7 @@
         </block>
     </category>
 
-    <category name="串列" colour="#7B68EE">
+    <category name="📚️ 串列" colour="#7B68EE">
         <block type="lists_create_with">
             <mutation items="3"></mutation>
         </block>
@@ -2343,7 +2349,8 @@
         <block type="msgbox">
             <value name="NAME">
                 <block type="list_str">
-                    <comment pinned="false" h="72" w="382">必須透過此積木才能將串列以文字方式顯示出來 因為AHK語法: Msgbox % Array(1,2,3) 並不會顯示串列</comment>
+                    <comment pinned="false" h="72" w="382">必須透過此積木才能將串列以文字方式顯示出來 因為AHK語法: Msgbox % Array(1,2,3) 並不會顯示串列
+                    </comment>
                     <value name="NAME">
                         <block type="lists_create_with">
                             <mutation items="3"></mutation>
@@ -2372,7 +2379,7 @@
 
 
 
-    <category name="函式" colour="#995BA5">
+    <category name="⚙️ 函式" colour="#995BA5">
         <block type="procedures_defnoreturn">
             <field name="NAME">函式名稱</field>
         </block>
@@ -2381,10 +2388,10 @@
         </block>
     </category>
 
-    <category name="變數" colour="#A45A7F" custom="VARIABLE">
+    <category name="🧩 變數" colour="#A45A7F" custom="VARIABLE">
     </category>
 
-    <category name="自訂編碼" colour="#C4C4C4">
+    <category name="💡 自訂編碼" colour="#C4C4C4">
         <block type="ahk_code"></block>
         <block type="cmd"></block>
     </category>
