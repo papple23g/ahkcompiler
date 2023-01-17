@@ -5393,7 +5393,7 @@ div_iframe_elt = DIV(iframe_elt)
 # 設置子頁面標頭DIV元素
 div_title_elt = DIV()
 # 設置標頭H1元素
-VERSION = "1.12.5"  # TUNE: 更新版本號
+VERSION = "1.13.0"  # VER: 更新版本號
 h1_title_elt = H1(f"AutoHotKey 積木語法產生器 v{VERSION}", style={
                   "color": "rgb(220, 107, 57)", "font-size": "18px", "font-weight": "600", 'float': 'left'})
 # 設置FB DIV元素
