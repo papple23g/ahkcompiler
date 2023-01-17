@@ -1,5 +1,9 @@
 # {% verbatim %}
 
+import random
+import re
+import string
+
 from browser import ajax, timer
 
 # 全域變數
@@ -2989,7 +2993,6 @@ def XmlToAHK(ev):
         div_parseXml_elt.innerHTML = xml_str
         block_elt_list = div_parseXml_elt.select('xml>block')
 
-# endregion
 
         # 將逐個blockly轉譯為AHK
         for block_elt in block_elt_list:
@@ -3379,6 +3382,31 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
 
             com_str += '\n'.join([
                 f'WinActivate % {value_title_str}\n',
+            ])
+
+        elif block_elt.attrs['type'] == "win_move":
+            value_x_elt = FindCurrent(block_elt, f'value[name="X"]')
+            value_x_str, value_x_comment = AHK_value(value_x_elt)
+            com_str += value_x_comment
+
+            value_y_elt = FindCurrent(block_elt, f'value[name="Y"]')
+            value_y_str, value_y_comment = AHK_value(value_y_elt)
+            com_str += value_y_comment
+
+            value_w_elt = FindCurrent(block_elt, f'value[name="W"]')
+            value_w_str, value_w_comment = AHK_value(value_w_elt)
+            com_str += value_w_comment
+
+            value_h_elt = FindCurrent(block_elt, f'value[name="H"]')
+            value_h_str, value_h_comment = AHK_value(value_h_elt)
+            com_str += value_h_comment
+
+            com_str += "\n".join([
+                f"__MoveX:={value_x_str}",
+                f"__MoveY:={value_y_str}",
+                f"__MoveW:={value_w_str}",
+                f"__MoveH:={value_h_str}",
+                f"WinMove, A,,%__MoveX%, %__MoveY%, %__MoveW%, %__MoveH%",
             ])
 
         elif block_elt.attrs['type'] == "run_or_active":
@@ -5167,8 +5195,40 @@ def ImportXmlCode(ev):
         def ReaderOnload(ev):
             # 獲取積木檔 XML 內容
             xml_code = ev.target.result
-            # 覆蓋到積木 XML 文字區域
-            doc['textarea_xml'].value = xml_code
+            # 追加到現有的積木 XML 文字區域
+            # print(doc['textarea_xml'].value.replace("</xml>", ""))
+            # print(xml_code)
+            # print(re.sub(
+            #         r'id="(.*)"',
+            #         (
+            #             # 替換追加的積木 id，避免出現重複的 id
+            #             lambda m: f'id="{"".join(random.choices(string.ascii_letters + string.digits, k=20))}"'
+            #         ),
+            #         xml_code,
+            # ))
+            # for id_str in re.findall(r'id="(.*)"', xml_code):
+            #     xml_code=xml_code.replace(
+            #         id_str,
+            #         'id="'+"".join(
+            #             random.choices(string.ascii_letters + string.digits, k=20)
+            #         )+'"'
+            #     )
+
+            # for id_str in re.findall(r'id="(.*)"', xml_code):
+            #     xml_code=xml_code.replace(
+            #         id_str,
+            #         f'id="{random.randint(0,10000)}"'
+            #     )
+            doc['textarea_xml'].value = (
+                "\n".join(doc['textarea_xml'].value.split("\n")[:-1])
+                + "\n".join(
+                    re.sub(
+                        r'id="(.*)"',
+                        "",
+                        xml_code,
+                    ).split("\n")[1:]
+                )
+            )
             # 觸發 XML 渲染事件
             XmlToBlockly(window.Event.new("input"))
 
