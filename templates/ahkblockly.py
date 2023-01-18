@@ -5195,6 +5195,8 @@ def ImportXmlCode(ev):
         def ReaderOnload(ev):
             # 獲取積木檔 XML 內容
             xml_code = ev.target.result
+            # 覆蓋到積木 XML 文字區域
+            doc['textarea_xml'].value = xml_code
             # 追加到現有的積木 XML 文字區域
             # print(doc['textarea_xml'].value.replace("</xml>", ""))
             # print(xml_code)
@@ -5219,16 +5221,16 @@ def ImportXmlCode(ev):
             #         id_str,
             #         f'id="{random.randint(0,10000)}"'
             #     )
-            doc['textarea_xml'].value = (
-                "\n".join(doc['textarea_xml'].value.split("\n")[:-1])
-                + "\n".join(
-                    re.sub(
-                        r'id="(.*)"',
-                        "",
-                        xml_code,
-                    ).split("\n")[1:]
-                )
-            )
+            # doc['textarea_xml'].value = (
+            #     "\n".join(doc['textarea_xml'].value.split("\n")[:-1])
+            #     + "\n".join(
+            #         re.sub(
+            #             r'id="(.*)"',
+            #             "",
+            #             xml_code,
+            #         ).split("\n")[1:]
+            #     )
+            # )
             # 觸發 XML 渲染事件
             XmlToBlockly(window.Event.new("input"))
 
