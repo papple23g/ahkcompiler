@@ -2993,7 +2993,6 @@ def XmlToAHK(ev):
         div_parseXml_elt.innerHTML = xml_str
         block_elt_list = div_parseXml_elt.select('xml>block')
 
-
         # 將逐個blockly轉譯為AHK
         for block_elt in block_elt_list:
             # 不要轉譯落單的field block
@@ -5363,7 +5362,7 @@ div_showAhkAreaBtns_elt <= BUTTON(
     "下載.exe檔(64-bit)", style={'color': '#000094'}, id="btn_dl64exe").bind("click", DownloadAhkExe)
 
 div_showAhkAreaBtns_elt <= SPAN(
-    "←測試功能 (")+A("檢測到病毒?有何風險?", href="https://hackmd.io/hcAlG6oeQNO1jpILguR5hw?view")+SPAN(")")
+    "←測試功能 (")+A("檢測到病毒?有何風險?", href="https://hackmd.io/1cw5qjUHR4avs__Vmw9YVg?view")+SPAN(")")
 
 # 排版
 div_showAhkArea_elt <= div_showAhkAreaHeader_elt
@@ -5389,7 +5388,7 @@ div_textareaXml_elt <= textarea_showXml_elt
 
 
 # 設置使用說明iframe
-iframe_elt = IFRAME(src="https://hackmd.io/@papple23g/r1RuM08tB")
+iframe_elt = IFRAME(src="https://hackmd.io/@papple12g/rJvq8d2uh")
 div_iframe_elt = DIV(iframe_elt)
 
 # 設置子頁面標頭DIV元素

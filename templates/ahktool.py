@@ -1,4 +1,4 @@
-from browser import doc, alert, bind, window
+from browser import alert, bind, doc, window
 from browser.html import *
 
 VERSION = "2.6"
@@ -1792,7 +1792,7 @@ AddStyle("""
 """)
 
 # 設置使用說明iframe
-iframe_elt = IFRAME(src="https://hackmd.io/@papple23g/r1geUgPKH")
+iframe_elt = IFRAME(src="https://hackmd.io/@papple12g/rJvq8d2uh")
 div_iframe_elt = DIV(iframe_elt)
 doc['div_subMainPage'] <= div_iframe_elt
 AddStyle('''

@@ -1,7 +1,7 @@
 
 # 設置更新日誌iframe
 iframe_elt = IFRAME(id="iframe_ahktool_iframe",
-                    src="https://hackmd.io/@papple23g/Sk2oJY6JK")
+                    src="https://hackmd.io/@papple12g/Hy0jtdnu3")
 div_iframe_elt = DIV(iframe_elt)
 
 # 排版
