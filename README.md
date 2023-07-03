@@ -35,6 +35,5 @@
 
 ### 離線版
 執行方法:
-1. 請至 [釋出版本](https://github.com/papple23g/ahkcompiler/releases) 頁面
-2. 下載 `.zip` 檔後解壓縮
-3. 執行裡面的 `AHK_Blockly.html` 網頁檔案即可
+1. 請至 [點擊此連結](https://github.com/papple23g/ahkcompiler/releases/download/1.12.0/AHK.Blockly.1.12.0.zip) 下載 `.zip` 檔後解壓縮
+2. 執行裡面的 `ahktool.html` 與 `ahkblockly.html` 網頁檔案即可
