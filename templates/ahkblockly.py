@@ -2912,7 +2912,7 @@ def XmlToBlockly(ev):
         xml_format_str = FormatXML(textarea_elt.value)
         textarea_elt.value = xml_format_str
 
-#定義動作:顯示blocks的xml (必須等待Block載入完成)
+# 定義動作:顯示blocks的xml (必須等待Block載入完成)
 
 
 def BlocklyToXml(ev):
@@ -2942,7 +2942,7 @@ def XmlToAHK(ev):
         # 清空:預設欲生成後來要追加在AHK腳本置頂處或最尾處的字典鍵值集合
         func_dict_key_set = set()
 
-        ##註冊物件型Block元素列表 (不能被獨立轉譯)
+        # 註冊物件型Block元素列表 (不能被獨立轉譯)
         OBJ_BLOCK_LIST = [
             'function_key',
             'special_key',
@@ -3024,7 +3024,7 @@ def XmlToAHK(ev):
 
 # region 基本函數
 
-#定義函數: 將半形符號轉換成全形符號
+# 定義函數: 將半形符號轉換成全形符號
 def ToFullWidthString(text, excluded_str_list=None):
     if not excluded_str_list:
         excluded_str_list = []
@@ -3068,7 +3068,7 @@ def ToFullWidthString(text, excluded_str_list=None):
     com_text = str(text)
     # 遍歷每一個字母
     for c in chr_set:
-        #替換成全行字體 (排除提供的例外串列)
+        # 替換成全行字體 (排除提供的例外串列)
         if c in full_width_string_dict.keys() and c not in excluded_str_list:
             com_text = com_text.replace(c, full_width_string_dict[c])
     return com_text
@@ -3492,12 +3492,12 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             # 獲取是否強制執行
             field_force_elt = FindCurrent(block_elt, 'field[name="force"]')
             field_force_str = field_force_elt.text
-            #若為Shutdown語法 (登出/關機/重新啟動)
+            # 若為Shutdown語法 (登出/關機/重新啟動)
             if field_action_str in ["logout", "shutdown", "restart"]:
                 action_int = 0 if field_action_str == "logout" else 1 if field_action_str == "shutdown" else 2
                 force_int = 4 if field_force_str == "TRUE" else 0
                 com_str += f"Shutdown, {action_int+force_int}\n"
-            #若為DllCall語法 (睡眠/休眠)
+            # 若為DllCall語法 (睡眠/休眠)
             elif field_action_str in ["sleep", "deepsleep"]:
                 var_int = 0 if field_action_str == "sleep" else 1
                 com_str += f'DllCall("PowrProf\\SetSuspendState", "int", {var_int}, "int", 0, "int", 0)\n'
@@ -4334,7 +4334,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                     block_elt = block_webAction_elt
                     break
 
-            #print([block_webAction_elt.attrs['id'] for block_webAction_elt in block_webAction_elt_list])
+            # print([block_webAction_elt.attrs['id'] for block_webAction_elt in block_webAction_elt_list])
 
             # 逐個處理每個網頁操作blockly，匯出完整JS程式碼
             com_js_code_str = ""
@@ -5004,7 +5004,7 @@ return
                 f"{statement_do_str}}}\n"
             ])
 
-            #com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
+            # com_str+=f"Loop {value_str} {{\n{statement_do_str}}}\n"
 
         # while循環
         elif block_elt.attrs['type'] == "controls_whileUntil":
@@ -5293,7 +5293,7 @@ sec_int = None
 def DownloadAhkExe(ev):
     global countdown_timer, sec_int
     # host="http://127.0.0.1:8001"
-    host = "https://6200-2001-b011-3814-3203-9de5-b5e6-b2cc-a174.ngrok-free.app "  # TUNE: Ngrok 網址
+    host = "https://6200-2001-b011-3814-3203-9de5-b5e6-b2cc-a174.ngrok-free.app"  # TUNE: Ngrok 網址
     btn_elt = ev.currentTarget
 
     # 停用按鍵
@@ -5409,7 +5409,7 @@ div_title_elt <= div_fb_elt+DIV(style={'clear': 'both'})
 # 設置版本標題
 doc['div_ahkblockly_gui'].insertBefore(
     div_title_elt, doc['div_ahkblockly_gui'].select_one('div'))
-#載入完Brython後才顯示workspace區塊 (才能一併顯示頁面)
+# 載入完Brython後才顯示workspace區塊 (才能一併顯示頁面)
 doc['blocklyDiv'].style.visibility = "visible"
 # 在ahkblockly_gui置入程式碼區塊
 doc['div_ahkblockly_gui'] <= div_showAhkArea_elt
