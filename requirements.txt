@@ -17,7 +17,8 @@ gunicorn==19.3.0
 path.py==8.1.2
 ptyprocess==0.5
 static3==0.6.1
-psycopg2==2.7.5
+# psycopg2==2.7.5
+psycopg2-binary
 django-cors-headers==3.1.0
 
 # dev
