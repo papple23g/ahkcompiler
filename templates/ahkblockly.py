@@ -5293,7 +5293,7 @@ sec_int = None
 def DownloadAhkExe(ev):
     global countdown_timer, sec_int
     # host="http://127.0.0.1:8001"
-    host = "https://469e-2001-b011-3814-b1d3-71cb-688f-592f-d34f.ngrok-free.app"  # TUNE: Ngrok 網址
+    host = "https://e04d-2001-b011-3814-bf25-604c-b0f-21cb-1d2.ngrok-free.app"  # TUNE: Ngrok 網址
     btn_elt = ev.currentTarget
 
     # 停用按鍵
