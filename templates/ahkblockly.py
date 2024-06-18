@@ -5292,8 +5292,7 @@ sec_int = None
 
 def DownloadAhkExe(ev):
     global countdown_timer, sec_int
-    # host="http://127.0.0.1:8001"
-    host = "https://2280-111-240-100-137.ngrok-free.app"  # TUNE: Ngrok 網址
+    host = "https://papple23g-rest-ahk.zeabur.app"
     btn_elt = ev.currentTarget
 
     # 停用按鍵
@@ -5306,52 +5305,57 @@ def DownloadAhkExe(ev):
     def waitting_compile_countdown():
         global sec_int
         btn_elt.text = f"轉譯中...(約{sec_int}秒等待)"
-        sec_int = sec_int-1 if sec_int != 0 else 0
+        sec_int = sec_int - 1 if sec_int != 0 else 0
 
     btn_text = btn_elt.text
     countdown_timer = timer.set_interval(waitting_compile_countdown, 1000)
 
     # 定義完成送出AHK程式碼後的動作
-    def on_complete(res):
-        # 停止倒數
+    def on_complete(req):
         global countdown_timer
+        # 停止倒數
         timer.clear_interval(countdown_timer)
         countdown_timer = None
-        # 獲取檔名key
-        filename_key = res.text
-        window.open(f"{host}/dl?filename_key={filename_key}", "_parent")
-        # 恢復按鍵文字訊息
         btn_elt.text = "下載中..."
 
-        # 定義刪除檔案動作
-        def rm_ahk_exe():
-            req = ajax.ajax()
-            url = f"{host}/rm?filename_key={filename_key}"
-            req.open('GET', url, True)
-            req.set_header('content-type', 'application/x-www-form-urlencoded')
-            req.send()
+        if req.status == 200:
+            # 創建一個Blob對象
+            blob = window.Blob.new([req.response], {"type": "application/octet-stream"})
+            # 創建一個URL來表示這個Blob對象
+            url = window.URL.createObjectURL(blob)
+            # 創建一個隱藏的<a>元素來觸發下載
+            download_link = doc.createElement('a')
+            download_link.href = url
+            download_link.download = "myahk.exe"
+            doc.body.appendChild(download_link)
+            download_link.click()
+            doc.body.removeChild(download_link)
+            window.URL.revokeObjectURL(url)  # 釋放URL
+        else:
+            btn_elt.text = "下載失敗"
+
+        # 恢復按鍵文字訊息
+        def reset_btn_text():
             btn_elt.text = btn_text
             # 啟用按鍵
             btn_elt.disabled = False
             btn_elt.classList.remove('disabled_button')
 
         # 數秒後送出刪除檔案請求
-        timer.set_timeout(rm_ahk_exe, 10000)
+        timer.set_timeout(reset_btn_text, 3000)
 
     # 獲取AHK程式碼
     ahk_code = doc['textarea_ahk'].innerHTML
     # 轉換JS字元，如 &amp; -> &
     ahk_code = JavascriptSymbolDecoder(ahk_code)
-    # 獲取作業系統類型(64/32位元)
-    btn_elt = ev.currentTarget
-    os_type_str = ';__32-bit__;\n' if btn_elt.id == "btn_dl32exe" else ';__64-bit__;\n'
     # 送出post請求
     req = ajax.ajax()
     req.bind('complete', on_complete)
-    url = f"{host}/cp"
+    url = f"{host}/compile"
     req.open('POST', url, True)
-    req.set_header('content-type', 'application/x-www-form-urlencoded')
-    req.send(os_type_str+ahk_code)
+    req.set_header('content-type', 'text/plain')
+    req.responseType = "blob"  # 確保response是二進制文件
+    req.send(ahk_code)
 
 
 # 設置複製和下載按鈕
