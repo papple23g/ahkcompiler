@@ -4310,6 +4310,23 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 '}\n',
             ])
 
+        elif block_elt.attrs['type'] == "pixel_get_color":
+            value_posX_elt = FindCurrent(block_elt, 'value[name="posX"]')
+            value_posX_str, value_posX_comment = AHK_value(value_posX_elt)
+            com_str += value_posX_comment
+            
+            value_posY_elt = FindCurrent(block_elt, 'value[name="posY"]')
+            value_posY_str, value_posY_comment = AHK_value(value_posY_elt)
+            com_str += value_posY_comment
+
+            field_color_id_elt = FindCurrent(block_elt, 'field[name="color_id"]')
+            value_color_id_str = field_color_id_elt.text
+
+            com_str += "\n".join([
+                f"__PosX:={value_posX_str}",
+                f"__PosY:={value_posY_str}",
+                f"PixelGetColor, {value_color_id_str}, %__PosX%, %__PosY%\n",
+            ])
         # endregion 偵測圖片Blockly
 
         # region 網頁操作
@@ -5398,7 +5415,7 @@ div_iframe_elt = DIV(iframe_elt)
 # 設置子頁面標頭DIV元素
 div_title_elt = DIV()
 # 設置標頭H1元素
-VERSION = "1.13.1"  # VER: 更新版本號
+VERSION = "1.14.0"  # VER: 更新版本號
 h1_title_elt = H1(f"AutoHotKey 積木語法產生器 v{VERSION}", style={
                   "color": "rgb(220, 107, 57)", "font-size": "18px", "font-weight": "600", 'float': 'left'})
 # 設置FB DIV元素

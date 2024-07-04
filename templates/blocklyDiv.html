@@ -1148,6 +1148,25 @@
                 </block>
             </value>
         </block>
+        <block type="mouse_get_pos" x="108" y="70">
+            <field name="posX" >滑鼠座標X</field>
+            <field name="posY" >滑鼠座標Y</field>
+            <next>
+            <block type="pixel_get_color">
+                <field name="color_id">色碼</field>
+                <value name="posX">
+                <block type="variables_get">
+                    <field name="VAR">滑鼠座標X</field>
+                </block>
+                </value>
+                <value name="posY">
+                <block type="variables_get">
+                    <field name="VAR">滑鼠座標Y</field>
+                </block>
+                </value>
+            </block>
+            </next>
+        </block>
     </category>
 
     <category name="🅰 文字" colour="#5BA58C">
