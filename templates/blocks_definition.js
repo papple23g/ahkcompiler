@@ -1847,3 +1847,15 @@ Blockly.Blocks['pixel_get_color'] = {
  this.setHelpUrl("");
   }
 };
+Blockly.Blocks['color_id'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("色碼")
+        .appendField(new Blockly.FieldTextInput("0xFFFFFF"), "color_id");
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};

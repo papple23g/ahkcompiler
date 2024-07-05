@@ -4326,6 +4326,12 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 f"__PosY:={value_posY_str}",
                 f"PixelGetColor, {value_color_id_str}, %__PosX%, %__PosY%\n",
             ])
+
+        elif block_elt.attrs['type'] == "color_id":
+            field_color_id_elt = FindCurrent(block_elt, 'field[name="color_id"]')
+            value_color_id_str = field_color_id_elt.text
+            com_str += value_color_id_str
+
         # endregion 偵測圖片Blockly
 
         # region 網頁操作

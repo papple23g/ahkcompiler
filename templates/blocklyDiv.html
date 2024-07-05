@@ -1148,23 +1148,60 @@
                 </block>
             </value>
         </block>
-        <block type="mouse_get_pos" x="108" y="70">
-            <field name="posX" >滑鼠座標X</field>
-            <field name="posY" >滑鼠座標Y</field>
+        <block type="mouse_get_pos">
+            <field name="posX">滑鼠座標X</field>
+            <field name="posY">滑鼠座標Y</field>
             <next>
-            <block type="pixel_get_color">
-                <field name="color_id">色碼</field>
-                <value name="posX">
-                <block type="variables_get">
-                    <field name="VAR">滑鼠座標X</field>
+                <block type="pixel_get_color">
+                    <field name="color_id">色碼</field>
+                    <value name="posX">
+                        <block type="variables_get">
+                            <field name="VAR">滑鼠座標X</field>
+                        </block>
+                    </value>
+                    <value name="posY">
+                        <block type="variables_get">
+                            <field name="VAR">滑鼠座標Y</field>
+                        </block>
+                    </value>
+                    <next>
+                        <block type="msgbox">
+                            <value name="NAME">
+                                <block type="variables_get">
+                                    <field name="VAR">色碼</field>
+                                </block>
+                            </value>
+                            <next>
+                                <block type="controls_if">
+                                    <value name="IF0">
+                                        <block type="logic_compare">
+                                            <field name="OP">EQ</field>
+                                            <value name="A">
+                                                <block type="variables_get">
+                                                    <field name="VAR">色碼</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="color_id">
+                                                    <field name="color_id">0xFFFFFF</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <statement name="DO0">
+                                        <block type="msgbox">
+                                            <value name="NAME">
+                                                <block type="text">
+                                                    <field name="TEXT">滑鼠指著白色像素!</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </statement>
+                                </block>
+                            </next>
+                        </block>
+                    </next>
                 </block>
-                </value>
-                <value name="posY">
-                <block type="variables_get">
-                    <field name="VAR">滑鼠座標Y</field>
-                </block>
-                </value>
-            </block>
             </next>
         </block>
     </category>
