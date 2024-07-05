@@ -66,9 +66,9 @@ ArrayStr(arr) {
     'SetBrightness': {
         'pre': "__vBright := 100\n",
         'end': "\n".join([
-            f"; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
-            f";'z dimmer.ahk' by jeeswg",
-            f'SetBrightness(__vBright){{',
+            "; ref. https://www.autohotkey.com/boards/viewtopic.php?f=6&t=39580",
+            ";'z dimmer.ahk' by jeeswg",
+            'SetBrightness(__vBright){',
             f'{TAB_SPACE}OnMessage(0x5555, "MsgMonitor")',
             f'{TAB_SPACE}OnMessage(0x5556, "MsgMonitor2")',
             f'{TAB_SPACE}OnMessage(0x5557, "MsgMonitor3")',
@@ -3322,7 +3322,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             if value_text_elt and FindCurrent(value_text_elt, 'block') and FindCurrent(value_text_elt, 'block').attrs['type'] != "text":
                 com_str += f':{hotstring_setting_str}:{value_abb_str}::\nSendInput % "{{TEXT}}" . {value_text_str}\nReturn\n'
             else:
-                com_str += f':{hotstring_setting_str}:{value_abb_str}::{f"{{TEXT}}"*expand_raw_text_bool}{value_text_str}\n'
+                com_str += f':{hotstring_setting_str}:{value_abb_str}::{"{TEXT}"*expand_raw_text_bool}{value_text_str}\n'
 
         elif block_elt.attrs['type'] == "hotstring_do":
             # 獲取縮寫元素
@@ -3383,19 +3383,19 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             ])
 
         elif block_elt.attrs['type'] == "win_move":
-            value_x_elt = FindCurrent(block_elt, f'value[name="X"]')
+            value_x_elt = FindCurrent(block_elt, 'value[name="X"]')
             value_x_str, value_x_comment = AHK_value(value_x_elt)
             com_str += value_x_comment
 
-            value_y_elt = FindCurrent(block_elt, f'value[name="Y"]')
+            value_y_elt = FindCurrent(block_elt, 'value[name="Y"]')
             value_y_str, value_y_comment = AHK_value(value_y_elt)
             com_str += value_y_comment
 
-            value_w_elt = FindCurrent(block_elt, f'value[name="W"]')
+            value_w_elt = FindCurrent(block_elt, 'value[name="W"]')
             value_w_str, value_w_comment = AHK_value(value_w_elt)
             com_str += value_w_comment
 
-            value_h_elt = FindCurrent(block_elt, f'value[name="H"]')
+            value_h_elt = FindCurrent(block_elt, 'value[name="H"]')
             value_h_str, value_h_comment = AHK_value(value_h_elt)
             com_str += value_h_comment
 
@@ -3404,7 +3404,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 f"__MoveY:={value_y_str}",
                 f"__MoveW:={value_w_str}",
                 f"__MoveH:={value_h_str}",
-                f"WinMove, A,,%__MoveX%, %__MoveY%, %__MoveW%, %__MoveH%",
+                "WinMove, A,,%__MoveX%, %__MoveY%, %__MoveW%, %__MoveH%",
             ])
 
         elif block_elt.attrs['type'] == "run_or_active":
@@ -3421,16 +3421,16 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
 
             com_str += '\n'.join([
                 f'IfWinExist % {value_title_str}',
-                f'{{',
+                '{',
                 f'{TAB_SPACE}IfWinNotActive % {value_title_str}',
                 f'{TAB_SPACE}{TAB_SPACE}WinActivate',
-                f'}}',
-                f'else',
-                f'{{',
+                '}',
+                'else',
+                '{',
                 f'{TAB_SPACE}Run % {value_str}',
                 f'{TAB_SPACE}WinWait % {value_title_str}',
                 f'{TAB_SPACE}WinActivate',
-                f'}}\n',
+                '}\n',
             ])
 
         elif block_elt.attrs['type'] == "file_recycle_empty":
@@ -3566,12 +3566,12 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             com_str += '\n'.join([
                 f'__title := {value_title_str}',
                 f'__text := {value_text_str}',
-                f'MsgBox, 4,%__title%,%__text%',
-                f'IfMsgBox Yes',
-                f'{{',
+                'MsgBox, 4,%__title%,%__text%',
+                'IfMsgBox Yes',
+                '{',
                 f'{statement_yes_str}}}',
-                f'else',
-                f'{{',
+                'else',
+                '{',
                 f'{statement_no_str}}}\n',
             ])
 
@@ -3837,10 +3837,10 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             value_max_str = value_max_str if value_max_str else "0"
             com_str += value_max_comment
             # 獲取變數名稱
-            field_var_elt = FindCurrent(block_elt, f'field[name="NAME"]')
+            field_var_elt = FindCurrent(block_elt, 'field[name="NAME"]')
             value_var_str = field_var_elt.text
             # 獲取亂數類型
-            field_type_elt = FindCurrent(block_elt, f'field[name="type"]')
+            field_type_elt = FindCurrent(block_elt, 'field[name="type"]')
             if field_type_elt.text == "int":
                 com_str += f'Random, {value_var_str}, ceil({value_min_str}), floor({value_max_str})\n'
             else:
@@ -3954,7 +3954,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             com_str += value_comment
             # 對於等待Win按鍵釋放，需要兩行程式碼寫完
             if value_str == "Win":
-                com_str += f'KeyWait, LWin\nKeyWait, RWin\n'
+                com_str += 'KeyWait, LWin\nKeyWait, RWin\n'
             else:
                 com_str += f'KeyWait, {value_str}\n'
 
@@ -4000,15 +4000,15 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
 
         # 點擊(x,y)
         elif block_elt.attrs['type'] == "click_x_y":
-            value_x_elt = FindCurrent(block_elt, f'value[name="X"]')
+            value_x_elt = FindCurrent(block_elt, 'value[name="X"]')
             value_x_str, value_x_comment = AHK_value(value_x_elt)
             com_str += value_x_comment
 
-            value_y_elt = FindCurrent(block_elt, f'value[name="Y"]')
+            value_y_elt = FindCurrent(block_elt, 'value[name="Y"]')
             value_y_str, value_y_comment = AHK_value(value_y_elt)
             com_str += value_y_comment
 
-            value_times_elt = FindCurrent(block_elt, f'value[name="TIMES"]')
+            value_times_elt = FindCurrent(block_elt, 'value[name="TIMES"]')
             value_times_str, value_times_comment = AHK_value(value_times_elt)
             com_str += value_times_comment
 
@@ -4016,14 +4016,14 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 f"__ClickX:={value_x_str}",
                 f"__ClickY:={value_y_str}",
                 f"__ClickTimes:={value_times_str}",
-                f"Click %__ClickX%, %__ClickY%, %__ClickTimes%\n",
+                "Click %__ClickX%, %__ClickY%, %__ClickTimes%\n",
             ])
 
         elif block_elt.attrs['type'] == "mouse_get_pos":
-            field_posX_elt = FindCurrent(block_elt, f'field[name="posX"]')
+            field_posX_elt = FindCurrent(block_elt, 'field[name="posX"]')
             value_posX_str = field_posX_elt.text
 
-            field_posY_elt = FindCurrent(block_elt, f'field[name="posY"]')
+            field_posY_elt = FindCurrent(block_elt, 'field[name="posY"]')
             value_posY_str = field_posY_elt.text
 
             com_str += f'MouseGetPos, {value_posX_str}, {value_posY_str}\n'
@@ -4206,7 +4206,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 "\n", "\n"+TAB_SPACE)  # 二次縮排
             com_str += '\n'.join([
                 f'__ImageFilePath:={value_imgFilepath_str}',
-                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+'CoordMode Pixel',
@@ -4247,7 +4247,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             statement_elseDo_str = AHK_statement(statement_elseDo_elt)
             com_str += '\n'.join([
                 f'__ImageFilePath:={value_imgFilepath_str}',
-                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
@@ -4288,7 +4288,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             statement_elseDo_str = AHK_statement(statement_elseDo_elt)
             com_str += '\n'.join([
                 f'__ImageFilePath:="{img_filepath_str}"',
-                f'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
+                'gui,add,picture,hwnd__mypic,%__ImageFilePath%',
                 'if FileExist(__ImageFilePath){',
                 TAB_SPACE+'controlgetpos,,,__img_w,__img_h,,ahk_id %__mypic%',
                 TAB_SPACE+';獲取顯示器長寬',
@@ -4370,7 +4370,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                         block_webElt_elt, 'field[name="NAME"]')
                     # 根據地址類型轉換元素地址文字
                     web_elt_JSpath_str = field_elt.text if FindCurrent(
-                        block_webElt_elt, f'field[name="elt_address"]').text == "js_path" else f'document.querySelector("{field_elt.text}")'
+                        block_webElt_elt, 'field[name="elt_address"]').text == "js_path" else f'document.querySelector("{field_elt.text}")'
                 # 若為點擊
                 if block_webAction_elt.attrs['type'] == 'web_element_click':
                     com_js_code_str += f"{web_elt_JSpath_str}.click();\n"
@@ -4410,12 +4410,12 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             # JS程式碼不為空
             if com_js_code_str:
                 com_str += '\n'.join([
-                    f'__JS程式碼=',
-                    f'(',
+                    '__JS程式碼=',
+                    '(',
                     f'{com_js_code_str}void(0);',
-                    f')',
-                    f'WinGetActiveTitle, __視窗標題',
-                    f'if InStr(__視窗標題," - Google Chrome") {{',
+                    ')',
+                    'WinGetActiveTitle, __視窗標題',
+                    'if InStr(__視窗標題," - Google Chrome") {',
                     f'{TAB_SPACE}BlockInput, On',
                     f'{TAB_SPACE}Send, ^l',
                     f'{TAB_SPACE}clipboard_save := clipboard',
@@ -4429,9 +4429,9 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                     f'{TAB_SPACE}Send, {{Delete}}',
                     f'{TAB_SPACE}Send, {{Enter}}',
                     f'{TAB_SPACE}BlockInput, Off',
-                    f'}} else {{',
+                    '} else {',
                     f'{TAB_SPACE}Msgbox % "只有Google瀏覽器才可以執行該函式"',
-                    f'}}\n',
+                    '}\n',
                 ])
 
         # endregion 網頁操作
@@ -5169,7 +5169,7 @@ return
             # 輸出程式碼
             com_str += '\n'.join([
                 f'_fullfilename := {value_path_str} . "/" .  FullwidthSymbol({value_filename_str}) . "{field_subfilename_str}"',
-                f'Screenshot(_fullfilename)\n',
+                'Screenshot(_fullfilename)\n',
             ])
 
         # endregion 螢幕亮度控制
@@ -5347,8 +5347,8 @@ async def DownloadAhkExe(ev):
         # 重置按钮
         await aio.sleep(3)
         btn_elt.text = original_text
-            btn_elt.disabled = False
-            btn_elt.classList.remove('disabled_button')
+        btn_elt.disabled = False
+        btn_elt.classList.remove('disabled_button')
 
 
 
@@ -5357,7 +5357,7 @@ div_showAhkAreaBtns_elt = DIV(id="div_copy_ahkfile_btns_area")
 div_showAhkAreaBtns_elt <= BUTTON("複製語法").bind("click", CopyAhkCode)
 div_showAhkAreaBtns_elt <= BUTTON("下載.ahk檔案").bind("click", DownloadAhkCode)
 div_showAhkAreaBtns_elt <= BUTTON(
-    "下載.exe檔(64-bit)", style={'color': '#000094'}, id="btn_dl64exe").bind("click", DownloadAhkExe)
+    "下載.exe檔(64-bit)", style={'color': '#000094'}, id="btn_dl64exe").bind("click", lambda ev: aio.run(DownloadAhkExe(ev)))
 
 div_showAhkAreaBtns_elt <= SPAN(
     "←測試功能 (")+A("檢測到病毒?有何風險?", href="https://hackmd.io/1cw5qjUHR4avs__Vmw9YVg?view")+SPAN(")")
