@@ -1,10 +1,9 @@
 # {% verbatim %}
 
-import random
-import re
-import string
 
-from browser import ajax, timer
+from browser import aio, alert, window
+from browser import document as doc
+from browser.html import BUTTON, DIV, H1, IFRAME, INPUT, PRE, SPAN, TEXTAREA, A, P
 
 # 全域變數
 Blockly = window.Blockly
@@ -5301,78 +5300,56 @@ def DownloadAhkCode(ev):
     filename = "myahk.ahk"
     DownloadTextFile(filename, ahk_code)
 
-
-countdown_timer = None
-sec_int = None
-# 定義動作:轉譯成AHK.exe檔並下載
-
-
-def DownloadAhkExe(ev):
-    global countdown_timer, sec_int
+async def DownloadAhkExe(ev):
     host = "https://papple23g-rest-ahk.zeabur.app"
     btn_elt = ev.currentTarget
+    original_text = btn_elt.text
 
-    # 停用按鍵
+    # 禁用按钮
     btn_elt.disabled = True
     btn_elt.classList.add('disabled_button')
 
-    sec_int = 10
-    # 定義動作:在按鈕文字上顯示等待時間
+    # 获取 AHK 代码
+    ahk_code = doc['textarea_ahk'].innerHTML
+    ahk_code = JavascriptSymbolDecoder(ahk_code)
 
-    def waitting_compile_countdown():
-        global sec_int
-        btn_elt.text = f"轉譯中...(約{sec_int}秒等待)"
-        sec_int = sec_int - 1 if sec_int != 0 else 0
-
-    btn_text = btn_elt.text
-    countdown_timer = timer.set_interval(waitting_compile_countdown, 1000)
-
-    # 定義完成送出AHK程式碼後的動作
-    def on_complete(req):
-        global countdown_timer
-        # 停止倒數
-        timer.clear_interval(countdown_timer)
-        countdown_timer = None
-        btn_elt.text = "下載中..."
-
-        if req.status == 200:
-            # 創建一個Blob對象
-            blob = window.Blob.new([req.response], {"type": "application/octet-stream"})
-            # 創建一個URL來表示這個Blob對象
+    try:
+        # 發送轉譯請求
+        btn_elt.text = "轉譯中..."
+        response = await aio.ajax(
+            "POST", f"{host}/compile", 
+            data=ahk_code, 
+            headers={"Content-Type": "text/plain"}, 
+            format="binary",
+        )  
+        
+        if response.status == 200:
+            btn_elt.text = "下载中..."
+            # 將二進制數據轉換為 Uint8Array
+            uint8_array = window.Uint8Array.new(response.data.source)
+            # 創建 Blob
+            blob = window.Blob.new([uint8_array], {"type": "application/x-msdownload"})
             url = window.URL.createObjectURL(blob)
-            # 創建一個隱藏的<a>元素來觸發下載
+            # 創建下載連結
             download_link = doc.createElement('a')
             download_link.href = url
             download_link.download = "myahk.exe"
             doc.body.appendChild(download_link)
             download_link.click()
             doc.body.removeChild(download_link)
-            window.URL.revokeObjectURL(url)  # 釋放URL
+            window.URL.revokeObjectURL(url)
+            btn_elt.text = "下载完成"
         else:
-            btn_elt.text = "下載失敗"
+            print("Server returned status:", response.status)
+            btn_elt.text = f"下載失敗: 伺服器錯誤 {response.status}"
 
-        # 恢復按鍵文字訊息
-        def reset_btn_text():
-            btn_elt.text = btn_text
-            # 啟用按鍵
+    finally:
+        # 重置按钮
+        await aio.sleep(3)
+        btn_elt.text = original_text
             btn_elt.disabled = False
             btn_elt.classList.remove('disabled_button')
 
-        # 數秒後送出刪除檔案請求
-        timer.set_timeout(reset_btn_text, 3000)
-
-    # 獲取AHK程式碼
-    ahk_code = doc['textarea_ahk'].innerHTML
-    # 轉換JS字元，如 &amp; -> &
-    ahk_code = JavascriptSymbolDecoder(ahk_code)
-    # 送出post請求
-    req = ajax.ajax()
-    req.bind('complete', on_complete)
-    url = f"{host}/compile"
-    req.open('POST', url, True)
-    req.set_header('content-type', 'text/plain')
-    req.responseType = "blob"  # 確保response是二進制文件
-    req.send(ahk_code)
 
 
 # 設置複製和下載按鈕
