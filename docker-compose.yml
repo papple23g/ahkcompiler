@@ -1,8 +1,0 @@
-version: '2.1'
-
-services:
-  ahkcompiler:
-    image: ahkcompiler
-    build: .
-    ports:
-      - 8001:8001
