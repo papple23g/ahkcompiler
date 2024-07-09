@@ -5379,8 +5379,7 @@ div_showAhkArea_elt <= div_showAhkAreaBtns_elt
 # 設置XML轉換結果畫面元素
 div_textareaXml_elt = DIV(id='input_xml_area')
 # 實際部屬時，要把XML區塊隱藏起來
-if 'herokuapp' in window.location.hostname:
-    div_textareaXml_elt.style.display = "none"
+div_textareaXml_elt.style.display = "none"
 div_textareaXml_elt
 div_textareaXml_elt <= P("xml:")
 textarea_showXml_elt = TEXTAREA(
