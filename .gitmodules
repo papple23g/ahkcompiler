@@ -1,0 +1,3 @@
+[submodule "browser"]
+	path = browser
+	url = https://github.com/papple23g/browser.git

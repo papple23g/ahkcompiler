@@ -3885,14 +3885,19 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
                 com_str += functionKey_comment
             # 獲取一般鍵(將英文字母按鍵名稱降為小寫)
             block_normalKey_elt_list = block_sendKey_elt.select(
-                'block[type="normal_key"]')
+                'block[type="normal_key"]'
+            )
             block_normalKey_elt_list.extend(
-                block_sendKey_elt.select('block[type="special_key"]'))
+                block_sendKey_elt.select('block[type="special_key"]')
+            )
             for block_normalKey_elt in block_normalKey_elt_list:
                 normalKey_str, normalKey_comment = AHK_block(
-                    block_normalKey_elt, separate_comment=True)
-                hotkey_str += (normalKey_str.lower(
-                ) if block_normalKey_elt.attrs['type'] == "normal_key" else f"{{{normalKey_str}}}")
+                    block_normalKey_elt, separate_comment=True
+                )
+                hotkey_str += (
+                    normalKey_str.lower() if block_normalKey_elt.attrs['type'] == "normal_key" else
+                    f"{{{normalKey_str.replace('`','``')}}}"
+                )
                 com_str += normalKey_comment
 
             com_str += f'Send, {hotkey_str}\n'
@@ -3909,7 +3914,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             # 獲取一般連續鍵
             field_elt = FindCurrent(block_elt, 'field')
 
-            com_str += f'Send, {field_elt.text}\n'
+            com_str += f"Send, {field_elt.text.replace('`','``')}\n"
 
         elif block_elt.attrs['type'] == "send_key_times":
             # 移除next元素(使用虛擬DIV容器)
@@ -3963,6 +3968,7 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             # 獲取功能鍵
             value_elt = FindCurrent(block_elt, 'value')
             value_str, value_comment = AHK_value(value_elt)
+            value_str = value_str.replace('`', '``')
             com_str += value_comment
             # 獲取執行元素
             statement_elt = FindCurrent(block_elt, 'statement[name="DO"]')
@@ -3973,16 +3979,11 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
 
         # 按著功能鍵
         elif block_elt.attrs['type'] in ["key_down", "key_up"]:
-            # print(1)
             # 獲取功能鍵
             value_elt = FindCurrent(block_elt, 'value', get_one=True)
-            # print(2)
             value_str, value_comment = AHK_value(value_elt)
-            # print(3)
+            value_str = value_str.replace('`', '``')
             com_str += value_comment
-            # print(value_str)
-            # print(block_elt.attrs['type'])
-            # print(block_elt.attrs['type'].replace('key_').upper())
 
             # 輸出程式碼
             com_str += f"Send {{{value_str} {block_elt.attrs['type'].replace('key_','').upper()}}}\n"
@@ -4313,12 +4314,13 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             value_posX_elt = FindCurrent(block_elt, 'value[name="posX"]')
             value_posX_str, value_posX_comment = AHK_value(value_posX_elt)
             com_str += value_posX_comment
-            
+
             value_posY_elt = FindCurrent(block_elt, 'value[name="posY"]')
             value_posY_str, value_posY_comment = AHK_value(value_posY_elt)
             com_str += value_posY_comment
 
-            field_color_id_elt = FindCurrent(block_elt, 'field[name="color_id"]')
+            field_color_id_elt = FindCurrent(
+                block_elt, 'field[name="color_id"]')
             value_color_id_str = field_color_id_elt.text
 
             com_str += "\n".join([
@@ -4328,7 +4330,8 @@ def AHK_block(block_elt, get_all_comment=False, separate_comment=False):
             ])
 
         elif block_elt.attrs['type'] == "color_id":
-            field_color_id_elt = FindCurrent(block_elt, 'field[name="color_id"]')
+            field_color_id_elt = FindCurrent(
+                block_elt, 'field[name="color_id"]')
             value_color_id_str = field_color_id_elt.text
             com_str += value_color_id_str
 
@@ -5306,6 +5309,7 @@ def DownloadAhkCode(ev):
     filename = "myahk.ahk"
     DownloadTextFile(filename, ahk_code)
 
+
 async def DownloadAhkExe(ev):
     host = "https://papple23g-rest-ahk.zeabur.app"
     btn_elt = ev.currentTarget
@@ -5323,18 +5327,19 @@ async def DownloadAhkExe(ev):
         # 發送轉譯請求
         btn_elt.text = "轉譯中..."
         response = await aio.ajax(
-            "POST", f"{host}/compile", 
-            data=ahk_code, 
-            headers={"Content-Type": "text/plain"}, 
+            "POST", f"{host}/compile",
+            data=ahk_code,
+            headers={"Content-Type": "text/plain"},
             format="binary",
-        )  
-        
+        )
+
         if response.status == 200:
             btn_elt.text = "下载中..."
             # 將二進制數據轉換為 Uint8Array
             uint8_array = window.Uint8Array.new(response.data.source)
             # 創建 Blob
-            blob = window.Blob.new([uint8_array], {"type": "application/x-msdownload"})
+            blob = window.Blob.new(
+                [uint8_array], {"type": "application/x-msdownload"})
             url = window.URL.createObjectURL(blob)
             # 創建下載連結
             download_link = doc.createElement('a')
@@ -5355,7 +5360,6 @@ async def DownloadAhkExe(ev):
         btn_elt.text = original_text
         btn_elt.disabled = False
         btn_elt.classList.remove('disabled_button')
-
 
 
 # 設置複製和下載按鈕
@@ -5397,7 +5401,7 @@ div_iframe_elt = DIV(iframe_elt)
 # 設置子頁面標頭DIV元素
 div_title_elt = DIV()
 # 設置標頭H1元素
-VERSION = "1.14.1"  # VER: 更新版本號
+VERSION = "1.14.2"  # VER: 更新版本號
 h1_title_elt = H1(f"AutoHotKey 積木語法產生器 v{VERSION}", style={
                   "color": "rgb(220, 107, 57)", "font-size": "18px", "font-weight": "600", 'float': 'left'})
 # 設置FB DIV元素
