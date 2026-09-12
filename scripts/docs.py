@@ -20,6 +20,7 @@ SOURCES: dict[str, tuple[str, str]] = {
     'changelog-ahkblockly': ('積木版更新日誌', 'https://hackmd.io/@papple12g/SJ1fcu2On'),
     'security': ('執行檔與防毒風險說明', 'https://hackmd.io/1cw5qjUHR4avs__Vmw9YVg'),
     'legacy-note-hcal': ('舊版離線頁面內嵌文件', 'https://hackmd.io/hcAlG6oeQNO1jpILguR5hw'),
+    'legacy-note-r1ru': ('舊版離線頁面內嵌文件 2', 'https://hackmd.io/@papple23g/r1RuM08tB'),
 }
 URL_RE = re.compile(r"https?://hackmd\.io/[^\s\"'<>\)\]]+", re.IGNORECASE)
 TEXT_EXTENSIONS = {'.py', '.html', '.js', '.css', '.md', '.json'}
