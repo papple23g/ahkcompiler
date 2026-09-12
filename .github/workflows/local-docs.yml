@@ -3,10 +3,10 @@ name: Local documentation
 on:
   push:
     branches: [codex/migrate-hackmd-to-local-docs]
-    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/tests.py', 'templates/**', 'protable/**', 'onlineToOffline.py', 'requirements-docs.txt', 'docs/**', '.github/workflows/local-docs.yml']
+    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/**', 'ahkcompiler/**', 'templates/**', 'protable/**', 'onlineToOffline.py', 'requirements*.txt', 'runtime.txt', '.python-version', 'docs/**', '.github/workflows/local-docs.yml']
   pull_request:
     branches: [master]
-    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/tests.py', 'requirements-docs.txt', 'docs/**', 'static/docs/**', 'templates/**', 'protable/**', 'onlineToOffline.py', '.github/workflows/local-docs.yml']
+    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/**', 'ahkcompiler/**', 'requirements*.txt', 'runtime.txt', '.python-version', 'docs/**', 'static/docs/**', 'templates/**', 'protable/**', 'onlineToOffline.py', '.github/workflows/local-docs.yml']
 
 permissions:
   contents: read
@@ -60,7 +60,10 @@ jobs:
         with:
           node-version: '24'
       - run: node --test tests/comments.test.cjs
-      - name: Validate Django templates (legacy URL compatibility alias, test process only)
+      - name: Validate the installed application without compatibility patches
         run: |
-          python -m pip install Django==5.2.17 django-cors-headers==4.9.0
-          python -c "import django.conf.urls; from django.urls import re_path; django.conf.urls.url = re_path; from django.core.management import execute_from_command_line; import os; os.environ['DJANGO_SETTINGS_MODULE']='ahkcompiler.settings'; execute_from_command_line(['manage.py','test','myapp','--verbosity=2'])"
+          python -m pip install -r requirements.txt
+          python -m pip check
+          python manage.py check
+          python manage.py test --verbosity=2
+          python -c "from ahkcompiler.wsgi import application; assert callable(application)"

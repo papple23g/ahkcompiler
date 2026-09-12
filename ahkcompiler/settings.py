@@ -55,6 +55,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ahkcompiler.urls'
+TEST_RUNNER = 'myapp.test_runner.V1DiscoverRunner'
 
 TEMPLATES = [
     {

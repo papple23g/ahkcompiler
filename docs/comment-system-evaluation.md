@@ -35,13 +35,14 @@ node --test tests/comments.test.cjs
 git diff --check
 ```
 
-PR 底版使用 Django 1.11 的 `django.conf.urls.url`，本機環境為 Django 5.2.17。下列 alias 僅存在於驗證程序，不改 production 原始碼或 dependencies：
+安裝與啟動已統一為 Python 3.12 / Django 5.2.17。`requirements.txt` 移除不再使用的舊依賴，路由使用 `re_path`，不需要暫時 alias。CI 直接從 requirements 安裝並執行下列檢查：
 
 ```powershell
-& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe -c "import django.conf.urls; from django.urls import re_path; django.conf.urls.url = re_path; from django.core.management import execute_from_command_line; import os; os.environ['DJANGO_SETTINGS_MODULE']='ahkcompiler.settings'; execute_from_command_line(['manage.py','test','myapp','--verbosity=2'])"
+& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe manage.py check
+& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe manage.py test --verbosity=2
 ```
 
-本機 browser smoke 使用相同 alias 啟動 `runserver 127.0.0.1:8765 --noreload`；這不代表已驗證原 Django 1.11 production 環境。
+本機使用 `python manage.py runserver` 正常啟動；原 Django 1.11 / Python 3.8 不再是此分支支援的環境。正式部署仍未執行。
 
 驗收結果：8 項文件／離線測試、4 項 Node 載入流程測試、2 項 Django 頁面測試及文件生成檢查通過。Chrome 網站內可見 210 則、輸入框、登入入口與巢狀回覆，並可切換最新排序及載入更多留言。核對 RSS 中少偉Wiki 的函式提問及王竣平的回覆（`6151066857`、`6158571627`），另可讀到 2020 年留言。手機尺寸檢查中 iframe 內容寬度與 scrollWidth 同為 384px，未水平溢出；Blockly 預設範例仍能產生 AHK 語法。
 
