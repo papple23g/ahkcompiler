@@ -1,11 +1,11 @@
 
 # 設置更新日誌iframe
 ahktool_iframe_elt = IFRAME(
-    id="iframe_ahktool_iframe", src="https://hackmd.io/@papple12g/rk3yqOnO2")
+    id="iframe_ahktool_iframe", src="/static/docs/changelog-ahktool.html")
 div_ahktoolIframe_elt = DIV(ahktool_iframe_elt)
 
 ahkblockly_iframe_elt = IFRAME(
-    id="iframe_ahkblockly_iframe", src="https://hackmd.io/@papple12g/SJ1fcu2On")
+    id="iframe_ahkblockly_iframe", src="/static/docs/changelog-ahkblockly.html")
 div_ahkblocklyIframe_elt = DIV(ahkblockly_iframe_elt)
 
 # 排版

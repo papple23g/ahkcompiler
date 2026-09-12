@@ -1,0 +1,43 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' https: data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>舊版離線頁面內嵌文件</title><style>body{max-width:960px;margin:0 auto;padding:20px;font:16px/1.7 system-ui,sans-serif;overflow-wrap:anywhere;color:#24292f;background:white}img{max-width:100%;height:auto}pre{overflow:auto;padding:12px;background:#f6f8fa}code{font-family:Consolas,monospace}table{border-collapse:collapse;display:block;overflow:auto}th,td{padding:6px 12px;border:1px solid #d0d7de}blockquote{margin-left:0;padding-left:16px;border-left:4px solid #d0d7de}a{color:#0969da}footer{margin-top:32px;border-top:1px solid #d0d7de;padding-top:12px;font-size:14px}</style></head><body><main><h1 id="ahkexe">關於AHK積木線上exe編譯</h1>
+<p>作者 : <a href="https://papple23g-ahkcompiler.herokuapp.com/about" rel="noopener noreferrer">逆道者</a>
+網站 : <a href="https://papple23g-ahkcompiler.herokuapp.com/ahkblockly" rel="noopener noreferrer">AutoHotKey 積木語法產生器</a></p>
+<p>[Toc]</p>
+<h2 id="_1">為何防毒軟體會出現警告</h2>
+<p>Autohotkey雖然是方便的腳本工具，但是被編譯成exe檔案後就會看不到腳本內容，而這隱藏的風險成為有心人的操作工具，因此防毒軟體會對AHK編譯的exe檔特別敏感。
+如果您相信本站編譯好的腳本沒有任何危害的話，請參考下一個章節。若不放心的話，也可以改成下載.ahk檔(存文字檔)，然後使用Autohotkey執行即可。
+本網站的完整程式碼公布於 <a href="https://github.com/papple23g/ahkcompiler/blob/master/myapp/views.py" rel="noopener noreferrer">Github - ahkcompiler</a>。</p>
+<h2 id="_2">如何跳過防毒/攔截訊息</h2>
+<ul>
+<li>
+<p>Windows Defender 防毒軟體
+<img alt="" src="https://i.imgur.com/gbY6PWU.png"></p>
+</li>
+<li>
+<p>Avast 防毒軟體
+<img alt="" src="https://i.imgur.com/6Bz9g88.png"></p>
+</li>
+</ul>
+<h2 id="exe">按下 [下載.exe] 按鈕後, 發生了什麼事</h2>
+<p>首先網頁前端會將AHK程式碼傳送至一台Window伺服器中進行exe編譯
+接著再將exe檔案傳送回網頁前端
+伺服器中的.ahk和.exe檔會在下載完後被自動刪除</p>
+<pre><code>網頁前端 -&gt; 伺服器: 傳送AHK程式碼
+note right of 伺服器: 產生.ahk檔案
+note right of 伺服器: 轉譯為.exe檔案
+伺服器 -&gt; 網頁前端 : 傳送.exe檔案
+note left of 網頁前端: 下載檔案
+網頁前端 -&gt; 伺服器: 刪除檔案請求
+note right of 伺服器: 刪除.ahk及.exe檔案
+
+</code></pre>
+<p>由於筆者找不到適合的Window線上部署空間
+因此出動了家裡沒有在用的舊電腦</p>
+<p>
+<img src="https://i.imgur.com/qjX3Ftl.png">
+<br>
+<span>(圖)純粹用於編譯AHK的舊主機，請大家為它加油!</span>
+</p>
+
+<h2 id="exe_1">我載好了exe檔，為何腳本沒有執行成功/沒有反應?</h2>
+<p>請對下載的exe檔案按右鍵&gt;使用管理者身分執行
+之後等待約10秒後，螢幕右下角出現綠色圖示 <img alt="" src="https://i.imgur.com/fKNzAz4.png =15x15"> 代表腳本已成功運行中</p></main><footer>文件由儲存庫內的 Markdown 產生。 <a href="legacy-note-hcal.md">Markdown 原文</a></footer></body></html>
