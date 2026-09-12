@@ -19,6 +19,7 @@ SOURCES: dict[str, tuple[str, str]] = {
     'changelog-ahktool': ('填表版更新日誌', 'https://hackmd.io/@papple12g/rk3yqOnO2'),
     'changelog-ahkblockly': ('積木版更新日誌', 'https://hackmd.io/@papple12g/SJ1fcu2On'),
     'security': ('執行檔與防毒風險說明', 'https://hackmd.io/1cw5qjUHR4avs__Vmw9YVg'),
+    'legacy-note-hcal': ('舊版離線頁面內嵌文件', 'https://hackmd.io/hcAlG6oeQNO1jpILguR5hw'),
 }
 URL_RE = re.compile(r"https?://hackmd\.io/[^\s\"'<>\)\]]+", re.IGNORECASE)
 TEXT_EXTENSIONS = {'.py', '.html', '.js', '.css', '.md', '.json'}
@@ -148,7 +149,8 @@ def migrate(root: Path = ROOT) -> None:
 def prepare_markdown(text: str) -> str:
     text = re.sub(r'\A---\s*\n.*?\n---\s*(?:\n|$)', '', text, count=1, flags=re.S)
     text = re.sub(r'<style\b[^>]*>.*?</style>', '', text, flags=re.I | re.S)
-    text = re.sub(r'\b(usage|faq|about|changelog-ahktool|changelog-ahkblockly|security)\.md(?=[#\)\"\s>])', r'\1.html', text)
+    slugs = '|'.join(re.escape(slug) for slug in SOURCES)
+    text = re.sub(rf'\b({slugs})\.md(?=[#\)\"\s>])', r'\1.html', text)
     return text
 
 
