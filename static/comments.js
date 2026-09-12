@@ -3,6 +3,7 @@
     'use strict';
     var button = document.getElementById('comments-load');
     var status = document.getElementById('comments-status');
+    var fallback = document.getElementById('comments-fallback');
     if (!button || !status || window.location.protocol === 'file:') return;
 
     var timer;
@@ -12,12 +13,15 @@
         loaded = true;
         clearTimeout(timer);
         button.hidden = true;
+        if (fallback) fallback.hidden = true;
         status.textContent = '';
     }
     function failed() {
         if (loaded) return;
         clearTimeout(timer);
         button.disabled = false;
+        button.hidden = false;
+        if (fallback) fallback.hidden = false;
         button.textContent = '重試載入留言';
         status.textContent = '留言尚未載入。請檢查網路或內容封鎖設定後重試，也可開啟下方原討論串。';
     }
@@ -26,8 +30,10 @@
         this.page.identifier = 'r1RuM08tB';
         this.callbacks.onReady = [ready];
     };
-    button.addEventListener('click', function () {
+    function load() {
         button.disabled = true;
+        button.hidden = true;
+        if (fallback) fallback.hidden = true;
         status.textContent = '正在載入留言…';
         timer = setTimeout(failed, 20000);
         try {
@@ -44,5 +50,7 @@
         } catch (error) {
             failed();
         }
-    });
+    }
+    button.addEventListener('click', load);
+    load();
 }());

@@ -2,7 +2,7 @@
 
 ## 2026-09-12 決定：沿用既有 Disqus
 
-已查證舊留言仍保存在 Disqus。本次在 `/ahkblockly` 的文件 iframe 外提供「載入留言」按鈕；Markdown 繼續由 repository 維護。本節取代下方原先尚未查明舊留言時的 giscus 建議。
+已查證舊留言仍保存在 Disqus。本次在 `/ahkblockly` 的文件 iframe 外自動載入原留言串；Markdown 繼續由 repository 維護。本節取代下方原先尚未查明舊留言時的 giscus 建議。
 
 | 項目 | 已確認值 |
 | --- | --- |
@@ -18,7 +18,7 @@
 
 ### 整合與限制
 
-- `static/comments.js` 僅在積木頁載入；按下按鈕後才請求 Disqus。20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
+- `static/comments.js` 僅在積木頁載入；進入頁面即請求 Disqus，不顯示額外標題與引言。20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
 - 新舊網域沿用相同原 URL / identifier，不使用目前瀏覽器網址識別留言。未修改 Disqus 後台、原串 URL 或匯入任何留言。
 - 歷史 HackMD URL 僅作為 Disqus 識別資料，不是文件來源。文件檢查只豁免 `static/comments.js` 中該精確設定行，其餘筆記引用仍禁止。
 - 留言區以局部樣式消除通用 iframe 浮動並限制寬度；文件 CSP 不放寬。
