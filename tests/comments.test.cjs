@@ -9,11 +9,16 @@ function fixture(protocol = 'https:') {
     const button = {addEventListener: (_, callback) => {click = callback;}};
     const status = {};
     const fallback = {};
-    const window = {location: {protocol}};
+    const events = {};
+    const frame = {tagName: 'IFRAME'};
+    const thread = {contains: element => element === frame};
+    const window = {location: {protocol}, addEventListener: (name, handler) => {events[name] = handler;}};
     const context = {
         window,
         document: {
-            getElementById: id => ({'comments-load': button, 'comments-status': status, 'comments-fallback': fallback})[id],
+            activeElement: frame,
+            hasFocus: () => false,
+            getElementById: id => ({'comments-load': button, 'comments-status': status, 'comments-fallback': fallback, 'disqus_thread': thread})[id],
             createElement: () => ({remove() {this.removed = true;}}),
             head: {appendChild: script => scripts.push(script)},
         },
@@ -21,7 +26,7 @@ function fixture(protocol = 'https:') {
         clearTimeout: () => {timeout = null;},
     };
     vm.runInNewContext(fs.readFileSync('static/comments.js', 'utf8'), context);
-    return {window, button, status, fallback, scripts, click: () => click(), expire: () => timeout()};
+    return {window, button, status, fallback, scripts, events, document: context.document, click: () => click(), expire: () => timeout()};
 }
 
 test('automatically loads the verified legacy thread, keeping controls hidden until failure', () => {
@@ -67,4 +72,42 @@ test('file URLs never attach a loader', () => {
     const app = fixture('file:');
     assert.equal(app.window.disqus_config, undefined);
     assert.equal(app.scripts.length, 0);
+});
+
+test('return from comments refreshes once and a failed refresh still permits retry', () => {
+    const app = fixture();
+    const config = {page: {}, callbacks: {}};
+    app.window.disqus_config.call(config);
+    config.callbacks.onReady[0]();
+    let resets = 0;
+    app.window.DISQUS = {reset: () => {resets++;}};
+    app.events.blur();
+    app.expire();
+    app.events.focus();
+    assert.equal(resets, 1);
+    app.expire();
+    assert.equal(app.button.hidden, false);
+    config.callbacks.onReady[0]();
+    app.events.blur();
+    app.events.focus();
+    assert.equal(resets, 1);
+});
+
+test('ordinary focus, focus within the page and identified users do not reload', () => {
+    const app = fixture();
+    const config = {page: {}, callbacks: {}};
+    app.window.disqus_config.call(config);
+    config.callbacks.onReady[0]();
+    let resets = 0;
+    app.window.DISQUS = {reset: () => {resets++;}};
+    app.events.focus();
+    app.document.hasFocus = () => true;
+    app.events.blur();
+    app.expire();
+    app.events.focus();
+    config.callbacks.onIdentify[0]('123');
+    app.document.hasFocus = () => false;
+    app.events.blur();
+    app.events.focus();
+    assert.equal(resets, 0);
 });
