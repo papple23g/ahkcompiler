@@ -26,6 +26,15 @@ URL_RE = re.compile(r"https?://hackmd\.io/(?!_uploads/)[^\s\"'<>\)\]]+", re.IGNO
 TEXT_EXTENSIONS = {'.py', '.html', '.js', '.css', '.md', '.json'}
 
 
+def has_runtime_note_url(path: Path, text: str) -> bool:
+    if path.as_posix() == 'static/comments.js':
+        # Only this exact configuration assignment may retain the legacy URL.
+        text = text.replace(
+            "this.page.url = 'https://hackmd.io/%40papple23g/r1RuM08tB';", '', 1
+        )
+    return URL_RE.search(text) is not None
+
+
 class NoteSource(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -185,7 +194,7 @@ def build(root: Path = ROOT, check: bool = False) -> None:
             path.write_text(text, encoding='utf-8')
     for dirname in ('templates', 'protable', 'static'):
         for path in (root / dirname).rglob('*'):
-            if path.is_file() and path.suffix in TEXT_EXTENSIONS and URL_RE.search(path.read_text(encoding='utf-8')):
+            if path.is_file() and path.suffix in TEXT_EXTENSIONS and has_runtime_note_url(path.relative_to(root), path.read_text(encoding='utf-8')):
                 raise ValueError('Runtime HackMD reference remains: ' + str(path))
 
 

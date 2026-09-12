@@ -14,6 +14,13 @@ SPEC.loader.exec_module(DOCS)
 
 
 class DocsMigrationTests(unittest.TestCase):
+    def test_only_exact_comment_configuration_is_exempt(self) -> None:
+        assignment = "this.page.url = 'https://hackmd.io/%40papple23g/r1RuM08tB';"
+        self.assertFalse(DOCS.has_runtime_note_url(Path('static/comments.js'), assignment))
+        self.assertTrue(DOCS.has_runtime_note_url(Path('templates/example.html'), assignment))
+        self.assertTrue(DOCS.has_runtime_note_url(Path('static/comments.js'), assignment + assignment))
+        self.assertTrue(DOCS.has_runtime_note_url(Path('static/comments.js'), assignment.replace('r1RuM08tB', 'other')))
+
     def test_validate_rejects_html_login_or_error_page(self) -> None:
         with self.assertRaises(ValueError):
             DOCS.validate_markdown('<!doctype html><html><body>login</body></html>')

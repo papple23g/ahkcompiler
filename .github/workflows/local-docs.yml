@@ -3,10 +3,10 @@ name: Local documentation
 on:
   push:
     branches: [codex/migrate-hackmd-to-local-docs]
-    paths: ['scripts/docs.py', 'tests/test_docs.py', 'requirements-docs.txt', 'docs/**', '.github/workflows/local-docs.yml']
+    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/tests.py', 'templates/**', 'protable/**', 'onlineToOffline.py', 'requirements-docs.txt', 'docs/**', '.github/workflows/local-docs.yml']
   pull_request:
     branches: [master]
-    paths: ['scripts/docs.py', 'tests/test_docs.py', 'requirements-docs.txt', 'docs/**', 'static/docs/**', 'templates/**', 'protable/**', 'onlineToOffline.py', '.github/workflows/local-docs.yml']
+    paths: ['scripts/**', 'tests/**', 'static/comments.js', 'myapp/tests.py', 'requirements-docs.txt', 'docs/**', 'static/docs/**', 'templates/**', 'protable/**', 'onlineToOffline.py', '.github/workflows/local-docs.yml']
 
 permissions:
   contents: read
@@ -46,7 +46,7 @@ jobs:
             git push origin HEAD:codex/migrate-hackmd-to-local-docs
           fi
   validate:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,5 +54,13 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements-docs.txt
-      - run: python -m unittest discover -s tests -p 'test_docs.py' -v
+      - run: python -m unittest discover -s tests -v
       - run: python scripts/docs.py --check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/comments.test.cjs
+      - name: Validate Django templates (legacy URL compatibility alias, test process only)
+        run: |
+          python -m pip install Django==5.2.17 django-cors-headers==4.9.0
+          python -c "import django.conf.urls; from django.urls import re_path; django.conf.urls.url = re_path; from django.core.management import execute_from_command_line; import os; os.environ['DJANGO_SETTINGS_MODULE']='ahkcompiler.settings'; execute_from_command_line(['manage.py','test','myapp','--verbosity=2'])"
