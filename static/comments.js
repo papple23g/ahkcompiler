@@ -9,9 +9,6 @@
     var timer;
     var script;
     var loaded = false;
-    var signedIn = false;
-    var leftComments = false;
-    var refreshedOnReturn = false;
     function ready() {
         loaded = true;
         clearTimeout(timer);
@@ -32,7 +29,6 @@
         this.page.url = 'https://hackmd.io/%40papple23g/r1RuM08tB';
         this.page.identifier = 'r1RuM08tB';
         this.callbacks.onReady = [ready];
-        this.callbacks.onIdentify = [function (userId) { signedIn = Boolean(userId); }];
     };
     function load() {
         loaded = false;
@@ -58,24 +54,5 @@
         }
     }
     button.addEventListener('click', load);
-    // Cross-origin login popups cannot be inspected by the host page. Refresh
-    // once after leaving the comments frame; unrelated page focus does nothing.
-    window.addEventListener('blur', function () {
-        var active = document.activeElement;
-        var thread = document.getElementById('disqus_thread');
-        if (loaded && !signedIn && !refreshedOnReturn && thread &&
-                active && active.tagName === 'IFRAME' && thread.contains(active)) {
-            setTimeout(function () {
-                if (!document.hasFocus()) leftComments = true;
-            }, 0);
-        }
-    });
-    window.addEventListener('focus', function () {
-        if (!leftComments) return;
-        leftComments = false;
-        if (signedIn || refreshedOnReturn || !loaded) return;
-        refreshedOnReturn = true;
-        load();
-    });
     load();
 }());

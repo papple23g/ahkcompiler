@@ -9,6 +9,7 @@ class CommentsTests(SimpleTestCase):
                 self.assertContains(response, 'id="disqus_thread"', count=1)
                 self.assertContains(response, '/static/comments.js', count=1)
                 self.assertContains(response, '/static/docs/usage.html')
+                self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin-allow-popups')
 
     def test_other_pages_do_not_load_comments(self) -> None:
         for page in ('ahktool', 'faq', 'about', 'updateDiary'):
@@ -16,3 +17,4 @@ class CommentsTests(SimpleTestCase):
                 response = self.client.get('/' + page)
                 self.assertNotContains(response, 'disqus_thread')
                 self.assertNotContains(response, 'comments.js')
+                self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin')

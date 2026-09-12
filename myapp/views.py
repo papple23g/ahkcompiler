@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpRequest,HttpResponse,HttpResponseRedirect
 from django.http import FileResponse
 import os
 import uuid
@@ -8,8 +8,12 @@ import time
 def homepage(req):
     return HttpResponse("home page.")
 
-def ahk_webpage(req,subpage):
-    return render(req,"ahk_webpage.html",{'subpage':subpage})
+def ahk_webpage(req: HttpRequest, subpage: str) -> HttpResponse:
+    response = render(req,"ahk_webpage.html",{'subpage':subpage})
+    if subpage == 'ahkblockly':
+        # Preserve the opener connection used by Disqus social-login popups.
+        response['Cross-Origin-Opener-Policy'] = 'same-origin-allow-popups'
+    return response
 
 #定義API:執行AHK編譯為EXE檔
 def cp(req):

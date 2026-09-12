@@ -19,12 +19,12 @@
 ### 整合與限制
 
 - `static/comments.js` 僅在積木頁載入；進入頁面即請求 Disqus，不顯示額外標題與引言。20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
-- 登入返回補救：留言 iframe 取得焦點後，若使用者離開視窗再返回，且 Disqus 尚未透過 `onIdentify` 回報使用者 ID，使用 `DISQUS.reset` 更新原串一次，不重載積木頁。這是焦點推斷，跨來源限制使本站無法判斷 Google 登入是否完成；從留言區切到其他視窗也可能觸發，每次頁面載入最多自動重試一次。回傳、已登入與失敗流程有自動測試；真實 Google OAuth 流程尚待使用者驗證。
+- Google 登入通知：Django 5 的預設 `Cross-Origin-Opener-Policy: same-origin` 會切斷跨來源登入彈出視窗與原頁面的連線，使登入後的留言身份未更新。僅 `/ahkblockly` 改用 `same-origin-allow-popups`，保留 Disqus 原生登入通知；其他頁面維持預設標頭。移除依視窗焦點猜測登入完成並重載留言的補救程式。此設定符合 [Google 的登入彈出視窗建議](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en)。
 - 新舊網域沿用相同原 URL / identifier，不使用目前瀏覽器網址識別留言。未修改 Disqus 後台、原串 URL 或匯入任何留言。
 - 歷史 HackMD URL 僅作為 Disqus 識別資料，不是文件來源。文件檢查只豁免 `static/comments.js` 中該精確設定行，其餘筆記引用仍禁止。
 - 留言區以局部樣式消除通用 iframe 浮動並限制寬度；文件 CSP 不放寬。
 - 既有及未來離線積木頁只保留正式網站入口。匯出器透過 `scripts/offline_comments.py` 整段替換標記區塊，包含 Disqus 載入腳本。
-- Disqus 可能提供廣告，目前不允許匿名發言。未代使用者登入或發布測試留言，實際送出未測試。
+- Disqus 可能提供廣告，目前不允許匿名發言。已依使用者授權完成 Google 登入驗證，未發布測試留言，實際送出未測試。
 - [公開 RSS](https://ahkcompiler.disqus.com/latest.rss) 回傳最近 25 則，不能當成完整備份。完整備份需管理員另行[匯出](https://help.disqus.com/en/articles/1717164-comments-export)，不要將含私人資料的匯出檔提交至公開 repository。
 
 ### 驗證
@@ -46,6 +46,8 @@ git diff --check
 本機使用 `python manage.py runserver` 正常啟動；原 Django 1.11 / Python 3.8 不再是此分支支援的環境。正式部署仍未執行。
 
 驗收結果：8 項文件／離線測試、4 項 Node 載入流程測試、2 項 Django 頁面測試及文件生成檢查通過。Chrome 網站內可見 210 則、輸入框、登入入口與巢狀回覆，並可切換最新排序及載入更多留言。核對 RSS 中少偉Wiki 的函式提問及王竣平的回覆（`6151066857`、`6158571627`），另可讀到 2020 年留言。手機尺寸檢查中 iframe 內容寬度與 scrollWidth 同為 384px，未水平溢出；Blockly 預設範例仍能產生 AHK 語法。
+
+2026-09-12 Chrome 真實登入驗證：本機積木頁原先顯示未登入，點擊 Disqus 內原有的 Google 登入按鈕並選擇使用者指定帳號後，登入視窗關閉，留言身份自動切換為該帳號的 Disqus 顯示名稱；過程未重新整理原頁面，原串仍為 210 則留言。Django 測試同時驗證積木頁的登入相容標頭與其他頁面的預設標頭。
 
 時間交叉比對有來源差異：5 則共同樣本（`6090625724`、`6091680628`、`6090619507`、`6092446836`、`6065185725`）的作者與 ID 一致，但 embed 的 `createdAt` 都比 RSS 宣告的 UTC 時間晚 5 小時。例如 `6090625724` 的 embed 為 `2023-01-15T11:25:15`，RSS 為 `2023-01-15 06:25:15 -0000`。這是兩個公開來源回傳值的差異，原因尚未確認；本次直接顯示 Disqus，不改寫歷史時間，也不將時間一致性標為通過。
 
