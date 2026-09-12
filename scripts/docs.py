@@ -22,7 +22,7 @@ SOURCES: dict[str, tuple[str, str]] = {
     'legacy-note-hcal': ('舊版離線頁面內嵌文件', 'https://hackmd.io/hcAlG6oeQNO1jpILguR5hw'),
     'legacy-note-r1ru': ('舊版離線頁面內嵌文件 2', 'https://hackmd.io/@papple23g/r1RuM08tB'),
 }
-URL_RE = re.compile(r"https?://hackmd\.io/[^\s\"'<>\)\]]+", re.IGNORECASE)
+URL_RE = re.compile(r"https?://hackmd\.io/(?!_uploads/)[^\s\"'<>\)\]]+", re.IGNORECASE)
 TEXT_EXTENSIONS = {'.py', '.html', '.js', '.css', '.md', '.json'}
 
 
