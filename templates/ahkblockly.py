@@ -5395,7 +5395,7 @@ div_textareaXml_elt <= textarea_showXml_elt
 
 
 # 設置使用說明iframe
-iframe_elt = IFRAME(src="/static/docs/usage.html?v=3")
+iframe_elt = IFRAME(src="/static/docs/usage.html?v=4")
 div_iframe_elt = DIV(iframe_elt)
 
 # 設置子頁面標頭DIV元素

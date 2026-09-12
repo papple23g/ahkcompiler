@@ -173,6 +173,7 @@ def render(text: str, title: str, slug: str) -> str:
     body = nh3.clean(rendered, attributes=attributes, clean_content_tags={'script', 'style', 'iframe'}, url_schemes={'http', 'https', 'mailto'})
     # YouTube watch pages cannot open inside the documentation iframe.
     body = body.replace('<a href="https://www.youtube.com/watch?', '<a target="_blank" href="https://www.youtube.com/watch?')
+    body = body.replace('src="https://i.imgur.com/Kmo2wc2.png"', 'src="assets/Kmo2wc2.png"')
     return f'''<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' https: data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>{html.escape(title)}</title><style>body{{max-width:960px;margin:0 auto;padding:20px;font:16px/1.7 system-ui,sans-serif;overflow-wrap:anywhere;color:#24292f;background:white}}img{{max-width:100%;height:auto}}pre{{overflow:auto;padding:12px;background:#f6f8fa}}code{{font-family:Consolas,monospace}}table{{border-collapse:collapse;display:block;overflow:auto}}th,td{{padding:6px 12px;border:1px solid #d0d7de}}blockquote{{margin-left:0;padding-left:16px;border-left:4px solid #d0d7de}}a{{color:#0969da}}</style></head><body><main>{body}</main></body></html>\n'''
 
 
@@ -194,6 +195,15 @@ def build(root: Path = ROOT, check: bool = False) -> None:
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding='utf-8')
+    thumbnail = (root / 'docs' / 'assets' / 'Kmo2wc2.png').read_bytes()
+    for folder in (root / 'static' / 'docs', root / 'protable' / 'docs'):
+        asset = folder / 'assets' / 'Kmo2wc2.png'
+        if check:
+            if not asset.exists() or asset.read_bytes() != thumbnail:
+                raise ValueError('Stale/missing generated asset: ' + str(asset))
+        else:
+            asset.parent.mkdir(parents=True, exist_ok=True)
+            asset.write_bytes(thumbnail)
     for dirname in ('templates', 'protable', 'static'):
         for path in (root / dirname).rglob('*'):
             if path.is_file() and path.suffix in TEXT_EXTENSIONS and has_runtime_note_url(path.relative_to(root), path.read_text(encoding='utf-8')):
