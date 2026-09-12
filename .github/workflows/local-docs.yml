@@ -1,0 +1,58 @@
+name: Local documentation
+
+on:
+  push:
+    branches: [codex/migrate-hackmd-to-local-docs]
+    paths: ['scripts/docs.py', 'tests/test_docs.py', 'requirements-docs.txt', 'docs/**', '.github/workflows/local-docs.yml']
+  pull_request:
+    branches: [master]
+    paths: ['scripts/docs.py', 'tests/test_docs.py', 'requirements-docs.txt', 'docs/**', 'static/docs/**', 'templates/**', 'protable/**', 'onlineToOffline.py', '.github/workflows/local-docs.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bootstrap:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/migrate-hackmd-to-local-docs'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/migrate-hackmd-to-local-docs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Import only after all migration tools have been committed
+        if: hashFiles('scripts/docs.py') != '' && hashFiles('tests/test_docs.py') != '' && hashFiles('requirements-docs.txt') != ''
+        run: |
+          python -m pip install -r requirements-docs.txt
+          python -m unittest discover -s tests -p 'test_docs.py' -v
+          if [ ! -f docs/content/usage.md ]; then
+            python scripts/docs.py --import-hackmd
+          fi
+          python scripts/docs.py --check
+          python -m unittest discover -s tests -p 'test_docs.py' -v
+          git add docs/content docs/migration-report.json static/docs protable templates onlineToOffline.py
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'docs: import original HackMD notes and build local online/offline pages'
+            git push origin HEAD:codex/migrate-hackmd-to-local-docs
+          fi
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-docs.txt
+      - run: python -m unittest discover -s tests -p 'test_docs.py' -v
+      - run: python scripts/docs.py --check
