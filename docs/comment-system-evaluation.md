@@ -45,6 +45,8 @@ PR 底版使用 Django 1.11 的 `django.conf.urls.url`，本機環境為 Django 
 
 驗收結果：8 項文件／離線測試、4 項 Node 載入流程測試、2 項 Django 頁面測試及文件生成檢查通過。Chrome 網站內可見 210 則、輸入框、登入入口與巢狀回覆，並可切換最新排序及載入更多留言。核對 RSS 中少偉Wiki 的函式提問及王竣平的回覆（`6151066857`、`6158571627`），另可讀到 2020 年留言。手機尺寸檢查中 iframe 內容寬度與 scrollWidth 同為 384px，未水平溢出；Blockly 預設範例仍能產生 AHK 語法。
 
+時間交叉比對有來源差異：5 則共同樣本（`6090625724`、`6091680628`、`6090619507`、`6092446836`、`6065185725`）的作者與 ID 一致，但 embed 的 `createdAt` 都比 RSS 宣告的 UTC 時間晚 5 小時。例如 `6090625724` 的 embed 為 `2023-01-15T11:25:15`，RSS 為 `2023-01-15 06:25:15 -0000`。這是兩個公開來源回傳值的差異，原因尚未確認；本次直接顯示 Disqus，不改寫歷史時間，也不將時間一致性標為通過。
+
 Codex 內建瀏覽器此次 iframe 曾停留空白並觸發逾時，重試提示確實顯示；Chrome 同一頁及相同設定成功。內建瀏覽器相容性問題未標記為已修復。正式網域部署後仍須重驗嵌入與登入；本 PR 不部署。
 
 整合依據：[官方 Embed Code](https://help.disqus.com/en/articles/1717112-universal-embed-code)、[避免分裂討論串](https://help.disqus.com/en/articles/1717137-use-configuration-variables-to-avoid-split-threads-and-missing-comments)。
