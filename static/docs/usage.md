@@ -27,7 +27,7 @@ papple12g@gmail.com
  - 修改ahk存檔後，要再對右下角的綠色圖示按右鍵>Reload，才能成功運行
  
 ### 影片說明
-[觀看 AHK 語法產生器教學影片（YouTube 播放清單）](https://www.youtube.com/watch?v=E6olKhbktWQ&list=PLbevCiUu6w3AT3prcCEytZQWdcIdv36BO&index=1)
+[![](https://i.imgur.com/Kmo2wc2.png)](https://www.youtube.com/watch?v=E6olKhbktWQ&list=PLbevCiUu6w3AT3prcCEytZQWdcIdv36BO&index=1)
 
 ### 本站程式碼
 [Github - ahkcompiler](https://github.com/papple23g/ahkcompiler)
