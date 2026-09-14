@@ -54,5 +54,16 @@
         }
     }
     button.addEventListener('click', load);
-    load();
+    var scheduled = false;
+    function schedule() {
+        if (scheduled) return;
+        scheduled = true;
+        // Let body.onload start Brython before adding third-party resources.
+        setTimeout(load, 0);
+    }
+    if (document.readyState === 'complete') {
+        schedule();
+    } else {
+        window.addEventListener('load', schedule, {once: true});
+    }
 }());

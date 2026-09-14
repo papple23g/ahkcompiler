@@ -3,29 +3,43 @@ const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const fs = require('node:fs');
 
-function fixture(protocol = 'https:') {
-    let click, timeout;
+function fixture(protocol = 'https:', readyState = 'loading') {
+    let click;
+    let nextTimer = 0;
+    const timers = new Map();
+    const events = {};
     const scripts = [];
     const button = {addEventListener: (_, callback) => {click = callback;}};
     const status = {};
     const fallback = {};
-    const window = {location: {protocol}};
+    const window = {location: {protocol}, addEventListener: (name, callback) => {events[name] = callback;}};
     const context = {
         window,
         document: {
+            readyState,
             getElementById: id => ({'comments-load': button, 'comments-status': status, 'comments-fallback': fallback})[id],
             createElement: () => ({remove() {this.removed = true;}}),
             head: {appendChild: script => scripts.push(script)},
         },
-        setTimeout: callback => {timeout = callback; return 1;},
-        clearTimeout: () => {timeout = null;},
+        setTimeout: (callback, delay) => {const id = ++nextTimer; timers.set(id, {callback, delay}); return id;},
+        clearTimeout: id => {timers.delete(id);},
     };
     vm.runInNewContext(fs.readFileSync('static/comments.js', 'utf8'), context);
-    return {window, button, status, fallback, scripts, click: () => click(), expire: () => timeout()};
+    function runTimer(delay) {
+        const entry = [...timers].find(([, timer]) => timer.delay === delay);
+        assert.ok(entry, `expected a ${delay}ms timer`);
+        timers.delete(entry[0]);
+        entry[1].callback();
+    }
+    return {window, button, status, fallback, scripts, timers,
+        pageLoaded: () => events.load?.(),
+        start: () => {events.load?.(); runTimer(0);},
+        click: () => click(), expire: () => runTimer(20000)};
 }
 
 test('automatically loads the verified legacy thread, keeping controls hidden until failure', () => {
     const app = fixture();
+    app.start();
     assert.equal(app.scripts.length, 1);
     assert.equal(app.button.hidden, true);
     assert.equal(app.fallback.hidden, true);
@@ -41,6 +55,7 @@ test('automatically loads the verified legacy thread, keeping controls hidden un
 
 test('script failure permits retry and removes the failed script', () => {
     const app = fixture();
+    app.start();
     app.scripts[0].onerror();
     assert.equal(app.button.hidden, false);
     assert.equal(app.fallback.hidden, false);
@@ -53,6 +68,7 @@ test('script failure permits retry and removes the failed script', () => {
 
 test('iframe timeout retries through Disqus reset without another embed script', () => {
     const app = fixture();
+    app.start();
     app.expire();
     assert.equal(app.button.disabled, false);
     let reset;
@@ -67,4 +83,27 @@ test('file URLs never attach a loader', () => {
     const app = fixture('file:');
     assert.equal(app.window.disqus_config, undefined);
     assert.equal(app.scripts.length, 0);
+    assert.equal(app.timers.size, 0);
+});
+
+test('waits for page load and a later task; timeout begins only with the request', () => {
+    const app = fixture();
+    assert.equal(app.scripts.length, 0);
+    assert.equal(app.timers.size, 0);
+    app.pageLoaded();
+    assert.equal(app.scripts.length, 0);
+    assert.deepEqual([...app.timers.values()].map(t => t.delay), [0]);
+    app.start();
+    assert.equal(app.scripts.length, 1);
+    assert.deepEqual([...app.timers.values()].map(t => t.delay), [20000]);
+    app.pageLoaded();
+    assert.equal(app.scripts.length, 1);
+    assert.deepEqual([...app.timers.values()].map(t => t.delay), [20000]);
+});
+
+test('a script attached after page load still schedules automatic loading', () => {
+    const app = fixture('https:', 'complete');
+    assert.equal(app.scripts.length, 0);
+    app.start();
+    assert.equal(app.scripts.length, 1);
 });

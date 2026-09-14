@@ -18,7 +18,7 @@
 
 ### 整合與限制
 
-- `static/comments.js` 僅在積木頁載入；進入頁面即請求 Disqus，不顯示額外標題與引言。20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
+- `static/comments.js` 僅在積木頁載入；主頁 `load` 完成後，排到下一個事件循環自動請求 Disqus，讓 `body.onload` 先啟動 Brython，避免留言資源拖延主頁初始化。不需要點擊或捲動，不顯示額外標題與引言。已載入完成的頁面也會排程，且初次啟動僅一次。從實際開始請求起算 20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
 - Google 登入通知：Django 5 的預設 `Cross-Origin-Opener-Policy: same-origin` 會切斷跨來源登入彈出視窗與原頁面的連線，使登入後的留言身份未更新。僅 `/ahkblockly` 改用 `same-origin-allow-popups`，保留 Disqus 原生登入通知；其他頁面維持預設標頭。移除依視窗焦點猜測登入完成並重載留言的補救程式。此設定符合 [Google 的登入彈出視窗建議](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en)。
 - 新舊網域沿用相同原 URL / identifier，不使用目前瀏覽器網址識別留言。未修改 Disqus 後台、原串 URL 或匯入任何留言。
 - 歷史 HackMD URL 僅作為 Disqus 識別資料，不是文件來源。文件檢查只豁免 `static/comments.js` 中該精確設定行，其餘筆記引用仍禁止。
@@ -28,6 +28,8 @@
 - [公開 RSS](https://ahkcompiler.disqus.com/latest.rss) 回傳最近 25 則，不能當成完整備份。完整備份需管理員另行[匯出](https://help.disqus.com/en/articles/1717164-comments-export)，不要將含私人資料的匯出檔提交至公開 repository。
 
 ### 驗證
+
+2026-09-15 載入順序驗證：Chrome 本機同一頁面修改前，Disqus embed 腳本在 614ms 開始、858ms 下載完成，但約 10 秒後主頁 `load` 尚未完成，AHK 轉換按鈕尚未建立。修改後一次實測 `loadEventEnd=568ms`，Disqus 在 594ms 才開始請求，轉換按鈕於 1115ms 被觀察到（50ms 輪詢精度），點擊可產生預設 AHK 語法。這是本機單次觀察，受快取與外部網路影響，不是正式站效能保證。臨時量測程式已移除。留言自動顯示 210 則，登出後透過原 Google 按鈕重新登入，身份自動切換，未重新整理頁面。此次 6 項 Node 測試涵蓋延後啟動、已完成載入、防重複及逾時／失敗重試；另執行既有文件與 Django 檢查。
 
 ```powershell
 & C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe -m unittest discover -s tests -v
