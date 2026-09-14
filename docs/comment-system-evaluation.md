@@ -1,94 +1,40 @@
-# 網頁留言系統與歷史留言恢復
+# HackMD 文件與獨立 Disqus 留言
 
-## 2026-09-12 決定：沿用既有 Disqus
+## 目前決定（2026-09-15）
 
-已查證舊留言仍保存在 Disqus。本次在 `/ahkblockly` 的文件 iframe 外自動載入原留言串；Markdown 繼續由 repository 維護。本節取代下方原先尚未查明舊留言時的 giscus 建議。
+- 五個線上頁面繼續使用正式站既有的 HackMD 文件來源，保留原內容、排版、圖片與噗浪小工具。不維護本地 Markdown / HTML 副本。
+- 積木頁在 HackMD iframe 外獨立載入 Disqus；不以 HackMD 的登入或留言功能作為本站留言入口。
+- 正式入口統一為 https://papple23g-ahkcompiler.herokuapp.com 。先發布移除搬遷公告的版本，再撤掉新網址的 DNS 與 Heroku 綁定，不更動其他網域、App 或方案。
+- 此決定取代原先的本地文件遷移與 giscus 評估；遷移程式、產物與自動匯入 CI 已撤回，可從 Git 歷史找回。
 
-| 項目 | 已確認值 |
+## 留言識別與行為
+
+| 項目 | 值 |
 | --- | --- |
 | Forum shortname | `ahkcompiler` |
-| Thread ID | `8080995238`（查證用途，不當作 page.identifier） |
+| Thread ID | `8080995238`（查證用，不當作 page.identifier） |
 | page.identifier | `r1RuM08tB` |
 | page.url | `https://hackmd.io/%40papple23g/r1RuM08tB` |
-| 原討論串 | [AHK 積木使用說明](https://disqus.com/home/discussion/ahkcompiler/ahk_hackmd_66/) |
-| 查證時公開留言數 | 210 |
-| 查證時狀態 | `isClosed=false`、`isDeleted=false` |
+| 原討論串 | https://disqus.com/home/discussion/ahkcompiler/ahk_hackmd_66/ |
 
-資料來自 Disqus 公開 embed 回應的 `disqus-threadData`，並已在 Chrome 本機網站留言框確認 210 則及原回覆。Forum 另有 12 則語法產生器留言，本次不混入。
+以上識別值不隨本機或正式站 host 改變；不匯入、搬移或刪除歷史留言。
 
-### 整合與限制
+留言在主頁 load 完成後的下一個事件循環自動請求，讓 Brython 先開始初始化。實際開始請求後 20 秒仍未完成會顯示重試與原串入口；以 Disqus onReady 判定完成。其他頁面不載入 Disqus；離線積木頁只提供正式站留言連結。
 
-- `static/comments.js` 僅在積木頁載入；主頁 `load` 完成後，排到下一個事件循環自動請求 Disqus，讓 `body.onload` 先啟動 Brython，避免留言資源拖延主頁初始化。不需要點擊或捲動，不顯示額外標題與引言。已載入完成的頁面也會排程，且初次啟動僅一次。從實際開始請求起算 20 秒未完成則顯示重試與原串入口；以 `onReady` 判定完成，不以腳本下載成功冒充留言已顯示。
-- Google 登入通知：Django 5 的預設 `Cross-Origin-Opener-Policy: same-origin` 會切斷跨來源登入彈出視窗與原頁面的連線，使登入後的留言身份未更新。僅 `/ahkblockly` 改用 `same-origin-allow-popups`，保留 Disqus 原生登入通知；其他頁面維持預設標頭。移除依視窗焦點猜測登入完成並重載留言的補救程式。此設定符合 [Google 的登入彈出視窗建議](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en)。
-- 新舊網域沿用相同原 URL / identifier，不使用目前瀏覽器網址識別留言。未修改 Disqus 後台、原串 URL 或匯入任何留言。
-- 歷史 HackMD URL 僅作為 Disqus 識別資料，不是文件來源。文件檢查只豁免 `static/comments.js` 中該精確設定行，其餘筆記引用仍禁止。
-- 留言區以局部樣式消除通用 iframe 浮動並限制寬度；文件 CSP 不放寬。
-- 既有及未來離線積木頁只保留正式網站入口。匯出器透過 `scripts/offline_comments.py` 整段替換標記區塊，包含 Disqus 載入腳本。
-- Disqus 可能提供廣告，目前不允許匿名發言。已依使用者授權完成 Google 登入驗證，未發布測試留言，實際送出未測試。
-- [公開 RSS](https://ahkcompiler.disqus.com/latest.rss) 回傳最近 25 則，不能當成完整備份。完整備份需管理員另行[匯出](https://help.disqus.com/en/articles/1717164-comments-export)，不要將含私人資料的匯出檔提交至公開 repository。
+只有積木頁使用 `Cross-Origin-Opener-Policy: same-origin-allow-popups`，保留 Google / Disqus 登入彈出視窗與原頁面的通知關係；其他頁面維持 Django 預設。參考 [Google 文件](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en)及 [Disqus 固定識別文件](https://help.disqus.com/en/articles/1717137-use-configuration-variables-to-avoid-split-threads-and-missing-comments)。
 
-### 驗證
+## 驗證與限制
 
-2026-09-15 載入順序驗證：Chrome 本機同一頁面修改前，Disqus embed 腳本在 614ms 開始、858ms 下載完成，但約 10 秒後主頁 `load` 尚未完成，AHK 轉換按鈕尚未建立。修改後一次實測 `loadEventEnd=568ms`，Disqus 在 594ms 才開始請求，轉換按鈕於 1115ms 被觀察到（50ms 輪詢精度），點擊可產生預設 AHK 語法。這是本機單次觀察，受快取與外部網路影響，不是正式站效能保證。臨時量測程式已移除。留言自動顯示 210 則，登出後透過原 Google 按鈕重新登入，身份自動切換，未重新整理頁面。此次 6 項 Node 測試涵蓋延後啟動、已完成載入、防重複及逾時／失敗重試；另執行既有文件與 Django 檢查。
+- 自動驗證：5 項 Django 測試覆蓋五頁原文件來源、本機與正式 host 回應一致、移除搬遷公告、留言載入範圍及 COOP；5 項離線匯出測試；6 項 Node 留言載入／重試測試。
+- 2026-09-15 撤回遷移後，本機五頁的 HackMD iframe 均回應 200；關於頁恢復噗浪小工具及 mailto 連結。積木轉換實際產生 AHK 語法，填表頁切換 Alt 後語法同步更新，獨立 Disqus 顯示 210 則。HackMD 的 paragraphBookmark 403 與 PostHog 訊息在既有正式站也出現，不列為本站修復完成或零 console 錯誤。
+- 先前本機 Chrome 驗證：210 則公開留言與巢狀回覆可見，Google 登入視窗關閉後身份自動更新。未送出測試留言，不宣稱已通過發表測試。這是先前紀錄，不取代本次正式站驗收。
+- HackMD、Disqus、噗浪與外部圖片仍受第三方可用性及瀏覽器內容封鎖影響。Disqus 可能含廣告；不保證所有瀏覽器或隱私設定都能使用。
+- RSS 只有最近 25 則，並非完整備份；先前與 embed 的 5 則共同樣本相差 5 小時，原因未確認，本次不改寫歷史時間。
 
 ```powershell
-& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe -m unittest discover -s tests -v
-& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe scripts/docs.py --check
+& 'C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe' manage.py check
+& 'C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe' manage.py test --verbosity=2
+& 'C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe' -m unittest discover -s tests -v
 node --test tests/comments.test.cjs
 git diff --check
 ```
-
-安裝與啟動已統一為 Python 3.12 / Django 5.2.17。`requirements.txt` 移除不再使用的舊依賴，路由使用 `re_path`，不需要暫時 alias。CI 直接從 requirements 安裝並執行下列檢查：
-
-```powershell
-& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe manage.py check
-& C:\Users\pappl\venvs\ahkcompiler_venv\Scripts\python.exe manage.py test --verbosity=2
-```
-
-本機使用 `python manage.py runserver` 正常啟動；原 Django 1.11 / Python 3.8 不再是此分支支援的環境。正式部署仍未執行。
-
-驗收結果：8 項文件／離線測試、4 項 Node 載入流程測試、2 項 Django 頁面測試及文件生成檢查通過。Chrome 網站內可見 210 則、輸入框、登入入口與巢狀回覆，並可切換最新排序及載入更多留言。核對 RSS 中少偉Wiki 的函式提問及王竣平的回覆（`6151066857`、`6158571627`），另可讀到 2020 年留言。手機尺寸檢查中 iframe 內容寬度與 scrollWidth 同為 384px，未水平溢出；Blockly 預設範例仍能產生 AHK 語法。
-
-2026-09-12 Chrome 真實登入驗證：本機積木頁原先顯示未登入，點擊 Disqus 內原有的 Google 登入按鈕並選擇使用者指定帳號後，登入視窗關閉，留言身份自動切換為該帳號的 Disqus 顯示名稱；過程未重新整理原頁面，原串仍為 210 則留言。Django 測試同時驗證積木頁的登入相容標頭與其他頁面的預設標頭。
-
-時間交叉比對有來源差異：5 則共同樣本（`6090625724`、`6091680628`、`6090619507`、`6092446836`、`6065185725`）的作者與 ID 一致，但 embed 的 `createdAt` 都比 RSS 宣告的 UTC 時間晚 5 小時。例如 `6090625724` 的 embed 為 `2023-01-15T11:25:15`，RSS 為 `2023-01-15 06:25:15 -0000`。這是兩個公開來源回傳值的差異，原因尚未確認；本次直接顯示 Disqus，不改寫歷史時間，也不將時間一致性標為通過。
-
-Codex 內建瀏覽器此次 iframe 曾停留空白並觸發逾時，重試提示確實顯示；Chrome 同一頁及相同設定成功。內建瀏覽器相容性問題未標記為已修復。正式網域部署後仍須重驗嵌入與登入；本 PR 不部署。
-
-整合依據：[官方 Embed Code](https://help.disqus.com/en/articles/1717112-universal-embed-code)、[避免分裂討論串](https://help.disqus.com/en/articles/1717137-use-configuration-variables-to-avoid-split-threads-and-missing-comments)。
-
-## 初期評估（歷史紀錄；目前決定以上節為準）
-
-HackMD 近期改版後，既有 iframe 內的留言體驗不再適合作為本站的留言入口。本次先將文件內容移回 repository；留言系統建議獨立於 Markdown 內容，避免再次把文件綁死在單一筆記平台。
-
-## 建議：giscus
-
-首選 **giscus**。本站 repository 已啟用 GitHub Discussions，而 giscus 將每個頁面的留言儲存在 GitHub Discussions：不需要另外維護資料庫、可直接在 GitHub 管理與封鎖留言、支援回覆與 reactions，也能以 pathname/title 等方式把頁面映射到固定討論串。
-
-代價是留言者需要 GitHub 帳號並授權 giscus；對 AHK / 程式開發者社群通常可接受，但若目標是讓完全沒有 GitHub 帳號的一般使用者留言，這會增加門檻。
-
-實作時建議：
-
-1. 安裝 giscus GitHub App 到 `papple23g/ahkcompiler`，並建立專用 Discussion category（例如 `網站留言`）。
-2. 以固定 key（例如文件 slug）映射 discussion，不依賴目前 Heroku URL，避免未來換網域後留言串失聯。
-3. 在文件 iframe **外層的本站頁面**載入 giscus，而不是塞進產生的 Markdown HTML；如此離線版仍可完全離線，線上留言則只存在主站。
-4. 加上 `giscus.json` 限制允許載入留言元件的 origin；正式網域確定後再設定。
-5. 不把 giscus 的 `repo-id` / `category-id` 猜寫進程式碼；由 giscus 設定頁取得正確值後再做第二個小 PR。
-
-## 其他方案
-
-### utterances
-
-也是無自建後端方案，但留言存在 GitHub Issues。優點是簡單、免費、無廣告；缺點是把網站留言混進 issue tracker，而且功能與討論結構比 Discussions 弱。既然此 repository 已開啟 Discussions，沒有明顯理由優先於 giscus。
-
-### Waline
-
-若「訪客不應被要求擁有 GitHub 帳號」是硬需求，Waline 比較適合。它有自己的 server、帳號/社群登入與多種資料庫支援，可部署到 Vercel / Docker / 自架環境。代價是多一套服務、資料庫、備份、反垃圾與維運工作。
-
-### Disqus
-
-整合成本低，也能用固定 identifier 維持頁面討論串。但它是第三方託管服務，資料與產品政策受外部平台控制；這次搬離 HackMD 的目的之一就是降低這種耦合，因此不建議作為新預設。若舊 HackMD 文件的 `disqus: ahkcompiler` 曾產生值得保留的歷史留言，可先調查能否以既有 Disqus shortname / identifier 找回，再決定是否做一次性遷移或保留唯讀入口。
-
-## 結論
-
-目前建議採 **「repository 內 Markdown + 線上頁面 giscus + 離線版不載入留言」**。這與現有 GitHub 開源專案的維護方式最一致，也把文件內容與留言服務拆開；未來即使再更換 Markdown renderer，Discussion 資料仍留在 repository 的 GitHub 社群空間。

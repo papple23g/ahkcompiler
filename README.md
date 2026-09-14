@@ -1,7 +1,7 @@
 # AHK 語法產生器
 
 [![](https://img.shields.io/static/v1?label=Python&message=v3.12&color=blue)](https://www.python.org/)
-[![](https://img.shields.io/static/v1?label=Brython&message=v3.7.5&color=purple)](https://github.com/brython-dev/brython)
+[![](https://img.shields.io/static/v1?label=Brython&message=v3.11.3&color=purple)](https://github.com/brython-dev/brython)
 [![](https://img.shields.io/static/v1?label=Django&message=v5.2.17&color=green)](https://www.djangoproject.com/)
 [![](https://img.shields.io/static/v1?label=Autohotkey&message=v1.1.30.03&color=#3F627F)](https://www.autohotkey.com/)
 
@@ -20,13 +20,15 @@
 ```powershell
 uv venv "$env:USERPROFILE\venvs\ahkcompiler_venv" --python 3.12
 & "$env:USERPROFILE\venvs\ahkcompiler_venv\Scripts\Activate.ps1"
-uv pip install -r requirements.txt -r requirements-docs.txt
+uv pip install -r requirements.txt
 python manage.py check
 python manage.py test
 python manage.py runserver 8000
 ```
 
-開啟 `http://127.0.0.1:8000/ahkblockly`。VS Code 選擇同一個外部環境後可直接啟動 Django 偵錯，不需要暫時 alias。Django 測試預設只探索 `myapp`，避免匯入供瀏覽器使用的 Brython 子模組；文件測試另執行 `python -m unittest discover -s tests -v`。
+開啟 `http://127.0.0.1:8000/ahkblockly`。VS Code 選擇同一個外部環境後可直接啟動 Django 偵錯，不需要暫時 alias。Django 測試預設只探索 `myapp`，避免匯入供瀏覽器使用的 Brython 子模組；離線匯出測試另執行 `python -m unittest discover -s tests -v`，留言載入測試執行 `node --test tests/comments.test.cjs`。
+
+各頁說明沿用既有 HackMD 文件與排版，不在 repository 維護副本。積木頁另外在文件外載入原 Disqus 留言串；留言與 Google 登入不依賴 HackMD。正式入口統一為 `papple23g-ahkcompiler.herokuapp.com`。
 
 `Failed to hardlink files; falling back to full copy` 表示 uv 改用複製安裝，不是啟動失敗原因；需要消除提示時可加 `--link-mode=copy`。
 

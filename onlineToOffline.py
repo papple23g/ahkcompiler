@@ -1,7 +1,6 @@
 import requests
 import os
 from scripts.offline_comments import replace_online_comments
-import shutil
 
 
 for app_web_name in [
@@ -28,7 +27,6 @@ for app_web_name in [
         html=html.replace(need_comment_out_str,'#'+need_comment_out_str)
 
     need_to_replace_str_pairList_list=[
-        ['/static/docs/', 'docs/'],
         ['<script src="https://cdn.rawgit.com/brython-dev/brython/3.7.5/www/src/brython.js"></script>','<script src="lib\\brython_3.7.5.js"></script>\n<script src="lib\\brython_stdlib_3.7.5.js"></script>'],
         ["if 'herokuapp' in window.location.hostname:","if True:"],
         ['width: 69% !important;','width: 100% !important;'],
@@ -49,6 +47,3 @@ doc['div_copy_ahkfile_btns_area']<=A("papple23g",href="https://papple23g-ahkcomp
     dir_path = os.path.dirname(os.path.realpath(__file__))
     with open(dir_path + f'\\protable\\{app_web_name}.html','w',encoding='utf-8') as f:
         f.write(html)
-
-# Include pre-rendered local documentation in future offline exports.
-shutil.copytree(os.path.join(dir_path, 'static', 'docs'), os.path.join(dir_path, 'protable', 'docs'), dirs_exist_ok=True)

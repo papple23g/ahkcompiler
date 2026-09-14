@@ -23,3 +23,15 @@ class OfflineCommentsTests(unittest.TestCase):
         self.assertIn(OFFLINE_COMMENTS, page)
         self.assertNotIn('comments.js', page)
         self.assertNotIn('disqus.com', page)
+
+    def test_offline_entry_uses_the_retained_production_domain(self) -> None:
+        self.assertIn('https://papple23g-ahkcompiler.herokuapp.com/ahkblockly#comments', OFFLINE_COMMENTS)
+        for filename in ('ahkblockly.html', 'ahktool.html'):
+            page = Path('protable', filename).read_text(encoding='utf-8')
+            self.assertNotIn('ahkcompiler.papple23g.com', page)
+            self.assertNotIn('docs/', page)
+
+    def test_exporter_no_longer_requires_local_documents(self) -> None:
+        exporter = Path('onlineToOffline.py').read_text(encoding='utf-8')
+        self.assertNotIn('copytree', exporter)
+        self.assertNotIn('/static/docs/', exporter)
