@@ -24,16 +24,17 @@ def cp(req):
     ahk_code='#SingleInstance force\n'+ahk_code
     filename_key=uuid.uuid4()
     #撰寫ahk檔案
-    with open(f"ahkfile1_30/{filename_key}.ahk",'w',encoding="utf-8-sig") as f:
+    ahk_filename=os.path.basename(f"{filename_key}.ahk")
+    with open(os.path.join("ahkfile1_30",ahk_filename),'w',encoding="utf-8-sig") as f:
         f.write(ahk_code)
     #執行編譯
     # if '64-bit' in os_type:
-    cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
+    cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {ahk_filename} /out {ahk_filename[:-4]}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
     # else:
     #     cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 32-bit.bin\" /mpress 1"
     print('CMD',cmd_command)
     os.system(cmd_command)
-    return HttpResponse(filename_key)
+    return HttpResponse(str(filename_key),content_type="text/plain")
 
 #定義API:下載.exe檔
 def dl(req):
@@ -41,7 +42,8 @@ def dl(req):
     filename_key=filename_key[:filename_key.find('?foo=')] if '?foo=' in filename_key else filename_key
     #確認檔名key的uuid版本是否符合格式
     if version_uuid(filename_key)==4:
-        response = FileResponse(open(f'ahkfile1_30/{filename_key}.exe', 'rb'))
+        exe_filename=os.path.basename(f"{filename_key}.exe")
+        response = FileResponse(open(os.path.join("ahkfile1_30",exe_filename), 'rb'))
         response['Content-Type']='application/octet-stream'
         response['Content-Disposition']='attachment;filename="myahk.exe"'
         return response
@@ -63,7 +65,7 @@ def rm(req):
             if os.path.isfile(filepath):
                 os.remove(filepath)
                 print('REMOVE',filepath,'success.')
-        return HttpResponse('OKOK!'+filename_key)
+        return HttpResponse('OKOK!'+filename_key,content_type="text/plain")
     else:
         return HttpResponseRedirect("https://papple23g-ahkcompiler.herokuapp.com/ahkblockly")
 
