@@ -1,5 +1,6 @@
 import requests
 import os
+from scripts.offline_comments import replace_online_comments
 
 
 for app_web_name in [
@@ -12,7 +13,7 @@ for app_web_name in [
     res=requests.get(url)
 
 
-    html=res.text
+    html=replace_online_comments(res.text)
 
 
     need_comment_out_str_list=[

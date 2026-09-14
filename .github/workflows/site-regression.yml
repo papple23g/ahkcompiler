@@ -1,0 +1,35 @@
+name: Site regression
+
+on:
+  push:
+    branches: [master, codex/migrate-hackmd-to-local-docs]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validate application, document sources and comments
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip check
+          python manage.py check
+          python manage.py test --verbosity=2
+          python -m unittest discover -s tests -v
+          node --test tests/comments.test.cjs
+          python -c "from ahkcompiler.wsgi import application; assert callable(application)"

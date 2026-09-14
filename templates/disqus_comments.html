@@ -1,0 +1,12 @@
+{% load static %}
+<!-- ONLINE-COMMENTS:START -->
+<style>#comments iframe {float:none;min-width:0;max-width:100%;} #comments button {min-height:44px;padding:8px 16px;} #comments [hidden] {display:none;}</style>
+<section id="comments" aria-label="留言" style="clear:both;max-width:960px;margin:32px auto;padding:16px;box-sizing:border-box">
+    <button id="comments-load" type="button" aria-controls="disqus_thread" hidden>重試載入留言</button>
+    <p id="comments-status" role="status" aria-live="polite"></p>
+    <div id="disqus_thread"></div>
+    <p id="comments-fallback" hidden><a href="https://disqus.com/home/discussion/ahkcompiler/ahk_hackmd_66/" target="_blank" rel="noopener noreferrer">在 Disqus 查看原討論串</a></p>
+    <noscript><a href="https://disqus.com/home/discussion/ahkcompiler/ahk_hackmd_66/">在 Disqus 查看留言</a></noscript>
+</section>
+<script src="{% static 'comments.js' %}?v=16" defer></script>
+<!-- ONLINE-COMMENTS:END -->
