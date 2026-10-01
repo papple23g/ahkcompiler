@@ -25,6 +25,9 @@ SECRET_KEY = '#r0=i684&j)vb)=uszhg+pctpf^1+fw%dn39h0=39hm^0_%p)-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Empty until a reviewed site and its manual ad unit are ready.
+AHK_ADSENSE_SLOT = os.environ.get('AHK_ADSENSE_SLOT', '').strip()
+
 ALLOWED_HOSTS = [
     '*',
     "papple23g-ahkcompiler.herokuapp.com",

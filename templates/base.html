@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>AHK 語法產生器</title>
+    <title>AHK 語法產生器{% if subpage == 'privacy' %}－隱私權說明{% endif %}</title>
+    <meta name="google-adsense-account" content="ca-pub-3626951597834728">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon200218-2.ico' %}" />
     <!--CSS庫-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -32,13 +33,16 @@
     <script crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v3.3"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135785524-3"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W2NEV5695P"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'UA-135785524-3');
+        gtag('config', 'G-W2NEV5695P', {
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
+        });
     </script>
 
     <style>

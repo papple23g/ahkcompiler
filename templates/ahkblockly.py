@@ -5395,8 +5395,8 @@ div_textareaXml_elt <= textarea_showXml_elt
 
 
 # 設置使用說明iframe
-iframe_elt = IFRAME(src="https://hackmd.io/@papple12g/rJvq8d2uh")
-div_iframe_elt = DIV(iframe_elt)
+iframe_elt = IFRAME(src="https://hackmd.io/@papple12g/rJvq8d2uh", title="AHK 積木使用說明")
+div_iframe_elt = DIV(iframe_elt, id="ahk_help_column")
 
 # 設置子頁面標頭DIV元素
 div_title_elt = DIV()
@@ -5426,26 +5426,34 @@ doc['div_subMainPage'] <= div_iframe_elt
 AddStyle('''
 
     #div_ahkblockly_gui {
-        width: 69% !important;
+        width: min(69%, calc(100% - 368px)) !important;
         float: left;
         margin-bottom: 150px;
 
     }
 
-    iframe{
+    #div_subMainPage > #ahk_help_column {
         float: left;
+        width: max(calc(30% - 12px), 348px);
+        padding: 20px 0 0;
+    }
+
+    #ahk_help_column > iframe {
         border: none;
-        width: 30%;
+        width: 100%;
         min-width: 200px;
-        height: 1000px;
+        height: 607px; /* With the ad and spacing, the preview sidebar is 924.5px tall. */
     }
 
     @media only screen and (max-width: 911px) {
         #div_ahkblockly_gui {
             width: 90% !important;
+            margin-bottom: 0;
         }
-        iframe{
-            width: 90%;
+        #div_subMainPage > #ahk_help_column {
+            clear: both;
+            width: 100%;
+            padding-inline: clamp(0px, calc(50% - 150px), 20px);
         }
     }
 

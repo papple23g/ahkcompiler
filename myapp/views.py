@@ -1,15 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse,HttpResponseRedirect
 from django.http import FileResponse
+from django.conf import settings
 import os
 import uuid
 import time
 
-def homepage(req):
-    return HttpResponse("home page.")
+def homepage(req: HttpRequest) -> HttpResponse:
+    return HttpResponseRedirect('/ahkblockly')
 
 def ahk_webpage(req: HttpRequest, subpage: str) -> HttpResponse:
-    response = render(req,"ahk_webpage.html",{'subpage':subpage})
+    slot = settings.AHK_ADSENSE_SLOT
+    response = render(req, "ahk_webpage.html", {
+        'subpage': subpage,
+        'ahk_adsense_slot': slot if slot.isascii() and slot.isdecimal() else '',
+    })
     if subpage == 'ahkblockly':
         # Preserve the opener connection used by Disqus social-login popups.
         response['Cross-Origin-Opener-Policy'] = 'same-origin-allow-popups'

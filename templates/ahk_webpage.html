@@ -2,7 +2,7 @@
 
 {% include 'base.html' %}
 
-<body onload="brython(1)">
+<body onload="brython(1)"{% if subpage == 'privacy' %} class="privacy-page"{% endif %}>
 
     <div id="div_headerAndBars"></div>
 
@@ -11,6 +11,9 @@
 
 <div id="div_subMainPage">
 
+{% if subpage == 'privacy' %}
+{% include 'privacy.html' %}
+{% endif %}
 
 
 {% if subpage == 'ahkblockly' %}
@@ -18,6 +21,7 @@
 {% include 'blocklyDiv.html' %}
 </div>
 <script src="{% static "workspace.js" %}"></script>
+{% include 'ahk_ads.html' %}
 {% endif %}
 
 </div>
@@ -54,6 +58,9 @@ doc['div_headerAndBars']<=DIV_bars(3)
 {% elif subpage == "faq" %}
 doc['div_headerAndBars']<=DIV_bars(4)
 {% include 'faq.py' %}
+
+{% elif subpage == "privacy" %}
+doc['div_headerAndBars']<=DIV_bars(5)
 
 {% endif %}
 

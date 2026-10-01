@@ -116,6 +116,7 @@ def DIV_bars(nbo_subpage_int):
         DIV_ButtonBar("更新日誌", id="更新日誌", link='/updateDiary'),
         DIV_ButtonBar("關於作者", id="關於作者", link='/about'),
         DIV_ButtonBar("常見Q&A", id="常見Q&A", link='/faq'),
+        DIV_ButtonBar("隱私權說明", link='/privacy'),
     ]
 
     # 將當前子頁面的按鈕亮起

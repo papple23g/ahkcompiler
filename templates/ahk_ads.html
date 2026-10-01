@@ -1,0 +1,24 @@
+{% load static %}
+<!-- ONLINE-ADS:START -->
+<style>
+    #ahk-ad {width:300px;margin:0 auto 20px;padding:0;}
+    #ahk-ad[hidden], #ahk-ad [hidden] {display:none !important;}
+    #ahk-ad-label {display:block;color:#777;font-size:12px;margin-bottom:4px;}
+    #ahk-ad-preview {width:300px;height:250px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:20px 22px;text-align:left;background:linear-gradient(135deg,#eef1ff,#e0e6fa);border:1px solid #d4daec;color:#26377a;}
+    #ahk-ad-preview .preview-note {font-size:11px;color:#59658c;}
+    #ahk-ad-preview strong {font-size:25px;line-height:1.35;letter-spacing:1px;}
+    #ahk-ad-preview .preview-art {display:flex;gap:10px;}
+    #ahk-ad-preview .preview-art span {display:grid;place-items:center;width:48px;height:48px;border-radius:10px;background:#fff;font-size:25px;color:#4053ad;}
+    #ahk-ad-preview .preview-size {font-size:12px;color:#59658c;}
+</style>
+<section id="ahk-ad" aria-label="廣告" data-ad-slot="{{ ahk_adsense_slot }}" hidden>
+    <span id="ahk-ad-label">廣告</span>
+    <div id="ahk-ad-preview" hidden>
+        <span class="preview-note">示意廣告 · 非實際投放</span>
+        <strong>工作更順手<br>每天更輕鬆</strong>
+        <div class="preview-art" aria-hidden="true"><span>⌘</span><span>↗</span><span>✓</span></div>
+        <span class="preview-size">300 × 250 · 素材僅供版面預覽</span>
+    </div>
+</section>
+<script src="{% static 'ahk_ads.js' %}?v=2"></script>
+<!-- ONLINE-ADS:END -->

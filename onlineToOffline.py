@@ -1,6 +1,7 @@
 import requests
 import os
 from scripts.offline_comments import replace_online_comments
+from scripts.offline_ads import remove_online_ads
 
 
 for app_web_name in [
@@ -13,7 +14,7 @@ for app_web_name in [
     res=requests.get(url)
 
 
-    html=replace_online_comments(res.text)
+    html=replace_online_comments(remove_online_ads(res.text))
 
 
     need_comment_out_str_list=[

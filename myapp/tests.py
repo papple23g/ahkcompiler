@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 
 
 HOSTS = ('127.0.0.1', 'papple23g-ahkcompiler.herokuapp.com')
@@ -15,6 +15,16 @@ DOCUMENT_SOURCES = {
 
 
 class SiteParityTests(SimpleTestCase):
+    def test_publisher_setup(self) -> None:
+        self.assertRedirects(self.client.get('/'), '/ahkblockly')
+        response = self.client.get('/ads.txt')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/plain')
+        self.assertEqual(response.content.decode().strip(), 'google.com, pub-3626951597834728, DIRECT, f08c47fec0942fa0')
+        self.assertEqual(self.client.get('/privacy').status_code, 200)
+        self.assertContains(self.client.get('/ahkblockly'), 'name="google-adsense-account" content="ca-pub-3626951597834728"', count=1)
+        self.assertNotContains(self.client.get('/ahkblockly'), 'pagead2.googlesyndication.com')
+
     def test_every_page_preserves_production_document_sources(self) -> None:
         for host in HOSTS:
             for page, sources in DOCUMENT_SOURCES.items():
@@ -49,9 +59,30 @@ class CommentsTests(SimpleTestCase):
                 self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin-allow-popups')
 
     def test_other_pages_do_not_load_comments(self) -> None:
-        for page in ('ahktool', 'faq', 'about', 'updateDiary'):
+        for page in ('ahktool', 'faq', 'about', 'updateDiary', 'privacy', 'privacy/'):
             with self.subTest(page=page):
                 response = self.client.get('/' + page)
                 self.assertNotContains(response, 'disqus_thread')
                 self.assertNotContains(response, 'comments.js')
                 self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin')
+
+
+class AdTrialTests(SimpleTestCase):
+    @override_settings(AHK_ADSENSE_SLOT='1234567890')
+    def test_only_blockly_has_the_manual_ad_controller(self) -> None:
+        for page in DOCUMENT_SOURCES:
+            with self.subTest(page=page):
+                response = self.client.get('/' + page)
+                self.assertNotContains(response, 'pagead2.googlesyndication.com')
+                if page == 'ahkblockly':
+                    self.assertContains(response, 'data-ad-slot="1234567890"', count=1)
+                    self.assertContains(response, '/static/ahk_ads.js', count=1)
+                else:
+                    self.assertNotContains(response, 'data-ad-slot')
+                    self.assertNotContains(response, 'ahk_ads.js')
+
+    def test_empty_or_invalid_slots_are_disabled(self) -> None:
+        for slot in ('', '１２３', '123\" onload=\"alert(1)'):
+            with self.subTest(slot=slot), self.settings(AHK_ADSENSE_SLOT=slot):
+                response = self.client.get('/ahkblockly')
+                self.assertContains(response, 'data-ad-slot=""', count=1)
