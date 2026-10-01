@@ -1,58 +1,43 @@
 # AHK 語法產生器
 
-[![](https://img.shields.io/static/v1?label=Python&message=v3.12&color=blue)](https://www.python.org/)
-[![](https://img.shields.io/static/v1?label=Brython&message=v3.11.3&color=purple)](https://github.com/brython-dev/brython)
-[![](https://img.shields.io/static/v1?label=Django&message=v5.2.17&color=green)](https://www.djangoproject.com/)
-[![](https://img.shields.io/static/v1?label=Autohotkey&message=v1.1.30.03&color=#3F627F)](https://www.autohotkey.com/)
+透過填表或拖曳積木，產生 Windows 自動化腳本：熱鍵、鍵盤與滑鼠操作、文字處理、條件判斷及迴圈。
 
+輸出採用 **AutoHotkey v1.1 語法**，請使用 AHK v1 執行；不能直接以 AHK v2 執行。
 
-本網站使用 Django 架設 [Autohotkey](https://www.autohotkey.com/) 語法產生器
+| 工具 | 適合用途 |
+| --- | --- |
+| [積木語法產生器](https://papple23g-ahkcompiler.herokuapp.com/ahkblockly) | 組合多個動作與流程，匯入／匯出 XML 積木檔 |
+| [填表語法產生器](https://papple23g-ahkcompiler.herokuapp.com/ahktool) | 設定熱鍵與常用動作，快速產生語法 |
 
-使用者可根據自己的需求產生自動化腳本與程式
+## 積木語法產生器
 
-本站提供 [填表](#填表產生語法) 與 [積木](#積木拼圖產生語法) 兩種方式產生腳本
+1. 開啟[積木頁面](https://papple23g-ahkcompiler.herokuapp.com/ahkblockly)，從左側分類拖出積木並接合。
+2. 設定積木中的文字、按鍵或選項，按「▼轉換為AHK語法」。
+3. 按「複製語法」或「下載.ahk檔案」，將產生的腳本交給 AutoHotkey v1 執行。
 
+「💾另存積木檔」可保存 XML；之後用「📥匯入積木檔」繼續編輯。
 
-## 本機開發（Windows / Python 3.12）
+「下載.exe檔(64-bit)」是實驗功能，會將程式碼傳送至外部編譯服務，可能因服務狀態而失敗。
 
-使用專案外部的虛擬環境；已有環境可跳過建立步驟：
+![積木編輯與語法輸出範例](https://i.imgur.com/XDxVKCd.png)
 
-```powershell
-uv venv "$env:USERPROFILE\venvs\ahkcompiler_venv" --python 3.12
-& "$env:USERPROFILE\venvs\ahkcompiler_venv\Scripts\Activate.ps1"
-uv pip install -r requirements.txt
-python manage.py check
-python manage.py test
-python manage.py runserver 8000
-```
+## 填表語法產生器
 
-開啟 `http://127.0.0.1:8000/ahkblockly`。VS Code 選擇同一個外部環境後可直接啟動 Django 偵錯，不需要暫時 alias。Django 測試預設只探索 `myapp`，避免匯入供瀏覽器使用的 Brython 子模組；離線匯出測試另執行 `python -m unittest discover -s tests -v`，留言載入測試執行 `node --test tests/comments.test.cjs`。
+1. 開啟[填表頁面](https://papple23g-ahkcompiler.herokuapp.com/ahktool)，選擇熱鍵與要執行的功能。
+2. 填入需要的參數，確認產生的語法後按「複製語法」。
+3. 將語法存成 `.ahk` 檔，以 AutoHotkey v1 執行。
 
-各頁說明沿用既有 HackMD 文件與排版，不在 repository 維護副本。積木頁另外在文件外載入原 Disqus 留言串；留言與 Google 登入不依賴 HackMD。正式入口統一為 `papple23g-ahkcompiler.herokuapp.com`。
+![填表設定與語法輸出範例](https://i.imgur.com/bCXaDEs.png)
 
-`Failed to hardlink files; falling back to full copy` 表示 uv 改用複製安裝，不是啟動失敗原因；需要消除提示時可加 `--link-mode=copy`。
+## 離線版
 
-## 填表產生語法
+1. 下載既有的 [AHK Blockly 1.12.0 ZIP](https://github.com/papple23g/ahkcompiler/releases/download/1.12.0/AHK.Blockly.1.12.0.zip) 並解壓縮。
+2. 用瀏覽器開啟其中的 `ahkblockly.html`（積木）或 `ahktool.html`（填表）。
 
-使用使用填寫表單的方式快速產生AHK語法
+此發行版本為 1.12.0，功能可能與線上版不同。
 
-網頁 : https://papple23g-ahkcompiler.herokuapp.com/ahktool
+## 開發、貢獻與授權
 
-### 瀏覽圖
+本機開發與測試見[開發文件](docs/development.md)；問題回報及程式貢獻見[貢獻說明](docs/development.md#貢獻)。
 
-![AHK首頁- 網頁瀏覽圖](https://i.imgur.com/bCXaDEs.png)
-
-
-## <span style="background-color:#f1c40fbb">積木拼圖產生語法</span>
-
-使用 [Google Blockly](https://developers.google.com/blockly) 的拼圖引擎撰寫製作AHK腳本
-
-網頁 : https://papple23g-ahkcompiler.herokuapp.com/ahkblockly
-
-### 瀏覽圖
-![AHK積木拼圖產生語法 - 網頁瀏覽圖](https://i.imgur.com/XDxVKCd.png)
-
-### 離線版
-執行方法:
-1. 請至 [點擊此連結](https://github.com/papple23g/ahkcompiler/releases/download/1.12.0/AHK.Blockly.1.12.0.zip) 下載 `.zip` 檔後解壓縮
-2. 執行裡面的 `ahktool.html` 與 `ahkblockly.html` 網頁檔案即可
+本專案採用 [MIT 授權](LICENSE)。
