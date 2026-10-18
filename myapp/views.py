@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse,HttpResponseRedirect
 from django.http import FileResponse
 import os
+import subprocess
 import uuid
 import time
 
@@ -28,11 +29,11 @@ def cp(req):
         f.write(ahk_code)
     #執行編譯
     # if '64-bit' in os_type:
-    cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
+    cmd_args=["Ahk2Exe.exe","/in",f"{filename_key}.ahk","/out",f"{filename_key}.exe","/bin","Unicode 64-bit.bin","/mpress","1"]
     # else:
-    #     cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 32-bit.bin\" /mpress 1"
-    print('CMD',cmd_command)
-    os.system(cmd_command)
+    #     cmd_args=["Ahk2Exe.exe","/in",f"{filename_key}.ahk","/out",f"{filename_key}.exe","/bin","Unicode 32-bit.bin","/mpress","1"]
+    print('CMD',cmd_args)
+    subprocess.run(cmd_args,cwd="ahkfile1_30",shell=False)
     return HttpResponse(filename_key)
 
 #定義API:下載.exe檔
