@@ -55,3 +55,89 @@ class CommentsTests(SimpleTestCase):
                 self.assertNotContains(response, 'disqus_thread')
                 self.assertNotContains(response, 'comments.js')
                 self.assertEqual(response['Cross-Origin-Opener-Policy'], 'same-origin')
+
+
+import subprocess
+import tempfile
+import uuid
+from pathlib import Path
+from unittest import mock
+
+
+class CompileEndpointTests(SimpleTestCase):
+    def setUp(self) -> None:
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        patcher = mock.patch('myapp.views.COMPILER_DIR', self.dir)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def post(self, body: str = '64-bit\nMsgBox hi'):
+        return self.client.post('/cp', data=body, content_type='text/plain')
+
+    def fake_run(self, write_exe: bool = True, content: bytes = b'MZ'):
+        def run(args, **kwargs):
+            if write_exe:
+                (self.dir / args[args.index('/out') + 1]).write_bytes(content)
+            return subprocess.CompletedProcess(args, 0)
+        return run
+
+    def assert_clean(self) -> None:
+        self.assertEqual(list(self.dir.iterdir()), [])
+
+    def test_success_uses_absolute_compiler_without_shell(self) -> None:
+        with mock.patch('myapp.views.subprocess.run', side_effect=self.fake_run()) as run:
+            response = self.post()
+        self.assertEqual(response.status_code, 200)
+        key = response.content.decode()
+        self.assertEqual(uuid.UUID(key).version, 4)
+        self.assertTrue((self.dir / f'{key}.exe').is_file())
+        argv, kwargs = run.call_args[0][0], run.call_args[1]
+        self.assertTrue(Path(argv[0]).is_absolute())
+        self.assertEqual(Path(argv[0]).name, 'Ahk2Exe.exe')
+        self.assertIs(kwargs['shell'], False)
+        self.assertEqual(kwargs['cwd'], self.dir)
+        self.assertIn('timeout', kwargs)
+
+    def test_nonzero_exit_returns_error_and_cleans_up(self) -> None:
+        err = subprocess.CalledProcessError(1, 'Ahk2Exe.exe')
+        with mock.patch('myapp.views.subprocess.run', side_effect=err):
+            response = self.post()
+        self.assertEqual(response.status_code, 500)
+        self.assert_clean()
+
+    def test_timeout_returns_error_and_cleans_up(self) -> None:
+        err = subprocess.TimeoutExpired('Ahk2Exe.exe', 30)
+        with mock.patch('myapp.views.subprocess.run', side_effect=err):
+            response = self.post()
+        self.assertEqual(response.status_code, 500)
+        self.assert_clean()
+
+    def test_missing_compiler_returns_error(self) -> None:
+        with mock.patch('myapp.views.subprocess.run', side_effect=FileNotFoundError):
+            response = self.post()
+        self.assertEqual(response.status_code, 500)
+        self.assert_clean()
+
+    def test_missing_or_empty_output_returns_error(self) -> None:
+        for fake in (self.fake_run(write_exe=False), self.fake_run(content=b'')):
+            with self.subTest(fake=fake):
+                with mock.patch('myapp.views.subprocess.run', side_effect=fake):
+                    response = self.post()
+                self.assertEqual(response.status_code, 500)
+                self.assertEqual(response.content, b'compile failed')
+                self.assert_clean()
+
+    def test_malformed_input_fails_gracefully(self) -> None:
+        with mock.patch('myapp.views.subprocess.run', side_effect=self.fake_run()):
+            response = self.post('')
+        self.assertIn(response.status_code, (200, 500))
+        self.assertNotIn(b'Traceback', response.content)
+
+    def test_dl_and_rm_reject_non_uuid_keys(self) -> None:
+        for path in ('/dl', '/rm'):
+            for key in ('../../etc/passwd', 'abc', '..%2f..%2fsecret'):
+                with self.subTest(path=path, key=key):
+                    response = self.client.get(path, {'filename_key': key})
+                    self.assertEqual(response.status_code, 302)

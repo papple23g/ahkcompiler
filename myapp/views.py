@@ -1,9 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse,HttpResponseRedirect
 from django.http import FileResponse
+import logging
 import os
+import subprocess
 import uuid
 import time
+from pathlib import Path
+
+logger=logging.getLogger(__name__)
+
+#編譯器目錄(絕對路徑,避免 Windows 在 shell=False 時不依 cwd 尋找執行檔)
+COMPILER_DIR=Path(__file__).resolve().parent.parent/"ahkfile1_30"
+COMPILE_TIMEOUT_SECONDS=30
 
 def homepage(req):
     return HttpResponse("home page.")
@@ -23,16 +32,25 @@ def cp(req):
     os_type=ahk_code[:linebreak_index+1]
     ahk_code='#SingleInstance force\n'+ahk_code
     filename_key=uuid.uuid4()
+    ahk_path=COMPILER_DIR/f"{filename_key}.ahk"
+    exe_path=COMPILER_DIR/f"{filename_key}.exe"
     #撰寫ahk檔案
-    with open(f"ahkfile1_30/{filename_key}.ahk",'w',encoding="utf-8-sig") as f:
+    with open(ahk_path,'w',encoding="utf-8-sig") as f:
         f.write(ahk_code)
     #執行編譯
     # if '64-bit' in os_type:
-    cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 64-bit.bin\" /mpress 1"
+    cmd_args=[str(COMPILER_DIR/"Ahk2Exe.exe"),"/in",ahk_path.name,"/out",exe_path.name,"/bin","Unicode 64-bit.bin","/mpress","1"]
     # else:
-    #     cmd_command=f"cd ahkfile1_30 & Ahk2Exe.exe /in {filename_key}.ahk /out {filename_key}.exe /bin \"Unicode 32-bit.bin\" /mpress 1"
-    print('CMD',cmd_command)
-    os.system(cmd_command)
+    #     cmd_args=[str(COMPILER_DIR/"Ahk2Exe.exe"),"/in",ahk_path.name,"/out",exe_path.name,"/bin","Unicode 32-bit.bin","/mpress","1"]
+    try:
+        subprocess.run(cmd_args,cwd=COMPILER_DIR,shell=False,check=True,timeout=COMPILE_TIMEOUT_SECONDS,capture_output=True)
+        if not exe_path.is_file() or exe_path.stat().st_size==0:
+            raise RuntimeError("compiler produced no output file")
+    except (subprocess.SubprocessError,OSError,RuntimeError):
+        logger.exception("AHK compile failed for %s",filename_key)
+        for filepath in (ahk_path,exe_path):
+            filepath.unlink(missing_ok=True)
+        return HttpResponse("compile failed",status=500)
     return HttpResponse(filename_key)
 
 #定義API:下載.exe檔
