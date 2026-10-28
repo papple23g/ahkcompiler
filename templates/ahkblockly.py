@@ -5311,7 +5311,7 @@ def DownloadAhkCode(ev):
 
 
 async def DownloadAhkExe(ev):
-    host = "https://papple23g-rest-ahk.zeabur.app"
+    host = "https://compile.papple23g.com"
     btn_elt = ev.currentTarget
     original_text = btn_elt.text
 
