@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import re_path
+from django.views.generic import TemplateView
 from myapp.views import *
 from django.conf import settings
 from django.conf.urls.static import static
@@ -8,6 +9,10 @@ urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
 
     re_path(r'^$', homepage),
+    re_path(
+        r'^ads\.txt$',
+        TemplateView.as_view(template_name='ads.txt', content_type='text/plain'),
+    ),
     re_path(r'(?P<subpage>ahktool)', ahk_webpage),
     re_path(r'(?P<subpage>ahkblockly)', ahk_webpage),
     re_path(r'(?P<subpage>updateDiary)', ahk_webpage),
