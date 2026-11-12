@@ -8,31 +8,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
 
-    re_path(r'^    re_path(r'(?P<subpage>ahktool)', ahk_webpage),
-    re_path(r'(?P<subpage>ahkblockly)', ahk_webpage),
-    re_path(r'(?P<subpage>updateDiary)', ahk_webpage),
-    re_path(r'(?P<subpage>about)', ahk_webpage),
-    re_path(r'(?P<subpage>faq)', ahk_webpage),
-
-
-    re_path(r'^dl$', dl),
-    re_path(r'^cp$', cp),
-    re_path(r'^rm$', rm),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-, homepage),
+    re_path(r'^$', homepage),
     re_path(
-        r'^ads\.txt    re_path(r'(?P<subpage>ahktool)', ahk_webpage),
-    re_path(r'(?P<subpage>ahkblockly)', ahk_webpage),
-    re_path(r'(?P<subpage>updateDiary)', ahk_webpage),
-    re_path(r'(?P<subpage>about)', ahk_webpage),
-    re_path(r'(?P<subpage>faq)', ahk_webpage),
-
-
-    re_path(r'^dl$', dl),
-    re_path(r'^cp$', cp),
-    re_path(r'^rm$', rm),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-,
+        r'^ads\.txt$',
         TemplateView.as_view(template_name='ads.txt', content_type='text/plain'),
     ),
     re_path(r'(?P<subpage>ahktool)', ahk_webpage),
