@@ -23,6 +23,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!/protable/lib/
 lib64/
 parts/
 sdist/

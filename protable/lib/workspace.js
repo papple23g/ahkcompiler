@@ -10,7 +10,7 @@ var options = {
     horizontalLayout: false,
     toolboxPosition: 'start',
     css: true,
-    media: 'https://blockly-demo.appspot.com/static/media/',
+    media: new URL('blockly/media/', document.currentScript.src).href,
     rtl: false,
     scrollbars: true,
     sounds: true,
